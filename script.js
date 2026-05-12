@@ -4390,219 +4390,297 @@ textarea { min-height: 88px; }
 </style>
 `;
 
-  // ==== Dynamic Row Rendering ====
-  function renderDynamicRow() {
-    const pos = appState.identity?.position || "";
-    let html = "";
-    if (pos === "Dosen/Guru") {
-      html = `
+// Pastikan appState.identity selalu ada
+appState.identity = appState.identity || {};
+
+// ==== Helper Functions ====
+function renderPositionOptions(selectedPos = "") {
+  return `
+    <option value="" disabled ${!selectedPos ? "selected" : ""}>Pilih Posisi</option>
+    <option value="Administrator" ${selectedPos === "Administrator" ? "selected" : ""}>Administrator</option>
+    <option value="Dosen/Guru" ${selectedPos === "Dosen/Guru" ? "selected" : ""}>Dosen/Guru</option>
+    <option value="Technical Staff" ${selectedPos === "Technical Staff" ? "selected" : ""}>Technical Staff</option>
+    <option value="IT Staff" ${selectedPos === "IT Staff" ? "selected" : ""}>IT Staff</option>
+    <option value="Housekeeping" ${selectedPos === "Housekeeping" ? "selected" : ""}>Housekeeping</option>
+  `;
+}
+
+function renderEducationOptions(selectedEdu = "") {
+  return `
+    <option value="" disabled ${!selectedEdu ? "selected" : ""}>Pilih Pendidikan</option>
+    <option value="S3" ${selectedEdu === "S3" ? "selected" : ""}>S3</option>
+    <option value="S2" ${selectedEdu === "S2" ? "selected" : ""}>S2</option>
+    <option value="S1" ${selectedEdu === "S1" ? "selected" : ""}>S1</option>
+    <option value="SMA/Sederajat" ${selectedEdu === "SMA/Sederajat" ? "selected" : ""}>SMA/Sederajat</option>
+    <option value="SMP/Sederajat" ${selectedEdu === "SMP/Sederajat" ? "selected" : ""}>SMP/Sederajat</option>
+  `;
+}
+
+function renderTeacherLevelOptions(selectedLevel = "") {
+  return `
+    <option value="" disabled ${!selectedLevel ? "selected" : ""}>Pilih Kategori</option>
+    <option value="English Lecturer" ${selectedLevel === "English Lecturer" ? "selected" : ""}>English Lecturer</option>
+    <option value="Math Lecturer" ${selectedLevel === "Math Lecturer" ? "selected" : ""}>Math Lecturer</option>
+    <option value="Kindergartens" ${selectedLevel === "Kindergartens" ? "selected" : ""}>Kindergartens</option>
+    <option value="Primary" ${selectedLevel === "Primary" ? "selected" : ""}>Primary</option>
+    <option value="Math" ${selectedLevel === "Math" ? "selected" : ""}>Math</option>
+    <option value="PE & Health" ${selectedLevel === "PE & Health" ? "selected" : ""}>PE & Health</option>
+    <option value="Biology" ${selectedLevel === "Biology" ? "selected" : ""}>Biology</option>
+    <option value="Counselor" ${selectedLevel === "Counselor" ? "selected" : ""}>Counselor</option>
+    <option value="English" ${selectedLevel === "English" ? "selected" : ""}>English</option>
+    <option value="Indonesian Language" ${selectedLevel === "Indonesian Language" ? "selected" : ""}>Indonesian Language</option>
+    <option value="Visual Arts" ${selectedLevel === "Visual Arts" ? "selected" : ""}>Visual Arts</option>
+    <option value="Social Studies" ${selectedLevel === "Social Studies" ? "selected" : ""}>Social Studies</option>
+  `;
+}
+
+function renderTechRoleOptions(selectedRole = "") {
+  return `
+    <option value="" disabled ${!selectedRole ? "selected" : ""}>Pilih Role Teknis</option>
+    <option value="Welder" ${selectedRole === "Welder" ? "selected" : ""}>Welder</option>
+    <option value="Wood Maintenance Technician" ${selectedRole === "Wood Maintenance Technician" ? "selected" : ""}>Wood Maintenance Technician</option>
+    <option value="Baker" ${selectedRole === "Baker" ? "selected" : ""}>Baker</option>
+  `;
+}
+
+// ==== Dynamic Row Rendering ====
+function renderDynamicRow() {
+  appState.identity = appState.identity || {};
+
+  const pos = appState.identity.position || "";
+  const selectedEducation = appState.identity.education || "";
+  const selectedTeacherLevel = appState.identity.teacherLevel || "";
+  const selectedTechRole = appState.identity.techRole || "";
+
+  let html = "";
+
+  if (pos === "Dosen/Guru") {
+    html = `
       <div class="identity-grid-row">
         <div class="identity-grid-group">
           <label for="position">Posisi <span class="star">*</span></label>
           <select id="position" required>
-            <option value="" disabled ${!pos ? "selected" : ""}>Pilih Posisi</option>
-            <option value="Administrator" ${pos==="Administrator"?"selected":""}>Administrator</option>
-            <option value="Dosen/Guru" selected>Dosen/Guru</option>
-            <option value="Technical Staff">Technical Staff</option>
-            <option value="IT Staff">IT Staff</option>
-            <option value="Housekeeping">Housekeeping</option>
+            ${renderPositionOptions(pos)}
           </select>
         </div>
+
         <div class="identity-grid-group">
-  <label for="teacherLevel">Kategori <span class="star">*</span></label>
-  <select id="teacherLevel" required>
-    <option value="" disabled ${!appState.identity?.teacherLevel ? "selected" : ""}>Pilih Kategori</option>
-    
-    <option value="English Lecturer" ${appState.identity?.teacherLevel==="English Lecturer"?"selected":""}>English Lecturer</option>
-    <option value="Math Lecturer" ${appState.identity?.teacherLevel==="Math Lecturer"?"selected":""}>Math Lecturer</option>
-    <option value="Kindergartens" ${appState.identity?.teacherLevel==="Kindergartens"?"selected":""}>Kindergartens</option>
-    <option value="Primary" ${appState.identity?.teacherLevel==="Primary"?"selected":""}>Primary</option>
-    <option value="Math" ${appState.identity?.teacherLevel==="Math"?"selected":""}>Math</option>
-    <option value="PE & Health" ${appState.identity?.teacherLevel==="PE & Health"?"selected":""}>PE & Health</option>
-    <option value="Biology" ${appState.identity?.teacherLevel==="Biology"?"selected":""}>Biology</option>
+          <label for="teacherLevel">Kategori <span class="star">*</span></label>
+          <select id="teacherLevel" required>
+            ${renderTeacherLevelOptions(selectedTeacherLevel)}
+          </select>
+        </div>
 
-    <!-- Tambahan -->
-    <option value="Counselor" ${appState.identity?.teacherLevel==="Counselor"?"selected":""}>Counselor</option>
-     <option value="English" ${appState.identity?.teacherLevel==="English"?"selected":""}>English</option>
-    <option value="Indonesian Language" ${appState.identity?.teacherLevel==="Indonesian Language"?"selected":""}>Indonesian Language</option>
-    <option value="Visual Arts" ${appState.identity?.teacherLevel==="Visual Arts"?"selected":""}>Visual Arts</option>
-    <option value="Social Studies" ${appState.identity?.teacherLevel==="Social Studies"?"selected":""}>Social Studies</option>
-
-  </select>
-</div>
         <div class="identity-grid-group">
           <label for="education">Pendidikan <span class="star">*</span></label>
           <select id="education" required>
-            <option value="" disabled ${!appState.identity?.education ? "selected" : ""}>Pilih Pendidikan</option>
-            <option value="S3" ${appState.identity?.education==="S3"?"selected":""}>S3</option>
-            <option value="S2" ${appState.identity?.education==="S2"?"selected":""}>S2</option>
-            <option value="S1" ${appState.identity?.education==="S1"?"selected":""}>S1</option>
-            <option value="SMA/Sederajat" ${appState.identity?.education==="SMA/Sederajat"?"selected":""}>SMA/Sederajat</option>
-            <option value="SMP/Sederajat" ${appState.identity?.education==="SMP/Sederajat"?"selected":""}>SMP/Sederajat</option>
+            ${renderEducationOptions(selectedEducation)}
           </select>
         </div>
-      </div>`;
-    } else if (pos === "Technical Staff") {
-      html = `
+      </div>
+    `;
+  } else if (pos === "Technical Staff") {
+    html = `
       <div class="identity-grid-row">
         <div class="identity-grid-group">
           <label for="position">Posisi <span class="star">*</span></label>
           <select id="position" required>
-            <option value="" disabled ${!pos ? "selected" : ""}>Pilih Posisi</option>
-            <option value="Administrator" ${pos==="Administrator"?"selected":""}>Administrator</option>
-            <option value="Dosen/Guru" ${pos==="Dosen/Guru"?"selected":""}>Dosen/Guru</option>
-            <option value="Technical Staff" selected>Technical Staff</option>
-            <option value="IT Staff" selected>IT Staff</option>
-            <option value="Housekeeping">Housekeeping</option>
+            ${renderPositionOptions(pos)}
           </select>
         </div>
+
         <div class="identity-grid-group">
           <label for="techRole">Role Teknis <span class="star">*</span></label>
           <select id="techRole" required>
-            <option value="" disabled ${!appState.identity?.techRole ? "selected" : ""}>Role Teknis</option>
-            <option value="Welder" ${appState.identity?.techRole==="Welder"?"selected":""}>Welder</option>
-            <option value="Wood Maintenance Technician" ${appState.identity?.techRole==="Wood Maintenance Technician"?"selected":""}>Wood Maintenance Technician</option>
-            <option value="Baker" ${appState.identity?.techRole==="Baker"?"selected":""}>Baker</option>
+            ${renderTechRoleOptions(selectedTechRole)}
           </select>
         </div>
+
         <div class="identity-grid-group">
           <label for="education">Pendidikan <span class="star">*</span></label>
           <select id="education" required>
-            <option value="" disabled ${!appState.identity?.education ? "selected" : ""}>Pilih Pendidikan</option>
-            <option value="S3" ${appState.identity?.education==="S3"?"selected":""}>S3</option>
-            <option value="S2" ${appState.identity?.education==="S2"?"selected":""}>S2</option>
-            <option value="S1" ${appState.identity?.education==="S1"?"selected":""}>S1</option>
-            <option value="SMA/Sederajat" ${appState.identity?.education==="SMA/Sederajat"?"selected":""}>SMA/Sederajat</option>
-            <option value="SMP/Sederajat" ${appState.identity?.education==="SMP/Sederajat"?"selected":""}>SMP/Sederajat</option>
+            ${renderEducationOptions(selectedEducation)}
           </select>
         </div>
-      </div>`;
-    } else {
-      html = `
+      </div>
+    `;
+  } else {
+    html = `
       <div class="identity-grid-row">
         <div class="identity-grid-group">
           <label for="position">Posisi <span class="star">*</span></label>
           <select id="position" required>
-            <option value="" disabled ${!pos ? "selected" : ""}>Pilih Posisi</option>
-            <option value="Administrator" ${pos==="Administrator"?"selected":""}>Administrator</option>
-            <option value="Dosen/Guru" ${pos==="Dosen/Guru"?"selected":""}>Dosen/Guru</option>
-            <option value="Technical Staff" ${pos==="Technical Staff"?"selected":""}>Technical Staff</option>
-             <option value="IT Staff" ${pos==="IT Staff"?"selected":""}>IT Staff</option>
-            <option value="Housekeeping" ${pos==="Housekeeping"?"selected":""}>Housekeeping</option>
+            ${renderPositionOptions(pos)}
           </select>
         </div>
+
         <div class="identity-grid-group">
           <label for="education">Pendidikan <span class="star">*</span></label>
           <select id="education" required>
-            <option value="" disabled ${!appState.identity?.education ? "selected" : ""}>Pilih Pendidikan</option>
-            <option value="S3" ${appState.identity?.education==="S3"?"selected":""}>S3</option>
-            <option value="S2" ${appState.identity?.education==="S2"?"selected":""}>S2</option>
-            <option value="S1" ${appState.identity?.education==="S1"?"selected":""}>S1</option>
-            <option value="SMA/Sederajat" ${appState.identity?.education==="SMA/Sederajat"?"selected":""}>SMA/Sederajat</option>
-            <option value="SMP/Sederajat" ${appState.identity?.education==="SMP/Sederajat"?"selected":""}>SMP/Sederajat</option>
+            ${renderEducationOptions(selectedEducation)}
           </select>
         </div>
-      </div>`;
-    }
-    document.getElementById("dynamicRow").innerHTML = html;
-    if (document.getElementById('guruAlumniOptions'))
-      document.getElementById('guruAlumniOptions').style.display = (pos === "Dosen/Guru") ? 'block' : 'none';
+      </div>
+    `;
   }
-  renderDynamicRow();
 
-  // Event Handler dinamis
-  document.getElementById("identityForm").addEventListener("change", function(e) {
-    if (["position", "teacherLevel", "techRole", "education"].includes(e.target.id)) {
-      appState.identity.position = document.getElementById('position').value;
-      appState.identity.teacherLevel = document.getElementById('teacherLevel')?.value || '';
-      appState.identity.techRole = document.getElementById('techRole')?.value || '';
-      appState.identity.education = document.getElementById('education').value;
-      renderDynamicRow();
+  const dynamicRow = document.getElementById("dynamicRow");
+  if (dynamicRow) {
+    dynamicRow.innerHTML = html;
+  }
+
+  const guruAlumniOptions = document.getElementById("guruAlumniOptions");
+  if (guruAlumniOptions) {
+    guruAlumniOptions.style.display = pos === "Dosen/Guru" ? "block" : "none";
+  }
+}
+
+renderDynamicRow();
+
+// ==== Event Handler Dinamis ====
+const identityForm = document.getElementById("identityForm");
+if (identityForm) {
+  identityForm.addEventListener("change", function (e) {
+    if (!e.target || !["position", "teacherLevel", "techRole", "education"].includes(e.target.id)) {
+      return;
+    }
+
+    appState.identity = appState.identity || {};
+
+    const positionEl = document.getElementById("position");
+    const teacherLevelEl = document.getElementById("teacherLevel");
+    const techRoleEl = document.getElementById("techRole");
+    const educationEl = document.getElementById("education");
+
+    appState.identity.position = positionEl ? positionEl.value : "";
+    appState.identity.teacherLevel = teacherLevelEl ? teacherLevelEl.value : "";
+    appState.identity.techRole = techRoleEl ? techRoleEl.value : "";
+    appState.identity.education = educationEl ? educationEl.value : "";
+
+    renderDynamicRow();
+  });
+
+  identityForm.onsubmit = submitIdentity;
+}
+
+// ==== Alumni Logic ====
+const getEl = (id) => document.getElementById(id);
+
+if (getEl("alumniSGS")) {
+  getEl("alumniSGS").addEventListener("change", function () {
+    const alumniLevels = getEl("alumniLevels");
+    if (alumniLevels) {
+      alumniLevels.style.display = this.checked ? "block" : "none";
     }
   });
 
-  // Alumni logic
-  const id = document.getElementById.bind(document);
-  if (id('alumniSGS')) {
-    id('alumniSGS').addEventListener('change', function() {
-      id('alumniLevels').style.display = this.checked ? 'block' : 'none';
-    });
-    if (id('alumniSGS').checked) id('alumniLevels').style.display = 'block';
-    if (id('alumniSD')) id('alumniSD').addEventListener('change', showAlumniInputs);
-    if (id('alumniSMP')) id('alumniSMP').addEventListener('change', showAlumniInputs);
-    if (id('alumniSMA')) id('alumniSMA').addEventListener('change', showAlumniInputs);
-    function showAlumniInputs() {
-      id('alumniSDText').style.display = id('alumniSD')?.checked ? 'inline-block' : 'none';
-      id('alumniSMPText').style.display = id('alumniSMP')?.checked ? 'inline-block' : 'none';
-      id('alumniSMAText').style.display = id('alumniSMA')?.checked ? 'inline-block' : 'none';
-    }
-    showAlumniInputs();
+  if (getEl("alumniSGS").checked) {
+    const alumniLevels = getEl("alumniLevels");
+    if (alumniLevels) alumniLevels.style.display = "block";
   }
-  id('sameAddress').addEventListener('change', function() {
+
+  function showAlumniInputs() {
+    const alumniSDText = getEl("alumniSDText");
+    const alumniSMPText = getEl("alumniSMPText");
+    const alumniSMAText = getEl("alumniSMAText");
+
+    if (alumniSDText) alumniSDText.style.display = getEl("alumniSD")?.checked ? "inline-block" : "none";
+    if (alumniSMPText) alumniSMPText.style.display = getEl("alumniSMP")?.checked ? "inline-block" : "none";
+    if (alumniSMAText) alumniSMAText.style.display = getEl("alumniSMA")?.checked ? "inline-block" : "none";
+  }
+
+  if (getEl("alumniSD")) getEl("alumniSD").addEventListener("change", showAlumniInputs);
+  if (getEl("alumniSMP")) getEl("alumniSMP").addEventListener("change", showAlumniInputs);
+  if (getEl("alumniSMA")) getEl("alumniSMA").addEventListener("change", showAlumniInputs);
+
+  showAlumniInputs();
+}
+
+// ==== Same Address Logic ====
+if (getEl("sameAddress")) {
+  getEl("sameAddress").addEventListener("change", function () {
+    const addressCurrent = getEl("addressCurrent");
+    const addressKTP = getEl("addressKTP");
+
+    if (!addressCurrent || !addressKTP) return;
+
     if (this.checked) {
-      id('addressCurrent').value = id('addressKTP').value;
-      id('addressCurrent').disabled = true;
-      id('addressCurrent').required = false;
+      addressCurrent.value = addressKTP.value;
+      addressCurrent.disabled = true;
+      addressCurrent.required = false;
       appState.identity.sameAddress = true;
     } else {
-      id('addressCurrent').value = '';
-      id('addressCurrent').disabled = false;
-      id('addressCurrent').required = true;
+      addressCurrent.value = "";
+      addressCurrent.disabled = false;
+      addressCurrent.required = true;
       appState.identity.sameAddress = false;
     }
   });
-  id('addressKTP').addEventListener('input', function() {
-    if (id('sameAddress').checked) id('addressCurrent').value = this.value;
-  });
-  if (!id('sameAddress').checked) id('addressCurrent').required = true;
-
-  document.getElementById('identityForm').onsubmit = submitIdentity;
 }
 
+if (getEl("addressKTP")) {
+  getEl("addressKTP").addEventListener("input", function () {
+    if (getEl("sameAddress")?.checked && getEl("addressCurrent")) {
+      getEl("addressCurrent").value = this.value;
+    }
+  });
+}
 
+if (getEl("addressCurrent") && !getEl("sameAddress")?.checked) {
+  getEl("addressCurrent").required = true;
+}
+
+// ==== Submit Identity ====
 function submitIdentity(e) {
   e.preventDefault();
+
   const id = document.getElementById.bind(document);
-  let nickname = id('nickname').value.trim();
-  if (!nickname && id('name').value) {
-    nickname = id('name').value.trim().split(/\s+/)[0];
-    id('nickname').value = nickname;
+
+  let nickname = (id("nickname")?.value || "").trim();
+  const fullName = (id("name")?.value || "").trim();
+
+  if (!nickname && fullName) {
+    nickname = fullName.split(/\s+/)[0];
+    if (id("nickname")) id("nickname").value = nickname;
   }
-  const position = id('position').value;
-  const education = id('education').value;
-  const teacherLevel = (position === "Dosen/Guru") ? id('teacherLevel').value : '';
-  const techRole = (position === "Technical Staff") ? id('techRole').value : '';
+
+  const position = id("position")?.value || "";
+  const education = id("education")?.value || "";
+  const teacherLevel = position === "Dosen/Guru" ? (id("teacherLevel")?.value || "") : "";
+  const techRole = position === "Technical Staff" ? (id("techRole")?.value || "") : "";
+  const sameAddressChecked = id("sameAddress")?.checked || false;
 
   appState.identity = {
-    name: id('name').value,
+    name: fullName,
     nickname: nickname,
-    email: id('email').value,
-    phone: id('phone').value,
-    dob: id('dob').value,
-    age: calculateAge(id('dob').value),
-    status: id('status').value,
-    addressKTP: id('addressKTP').value,
-    addressCurrent: id('sameAddress').checked ? id('addressKTP').value : id('addressCurrent').value,
-    sameAddress: id('sameAddress').checked,
+    email: id("email")?.value || "",
+    phone: id("phone")?.value || "",
+    dob: id("dob")?.value || "",
+    age: calculateAge(id("dob")?.value || ""),
+    status: id("status")?.value || "",
+    addressKTP: id("addressKTP")?.value || "",
+    addressCurrent: sameAddressChecked
+      ? (id("addressKTP")?.value || "")
+      : (id("addressCurrent")?.value || ""),
+    sameAddress: sameAddressChecked,
     position: position,
     teacherLevel: teacherLevel,
     techRole: techRole,
-    alumniSGS: id('alumniSGS')?.checked || false,
-    alumniSD: id('alumniSD')?.checked || false,
-    alumniSMP: id('alumniSMP')?.checked || false,
-    alumniSMA: id('alumniSMA')?.checked || false,
-    alumniSDText: id('alumniSDText')?.value || '',
-    alumniSMPText: id('alumniSMPText')?.value || '',
-    alumniSMAText: id('alumniSMAText')?.value || '',
+    alumniSGS: id("alumniSGS")?.checked || false,
+    alumniSD: id("alumniSD")?.checked || false,
+    alumniSMP: id("alumniSMP")?.checked || false,
+    alumniSMA: id("alumniSMA")?.checked || false,
+    alumniSDText: id("alumniSDText")?.value || "",
+    alumniSMPText: id("alumniSMPText")?.value || "",
+    alumniSMAText: id("alumniSMAText")?.value || "",
     education: education,
-    explanation: id('explanation').value,
-    date: id('date').value
+    explanation: id("explanation")?.value || "",
+    date: id("date")?.value || ""
   };
 
-  localStorage.setItem('identity', JSON.stringify(appState.identity));
+  localStorage.setItem("identity", JSON.stringify(appState.identity));
   renderTestSelection();
 }
-
 
 
 // Tambahkan fungsi untuk umur
