@@ -4034,7 +4034,7 @@ function renderKraeplinChartToPDF(doc, x, y, width, height, data, opts = {}) {
 
 // Password protection
 let downloadClickCount = 0;
-let PASSWORD = localStorage.getItem('usedPragas') === '1' ? "Talent#Secure26!" : "SGS@Assessment2026";
+let PASSWORD = localStorage.getItem('usedPragas') === '1' ? "Talent#Secure2626!" : "SGS@Assessment202626";
 
 
 // --- Efek suara welcome (futuristik) ---
