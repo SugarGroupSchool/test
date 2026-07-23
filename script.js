@@ -12151,255 +12151,451 @@ if (
     return invert ? LABELS5[4 - idx] : LABELS5[idx];
   }
 
-  /* ==================== PERHITUNGAN DETAIL ==================== */
-  const key = appState.kraeplinKey || [];
-  const ans = appState.answers.KRAEPLIN || [];
-  const colsOrigin = tests?.KRAEPLIN?.columns || [];
+ /* ==================== PERHITUNGAN DETAIL — DIPERBAIKI ==================== */
 
-  // Maksimal 50 kolom sesuai rancangan tes.
-  const jumlahKolomSumber = Math.max(
-    colsOrigin.length,
-    key.length,
-    ans.length
-  );
+const key = Array.isArray(appState.kraeplinKey)
+  ? appState.kraeplinKey
+  : [];
 
-  const jumlahKolomAnalisis = Math.min(50, jumlahKolomSumber);
+const ans = Array.isArray(appState.answers.KRAEPLIN)
+  ? appState.answers.KRAEPLIN
+  : [];
 
-  const expectedPerCol = Array.from(
-    { length: jumlahKolomAnalisis },
-    (_, cIdx) => {
-      const sourceCol = colsOrigin[cIdx];
-      const keyCol = key[cIdx];
-      const ansCol = ans[cIdx];
+/*
+  Jangan langsung memakai:
+  tests?.KRAEPLIN?.columns
 
-      // Pertahankan struktur lama: jumlah item = panjang kolom sumber - 1.
-      if (Array.isArray(sourceCol) && sourceCol.length > 0) {
-        return Math.max(0, sourceCol.length - 1);
+  Optional chaining tidak mencegah ReferenceError apabila variabel
+  "tests" sama sekali belum dideklarasikan.
+*/
+const colsOrigin =
+  typeof tests !== "undefined" &&
+  tests &&
+  tests.KRAEPLIN &&
+  Array.isArray(tests.KRAEPLIN.columns)
+    ? tests.KRAEPLIN.columns
+    : [];
+
+/* Mengubah "7" menjadi 7, tetapi tetap membaca "" sebagai kosong. */
+function kraeplinToNumber(value) {
+  if (
+    value === null ||
+    typeof value === "undefined" ||
+    value === ""
+  ) {
+    return null;
+  }
+
+  const numberValue = Number(value);
+
+  return Number.isFinite(numberValue)
+    ? numberValue
+    : null;
+}
+
+/*
+  Tentukan jumlah kolom dari sumber yang tersedia.
+  Maksimal 50 kolom.
+*/
+const jumlahKolomSumber = Math.max(
+  colsOrigin.length,
+  key.length,
+  ans.length
+);
+
+const jumlahKolomAnalisis = Math.min(
+  50,
+  jumlahKolomSumber
+);
+
+/*
+  Tentukan jumlah item yang seharusnya dikerjakan per kolom.
+*/
+const expectedPerCol = Array.from(
+  { length: jumlahKolomAnalisis },
+  (_, cIdx) => {
+    const sourceCol = colsOrigin[cIdx];
+    const keyCol = key[cIdx];
+    const ansCol = ans[cIdx];
+
+    if (
+      Array.isArray(sourceCol) &&
+      sourceCol.length > 0
+    ) {
+      return Math.max(
+        0,
+        sourceCol.length - 1
+      );
+    }
+
+    if (Array.isArray(keyCol)) {
+      return keyCol.length;
+    }
+
+    if (Array.isArray(ansCol)) {
+      return ansCol.length;
+    }
+
+    return 0;
+  }
+);
+
+const expectedTotal = expectedPerCol.reduce(
+  (total, value) => total + value,
+  0
+);
+
+/*
+  Bedakan:
+  1. Salah
+  2. Loncatan nyata di antara jawaban
+  3. Belum dikerjakan pada bagian akhir kolom
+*/
+const colStats = expectedPerCol.map((exp, cIdx) => {
+  const jaw = Array.isArray(ans[cIdx])
+    ? ans[cIdx]
+    : [];
+
+  const k = Array.isArray(key[cIdx])
+    ? key[cIdx]
+    : [];
+
+  let isi = 0;
+  let benar = 0;
+  let salah = 0;
+  let skipped = 0;
+  let belumDikerjakan = 0;
+
+  /*
+    Temukan posisi jawaban terakhir.
+    Kosong setelah posisi ini dianggap belum sempat dikerjakan.
+  */
+  let lastAnsweredRow = -1;
+
+  for (
+    let r = Math.min(exp, jaw.length) - 1;
+    r >= 0;
+    r--
+  ) {
+    const value = kraeplinToNumber(jaw[r]);
+
+    if (value !== null) {
+      lastAnsweredRow = r;
+      break;
+    }
+  }
+
+  for (let r = 0; r < exp; r++) {
+    const value = kraeplinToNumber(jaw[r]);
+    const kunci = kraeplinToNumber(k[r]);
+
+    if (value !== null) {
+      isi++;
+
+      if (
+        kunci !== null &&
+        value === kunci
+      ) {
+        benar++;
+      } else {
+        salah++;
       }
-
-      // Fallback bila sumber kolom tidak tersedia.
-      if (Array.isArray(keyCol)) return keyCol.length;
-      if (Array.isArray(ansCol)) return ansCol.length;
-
-      return 0;
+    } else if (r <= lastAnsweredRow) {
+      skipped++;
+    } else {
+      belumDikerjakan++;
     }
+  }
+
+  return {
+    exp,
+    isi,
+    benar,
+    salah,
+    skipped,
+    belumDikerjakan,
+    kosong: skipped + belumDikerjakan,
+    dijangkau: isi + skipped,
+    akurasi:
+      isi > 0
+        ? (benar / isi) * 100
+        : 0
+  };
+});
+
+/* ==================== TOTAL ==================== */
+
+const isiPerKolom = colStats.map(
+  stat => stat.isi
+);
+
+const benarPerKolom = colStats.map(
+  stat => stat.benar
+);
+
+const salahPerKolom = colStats.map(
+  stat => stat.salah
+);
+
+const kosongPerKolom = colStats.map(
+  stat => stat.kosong
+);
+
+const skippedPerKolom = colStats.map(
+  stat => stat.skipped
+);
+
+const belumDikerjakanPerKolom = colStats.map(
+  stat => stat.belumDikerjakan
+);
+
+const akurasiPerKolom = colStats.map(
+  stat => stat.akurasi
+);
+
+const totalIsi = isiPerKolom.reduce(
+  (total, value) => total + value,
+  0
+);
+
+const totalBenar = benarPerKolom.reduce(
+  (total, value) => total + value,
+  0
+);
+
+const totalSalah = salahPerKolom.reduce(
+  (total, value) => total + value,
+  0
+);
+
+const totalSkipped = skippedPerKolom.reduce(
+  (total, value) => total + value,
+  0
+);
+
+const totalBelumDikerjakan =
+  belumDikerjakanPerKolom.reduce(
+    (total, value) => total + value,
+    0
   );
 
-  const expectedTotal = expectedPerCol.reduce((a, b) => a + b, 0);
+const totalKosong = kosongPerKolom.reduce(
+  (total, value) => total + value,
+  0
+);
 
-  const colStats = expectedPerCol.map((exp, cIdx) => {
-    const jaw = Array.isArray(ans[cIdx]) ? ans[cIdx] : [];
-    const k = Array.isArray(key[cIdx]) ? key[cIdx] : [];
+const totalDijangkau =
+  totalIsi + totalSkipped;
 
-    let isi = 0;
-    let benar = 0;
-    let salah = 0;
-    let skipped = 0;
-    let belumDikerjakan = 0;
+const kolomDikerjakan =
+  isiPerKolom.filter(value => value > 0).length;
 
-    // Cari posisi jawaban numerik terakhir pada kolom.
-    // Kosong sebelum/di posisi ini dianggap loncatan nyata.
-    // Kosong setelahnya dianggap belum sempat dijangkau.
-    let lastAnsweredRow = -1;
+const jumlahKolomTerjadwal =
+  isiPerKolom.length;
 
-for (let r = Math.min(exp, jaw.length) - 1; r >= 0; r--) {
-  const v = normalizeKraeplinValue(jaw[r]);
+/* ==================== SKOR KONSTRUK ==================== */
 
-  if (v !== null) {
-    lastAnsweredRow = r;
-    break;
-  }
-}
-
-   for (let r = 0; r < exp; r++) {
-  const v = normalizeKraeplinValue(jaw[r]);
-  const kunci = normalizeKraeplinValue(k[r]);
-
-  if (v !== null) {
-    isi++;
-
-    if (kunci !== null && v === kunci) {
-      benar++;
-    } else {
-      salah++;
-    }
-  } else if (r <= lastAnsweredRow) {
-    skipped++;
-  } else {
-    belumDikerjakan++;
-  }
-}
-
-    const kosong = skipped + belumDikerjakan;
-    const dijangkau = isi + skipped;
-    const akurasi = isi > 0 ? (benar / isi) * 100 : 0;
-
-    return {
-      exp,
-      isi,
-      benar,
-      salah,
-      skipped,
-      belumDikerjakan,
-      kosong,
-      dijangkau,
-      akurasi
-    };
-  });
-
-  const isiPerKolom = colStats.map(s => s.isi);
-  const benarPerKolom = colStats.map(s => s.benar);
-  const salahPerKolom = colStats.map(s => s.salah);
-  const skippedPerKolom = colStats.map(s => s.skipped);
-  const belumDikerjakanPerKolom = colStats.map(s => s.belumDikerjakan);
-  const kosongPerKolom = colStats.map(s => s.kosong);
-  const akurasiPerKolom = colStats.map(s => s.akurasi);
-
-  const totalIsi = isiPerKolom.reduce((a, b) => a + b, 0);
-  const totalBenar = benarPerKolom.reduce((a, b) => a + b, 0);
-  const totalSalah = salahPerKolom.reduce((a, b) => a + b, 0);
-  const totalSkipped = skippedPerKolom.reduce((a, b) => a + b, 0);
-  const totalBelumDikerjakan = belumDikerjakanPerKolom.reduce((a, b) => a + b, 0);
-  const totalKosong = kosongPerKolom.reduce((a, b) => a + b, 0);
-  const totalDijangkau = totalIsi + totalSkipped;
-
-  const kolomDikerjakan = isiPerKolom.filter(v => v > 0).length;
-  const jumlahKolomTerjadwal = isiPerKolom.length;
-
-  /* ==================== SKOR KONSTRUK ==================== */
-
-  // PANKER: rata-rata output per seluruh lajur terjadwal.
-  // Tidak dibagi hanya dengan kolom yang berisi karena dapat menginflasi skor.
-  const panker = jumlahKolomTerjadwal > 0
+/*
+  PANKER:
+  Rata-rata output dari seluruh kolom yang terjadwal.
+*/
+const panker =
+  jumlahKolomTerjadwal > 0
     ? totalIsi / jumlahKolomTerjadwal
     : 0;
 
-  // TIANKER: salah + loncatan nyata.
-  // Item yang belum sempat dijangkau tidak dihitung sebagai error ketelitian.
-  const tianker_abs = totalSalah + totalSkipped;
+/*
+  TIANKER:
+  Salah + loncatan nyata.
+  Belum dikerjakan tidak dihitung sebagai kesalahan ketelitian.
+*/
+const tianker_abs =
+  totalSalah + totalSkipped;
 
-  // Kategori TIANKER menggunakan persentase terhadap item yang dijangkau.
-  const tianker_pct = totalDijangkau > 0
+const tianker_pct =
+  totalDijangkau > 0
     ? (tianker_abs / totalDijangkau) * 100
     : 0;
 
-  // Akurasi jawaban yang benar-benar diberikan.
-  const akurasiTotal = totalIsi > 0
-    ? (totalBenar / totalIsi) * 100
-    : 0;
-
-  // Cakupan pengerjaan dipisahkan dari ketelitian.
-  const cakupanPengerjaan = expectedTotal > 0
-    ? (totalIsi / expectedTotal) * 100
-    : 0;
-
-  // JANKER: deviasi rata-rata setiap lajur dari rata-rata PANKER.
-  // Semakin kecil nilainya, semakin stabil/ajeg.
-  const jankerAvgDev = isiPerKolom.length > 0
+/*
+  JANKER:
+  Deviasi rata-rata setiap kolom terhadap rata-rata PANKER.
+  Semakin kecil semakin stabil.
+*/
+const jankerAvgDev =
+  isiPerKolom.length > 0
     ? isiPerKolom.reduce(
-        (sum, nilai) => sum + Math.abs(nilai - panker),
+        (total, value) =>
+          total + Math.abs(value - panker),
         0
       ) / isiPerKolom.length
     : 0;
 
-  const jankerRange = isiPerKolom.length > 0
-    ? Math.max(...isiPerKolom) - Math.min(...isiPerKolom)
-    : 0;
+/* ==================== REGRESI DAN HANKER ==================== */
 
-  // Regresi linear untuk kecenderungan performa.
-  function linRegSlope(yFix) {
-    const values = Array.isArray(yFix)
-      ? yFix.map(v => Number(v) || 0)
-      : [];
-
-    const m = values.length;
-    if (m < 2) return 0;
-
-    const meanX = (m + 1) / 2;
-    const meanY = values.reduce((a, b) => a + b, 0) / m;
-
-    let num = 0;
-    let den = 0;
-
-    for (let i = 0; i < m; i++) {
-      const x = i + 1;
-      num += (x - meanX) * (values[i] - meanY);
-      den += Math.pow(x - meanX, 2);
-    }
-
-    return den > 0 ? num / den : 0;
+function linRegSlope(values) {
+  if (
+    !Array.isArray(values) ||
+    values.length < 2
+  ) {
+    return 0;
   }
 
-  const slopeRaw = linRegSlope(isiPerKolom);
-  const slope = Number(slopeRaw.toFixed(3));
+  const jumlahData = values.length;
 
-  // HANKER: estimasi perubahan dari lajur awal ke lajur akhir berdasarkan regresi.
-  const hanker = isiPerKolom.length >= 2
+  const meanX =
+    (jumlahData + 1) / 2;
+
+  const meanY =
+    values.reduce(
+      (total, value) => total + value,
+      0
+    ) / jumlahData;
+
+  let numerator = 0;
+  let denominator = 0;
+
+  for (let i = 0; i < jumlahData; i++) {
+    const x = i + 1;
+
+    numerator +=
+      (x - meanX) *
+      (values[i] - meanY);
+
+    /*
+      Perbaikan penting:
+      sebelumnya memakai (x[i] - x[i]),
+      sehingga denominator selalu 0.
+    */
+    denominator +=
+      Math.pow(x - meanX, 2);
+  }
+
+  return denominator > 0
+    ? numerator / denominator
+    : 0;
+}
+
+const slopeRaw =
+  linRegSlope(isiPerKolom);
+
+const slope =
+  Number(slopeRaw.toFixed(3));
+
+/*
+  HANKER:
+  Estimasi perubahan performa dari kolom awal ke kolom akhir.
+*/
+const hanker =
+  isiPerKolom.length >= 2
     ? slopeRaw * (isiPerKolom.length - 1)
     : 0;
 
-  // Rata-rata 10 lajur awal dan 10 lajur akhir.
-  // Nilai 0 tetap ikut dihitung karena merupakan output pada lajur terjadwal.
-  function takeAvgFixed(arr, from, to) {
-    const seg = arr.slice(from, to);
-    return seg.length > 0
-      ? seg.reduce((a, b) => a + b, 0) / seg.length
-      : 0;
-  }
+/* ==================== TREN AWAL–AKHIR ==================== */
 
-  const n = isiPerKolom.length;
-  const blk = Math.min(10, n);
+function takeAvg(arr, from, to) {
+  const segment = arr.slice(from, to);
 
-  const earlyAvg = takeAvgFixed(
-    isiPerKolom,
-    0,
-    blk
-  );
+  return segment.length > 0
+    ? segment.reduce(
+        (total, value) => total + value,
+        0
+      ) / segment.length
+    : 0;
+}
 
-  const lateAvg = takeAvgFixed(
-    isiPerKolom,
-    Math.max(0, n - blk),
-    n
-  );
+const n = isiPerKolom.length;
+const blk = Math.min(10, n);
 
-  const deltaEL = lateAvg - earlyAvg;
+const earlyAvg = takeAvg(
+  isiPerKolom,
+  0,
+  blk
+);
 
-  let trenText;
-  const TH_SLOPE = 0.15;
-  const TH_DELTA = 1.00;
+const lateAvg = takeAvg(
+  isiPerKolom,
+  Math.max(0, n - blk),
+  n
+);
 
-  if (slope <= -TH_SLOPE && deltaEL < -TH_DELTA) {
-    trenText = "Menurun (indikasi kelelahan/penurunan ritme)";
-  } else if (slope >= TH_SLOPE && deltaEL > TH_DELTA) {
-    trenText = "Meningkat (indikasi pemanasan/peningkatan ritme)";
-  } else {
-    trenText = "Relatif stabil";
-  }
+const deltaEL =
+  lateAvg - earlyAvg;
 
-  /* ==================== KATEGORI ==================== */
-  const pScore = Number(panker.toFixed(1));
-  const tScore = Number(tianker_abs.toFixed(0));
-  const tPctScore = Number(tianker_pct.toFixed(1));
-  const jScore = Number(jankerAvgDev.toFixed(2));
-  const hScore = Number(hanker.toFixed(2));
+let trenText;
 
-  const catP = USE_UGM_NORMS
-    ? catFixedAsc(pScore, UGM_BANDS.PANKER, false)
-    : "Cukup";
+const TH_SLOPE = 0.15;
+const TH_DELTA = 1;
 
-  // PENTING: kategori TIANKER memakai persentase, bukan jumlah absolut.
-  const catT = USE_UGM_NORMS
-    ? catFixedAsc(tPctScore, UGM_BANDS.TIANKER, true)
-    : "Cukup";
+if (
+  slope <= -TH_SLOPE &&
+  deltaEL < -TH_DELTA
+) {
+  trenText =
+    "Menurun (indikasi kelelahan)";
+} else if (
+  slope >= TH_SLOPE &&
+  deltaEL > TH_DELTA
+) {
+  trenText =
+    "Meningkat (indikasi pemanasan/ketahanan)";
+} else {
+  trenText =
+    "Relatif stabil";
+}
 
-  const catJ = USE_UGM_NORMS
-    ? catFixedAsc(jScore, UGM_BANDS.JANKER, true)
-    : "Cukup";
+/* ==================== KATEGORI ==================== */
 
-  const catH = USE_UGM_NORMS
-    ? catFixedAsc(hScore, UGM_BANDS.HANKER, false)
-    : "Cukup";
+const pScore =
+  Number(panker.toFixed(1));
 
+const tScore =
+  Number(tianker_abs.toFixed(0));
+
+const tPctScore =
+  Number(tianker_pct.toFixed(1));
+
+const jScore =
+  Number(jankerAvgDev.toFixed(2));
+
+const hScore =
+  Number(hanker.toFixed(2));
+
+const catP = USE_UGM_NORMS
+  ? catFixedAsc(
+      pScore,
+      UGM_BANDS.PANKER,
+      false
+    )
+  : "Cukup";
+
+/*
+  Kategori TIANKER harus memakai persentase,
+  bukan jumlah mentah kesalahan.
+*/
+const catT = USE_UGM_NORMS
+  ? catFixedAsc(
+      tPctScore,
+      UGM_BANDS.TIANKER,
+      true
+    )
+  : "Cukup";
+
+const catJ = USE_UGM_NORMS
+  ? catFixedAsc(
+      jScore,
+      UGM_BANDS.JANKER,
+      true
+    )
+  : "Cukup";
+
+const catH = USE_UGM_NORMS
+  ? catFixedAsc(
+      hScore,
+      UGM_BANDS.HANKER,
+      false
+    )
+  : "Cukup";
   /* ==================== RENDER PDF (SEMUA TYPEWRITER) ==================== */
 
   // Header
