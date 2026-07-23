@@ -3573,7 +3573,7 @@ function koreksiBigFive(answers, questions) {
 }
 
 
-// ===== FUNGSI ANALISIS HASIL — VERSI UGM (nama tetap) =====
+// ===== FUNGSI ANALISIS HASIL — VERSI DIPERBAIKI =====
 function analyzeKraeplin() {
   const user = appState.answers.KRAEPLIN || [];
   const key  = appState.kraeplinKey || [];
@@ -3583,107 +3583,229 @@ function analyzeKraeplin() {
   const benarPerKolom = [];
   const salahPerKolom = [];
   const skippedPerKolom = [];
+  const belumDikerjakanPerKolom = [];
 
-  let totalBenar = 0, totalSalah = 0, totalSkipped = 0, kolomTerisi = 0, dibenarkan = 0;
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let totalSkipped = 0;          // Loncatan nyata di antara item yang sudah dijangkau
+  let totalBelumDikerjakan = 0;  // Bagian akhir kolom yang belum sempat dijangkau
+  let totalSeharusnya = 0;
+  let kolomTerisi = 0;
+  let jumlahKolomTerjadwal = 0;
+  let dibenarkan = 0;
 
-  // Analisis per kolom (UGM)
-  for (let col = 0; col < user.length; col++) {
-    const U = user[col], K = key[col];
-    if (!Array.isArray(U) || !Array.isArray(K)) continue;
+  const jumlahKolom = Math.max(user.length, key.length);
 
-    const n = Math.min(U.length, K.length);
-    let isi = 0, b = 0, s = 0, sk = 0;
+  for (let col = 0; col < jumlahKolom; col++) {
+    const U = Array.isArray(user[col]) ? user[col] : [];
+    const K = Array.isArray(key[col])  ? key[col]  : [];
+
+    if (!K.length) continue;
+
+    const n = K.length;
+    totalSeharusnya += n;
+    jumlahKolomTerjadwal++;
+
+    // Cari jawaban terakhir pada kolom.
+    // Kosong setelah posisi ini adalah "belum dikerjakan", bukan loncatan.
+    let lastAnsweredRow = -1;
+    for (let row = Math.min(U.length, n) - 1; row >= 0; row--) {
+      const ans = U[row];
+      if (ans !== null && typeof ans !== "undefined" && ans !== "") {
+        lastAnsweredRow = row;
+        break;
+      }
+    }
+
+    let isi = 0;
+    let b = 0;
+    let s = 0;
+    let sk = 0;
+    let belum = 0;
 
     for (let row = 0; row < n; row++) {
       const ans = U[row];
       const kunci = K[row];
+      const kosong = ans === null || typeof ans === "undefined" || ans === "";
 
-      // kosong = loncatan (skipped)
-      if (ans === null || typeof ans === "undefined") { sk++; continue; }
+      if (kosong) {
+        if (row <= lastAnsweredRow) sk++;
+        else belum++;
+        continue;
+      }
 
       isi++;
+
       if (ans === kunci) {
         b++;
-        // dibenarkan: sebelumnya salah lalu jadi benar
+
+        // Dibenarkan: sebelumnya pernah salah, lalu diubah menjadi benar.
         const hKey = `${col}-${row}`;
         const riwayat = history[hKey] || [];
-        if (riwayat.length > 1 && riwayat.some(v => v !== kunci)) dibenarkan++;
+        if (riwayat.length > 1 && riwayat.some(v => v !== kunci)) {
+          dibenarkan++;
+        }
       } else {
         s++;
       }
     }
 
-    if (isi + sk > 0) {
-      isiPerKolom.push(isi);
-      benarPerKolom.push(b);
-      salahPerKolom.push(s);
-      skippedPerKolom.push(sk);
+    // Simpan seluruh kolom terjadwal agar grafik ritme tetap berjumlah 50 lajur.
+    isiPerKolom.push(isi);
+    benarPerKolom.push(b);
+    salahPerKolom.push(s);
+    skippedPerKolom.push(sk);
+    belumDikerjakanPerKolom.push(belum);
 
-      totalBenar += b; totalSalah += s; totalSkipped += sk;
-      kolomTerisi++;
-    }
+    totalBenar += b;
+    totalSalah += s;
+    totalSkipped += sk;
+    totalBelumDikerjakan += belum;
+
+    if (isi > 0 || sk > 0) kolomTerisi++;
   }
 
-  // Dasar (informasi tambahan/kompat)
-  const kecepatan = isiPerKolom.reduce((a,b)=>a+b,0);            // total DIISI
-  const avgIsiPerKolom = isiPerKolom.length ? kecepatan/isiPerKolom.length : 0;
-  const totalSoal = kecepatan;                                   // yang DIISI (tanpa skipped)
-  const ketelitian = totalSoal ? (totalBenar/totalSoal)*100 : 0; // % benar total
+  // ===== Data dasar =====
+  const kecepatan = isiPerKolom.reduce((a, b) => a + b, 0);
+  const avgIsiPerKolom = jumlahKolomTerjadwal
+    ? kecepatan / jumlahKolomTerjadwal
+    : 0;
 
-  // ===== Istilah UGM =====
-  const panker  = avgIsiPerKolom;                  // laju kerja: rata item/lajur (15 dtk)
-  const tianker = totalSalah + totalSkipped;       // ketelitian: error + loncatan
+  const totalDiisi = totalBenar + totalSalah;
+  const totalDijangkau = totalDiisi + totalSkipped;
+  const totalKosong = totalSkipped + totalBelumDikerjakan;
 
-  // JANKER: keajegan (lebih kecil = lebih ajeg)
-  let jankerRange = 0, jankerAvgDev = 0;
+  // Akurasi hanya berdasarkan jawaban yang benar-benar diberikan.
+  const ketelitian = totalDiisi
+    ? (totalBenar / totalDiisi) * 100
+    : 0;
+
+  // Cakupan pengerjaan dipisahkan dari ketelitian.
+  const cakupanPengerjaan = totalSeharusnya
+    ? (totalDiisi / totalSeharusnya) * 100
+    : 0;
+
+  // ===== Indikator inti =====
+  const panker = avgIsiPerKolom;
+
+  // TIANKER mentah: salah + loncatan nyata.
+  // Soal yang belum sempat dijangkau TIDAK dimasukkan.
+  const tianker = totalSalah + totalSkipped;
+
+  // Persentase TIANKER dipakai untuk kategorisasi agar adil
+  // pada tes dengan jumlah lajur/item yang berbeda.
+  const tiankerPct = totalDijangkau
+    ? (tianker / totalDijangkau) * 100
+    : 0;
+
+  // JANKER: semakin kecil deviasi, semakin ajeg.
+  let jankerRange = 0;
+  let jankerAvgDev = 0;
+
   if (isiPerKolom.length) {
-    const maxY = Math.max(...isiPerKolom), minY = Math.min(...isiPerKolom);
+    const maxY = Math.max(...isiPerKolom);
+    const minY = Math.min(...isiPerKolom);
+
     jankerRange = maxY - minY;
-    jankerAvgDev = isiPerKolom.reduce((a,y)=>a+Math.abs(y-avgIsiPerKolom),0) / isiPerKolom.length;
+    jankerAvgDev =
+      isiPerKolom.reduce(
+        (sum, nilai) => sum + Math.abs(nilai - avgIsiPerKolom),
+        0
+      ) / isiPerKolom.length;
   }
 
-  // HANKER: ketahanan = (y50 - y0) dari garis regresi (slope × 50)
-  let slope = 0, hanker = 0;
+  // HANKER: perubahan garis regresi dari lajur pertama ke lajur terakhir.
+  let slope = 0;
+  let hanker = 0;
+
   if (isiPerKolom.length >= 2) {
     const N = isiPerKolom.length;
-    const xs = Array.from({length:N}, (_,i)=>i+1);
-    const meanX = xs.reduce((a,c)=>a+c,0)/N;
+    const xs = Array.from({ length: N }, (_, i) => i + 1);
+    const meanX = xs.reduce((a, b) => a + b, 0) / N;
     const meanY = avgIsiPerKolom;
-    const num = xs.reduce((a,x,i)=>a + (x-meanX)*(isiPerKolom[i]-meanY), 0);
-    const den = xs.reduce((a,x)=>a + Math.pow(x-meanX,2), 0);
-    slope = den ? (num/den) : 0;
-    hanker = slope * 50; // proyeksi perubahan dari awal → lajur 50
+
+    const numerator = xs.reduce(
+      (sum, x, i) => sum + (x - meanX) * (isiPerKolom[i] - meanY),
+      0
+    );
+
+    const denominator = xs.reduce(
+      (sum, x) => sum + Math.pow(x - meanX, 2),
+      0
+    );
+
+    slope = denominator ? numerator / denominator : 0;
+    hanker = slope * (N - 1);
   }
 
-  // Mental fatigue (opsional, tetap)
+  // Mental fatigue: perbandingan rerata seperempat awal dan akhir.
   let mentalFatigue = 0;
+
   if (isiPerKolom.length >= 4) {
-    const q = Math.floor(isiPerKolom.length/4);
-    const awal  = isiPerKolom.slice(0,q).reduce((a,b)=>a+b,0)/(q||1);
-    const akhir = isiPerKolom.slice(-q).reduce((a,b)=>a+b,0)/(q||1);
-    mentalFatigue = awal>0 ? ((awal-akhir)/awal)*100 : 0;
+    const q = Math.floor(isiPerKolom.length / 4);
+
+    const awal =
+      isiPerKolom.slice(0, q).reduce((a, b) => a + b, 0) / (q || 1);
+
+    const akhir =
+      isiPerKolom.slice(-q).reduce((a, b) => a + b, 0) / (q || 1);
+
+    mentalFatigue = awal > 0
+      ? ((awal - akhir) / awal) * 100
+      : 0;
   }
 
-  // Akurasi per kolom (untuk grafik)
-  const akurasiPerKolom = isiPerKolom.map((isi,i)=> isi>0 ? (benarPerKolom[i]/isi)*100 : 0);
-  const rataAkurasi = akurasiPerKolom.length ? akurasiPerKolom.reduce((a,b)=>a+b,0)/akurasiPerKolom.length : 0;
+  // Akurasi per kolom untuk grafik.
+  const akurasiPerKolom = isiPerKolom.map((isi, i) =>
+    isi > 0 ? (benarPerKolom[i] / isi) * 100 : 0
+  );
 
-  // (Kompat) keajegan lama
+  const kolomDenganIsi = akurasiPerKolom.filter(
+    (_, i) => isiPerKolom[i] > 0
+  );
+
+  const rataAkurasi = kolomDenganIsi.length
+    ? kolomDenganIsi.reduce((a, b) => a + b, 0) / kolomDenganIsi.length
+    : 0;
+
+  // Indikator kompatibilitas lama.
   const diffs = [];
-  for (let i = 1; i < isiPerKolom.length; i++) diffs.push(Math.abs(isiPerKolom[i]-isiPerKolom[i-1]));
-  const rataFluktuasi = diffs.length ? diffs.reduce((a,b)=>a+b,0)/diffs.length : 0;
-  const koefisienKonsistensi = avgIsiPerKolom ? (rataFluktuasi/avgIsiPerKolom)*100 : 0;
+  for (let i = 1; i < isiPerKolom.length; i++) {
+    diffs.push(Math.abs(isiPerKolom[i] - isiPerKolom[i - 1]));
+  }
+
+  const rataFluktuasi = diffs.length
+    ? diffs.reduce((a, b) => a + b, 0) / diffs.length
+    : 0;
+
+  const koefisienKonsistensi = avgIsiPerKolom
+    ? (rataFluktuasi / avgIsiPerKolom) * 100
+    : 0;
 
   return {
-    // total & dasar (kompat)
     benar: totalBenar,
     salah: totalSalah,
     dibenarkan,
-    total: totalSoal,
-    ketelitian,                 // % benar total (informasi tambahan)
-    kecepatan,                  // total DIISI
+
+    total: totalDiisi, // kompatibilitas nama lama
+    totalDiisi,
+    totalDijangkau,
+    totalSeharusnya,
+    totalKosong,
+    skipped: totalSkipped,
+    belumDikerjakan: totalBelumDikerjakan,
+
+    ketelitian,
+    cakupanPengerjaan,
+    kecepatan,
+
     isiPerKolom,
+    benarPerKolom,
+    salahPerKolom,
+    skippedPerKolom,
+    belumDikerjakanPerKolom,
     akurasiPerKolom,
+
     keajegan: rataFluktuasi,
     koefisienKonsistensi,
     ketahananSlope: slope,
@@ -3691,15 +3813,18 @@ function analyzeKraeplin() {
     avgIsi: avgIsiPerKolom,
     rataAkurasi,
     kolomTerisi,
+    jumlahKolomTerjadwal,
 
-    // skor UGM (inti)
-    panker,                     // laju: mean isi/lajur
-    tianker,                    // ketelitian: error + loncatan
+    panker,
+    tianker,
+    tiankerPct,
+    tianker_pct: tiankerPct, // alias agar kode PDF lama tetap kompatibel
     jankerRange,
     jankerAvgDev,
     hanker
   };
 }
+
 
 
 // Fungsi kategorisasi (tetap; tidak dipakai untuk UGM kecuali ketahanan deskriptif)
@@ -3719,56 +3844,98 @@ function kraeplinKategori(skor, jenisMetric, tresholds) {
 }
 
 
-// ===== FUNGSI LAPORAN — VERSI UGM (nama tetap) =====
+// ===== FUNGSI LAPORAN — VERSI DIPERBAIKI =====
 function generateKraeplinReport(analysis) {
   const {
-    // UGM core
-    panker, tianker, jankerRange, jankerAvgDev, hanker,
-    // tambahan/kompat
-    benar, salah, dibenarkan, total, ketelitian, kecepatan,
-    ketahananSlope, mentalFatigue, avgIsi, kolomTerisi
+    panker,
+    tianker,
+    tiankerPct = analysis.tianker_pct ?? 0,
+    jankerRange,
+    jankerAvgDev,
+    hanker,
+
+    benar,
+    salah,
+    dibenarkan,
+    total,
+    totalDiisi = total ?? 0,
+    totalDijangkau = totalDiisi,
+    totalSeharusnya = totalDiisi,
+    totalKosong = 0,
+    skipped = 0,
+    belumDikerjakan = 0,
+
+    ketelitian,
+    cakupanPengerjaan = 0,
+    kecepatan,
+    ketahananSlope,
+    mentalFatigue,
+    avgIsi,
+    kolomTerisi,
+    jumlahKolomTerjadwal = kolomTerisi
   } = analysis;
 
-  // Kategori ketahanan (arah)
+  // Kategori ketahanan berdasarkan arah perubahan output.
   let kategoriKetahanan;
   if (hanker < -1) kategoriKetahanan = "Menurun";
   else if (hanker > 1) kategoriKetahanan = "Meningkat";
   else kategoriKetahanan = "Stabil";
 
-  // ===== Kategori 5-level (Sangat Tinggi s.d. Rendah Sekali) =====
-  const LABELS5 = ["Rendah Sekali","Rendah","Cukup","Tinggi","Sangat Tinggi"];
+  const LABELS5 = [
+    "Rendah Sekali",
+    "Rendah",
+    "Cukup",
+    "Tinggi",
+    "Sangat Tinggi"
+  ];
 
-  // Ambang ASC (operasional 15 dtk/lajur)
-  // PANKER (lebih besar lebih baik)
+  // Ambang operasional, bukan norma baku populasi.
   const bandsP = [10, 14, 18, 22];
-  // TIANKER (lebih kecil lebih baik) → pakai ASC lalu dibalik labelnya
+
+  // TIANKER sekarang berupa persentase kesalahan pada item yang dijangkau.
+  // Semakin kecil persentasenya, semakin tinggi ketelitian.
   const bandsT = [5, 10, 15, 20];
-  // JANKER avgDev (lebih kecil lebih baik)
+
+  // JANKER menggunakan deviasi rata-rata; semakin kecil semakin ajeg.
   const bandsJ = [1.5, 2.5, 4.0, 6.0];
 
-  function pickLabel5(value, bandsAsc, invert=false) {
-    const [b1,b2,b3,b4] = bandsAsc;
+  function pickLabel5(value, bandsAsc, invert = false) {
+    const [b1, b2, b3, b4] = bandsAsc;
     let idx = 0;
+
     if (value <= b1) idx = 0;
     else if (value <= b2) idx = 1;
     else if (value <= b3) idx = 2;
     else if (value <= b4) idx = 3;
     else idx = 4;
-    return invert ? LABELS5.slice().reverse()[idx] : LABELS5[idx];
+
+    return invert
+      ? LABELS5.slice().reverse()[idx]
+      : LABELS5[idx];
   }
 
-  const catP = pickLabel5(panker ?? 0,       bandsP, false);
-  const catT = pickLabel5(tianker ?? 0,      bandsT, true);
+  const catP = pickLabel5(panker ?? 0, bandsP, false);
+  const catT = pickLabel5(tiankerPct ?? 0, bandsT, true);
   const catJ = pickLabel5(jankerAvgDev ?? 0, bandsJ, true);
 
-  // Aspek yang perlu penguatan
   const lowList = [];
-  if (catP === "Rendah" || catP === "Rendah Sekali") lowList.push("tempo kerja");
-  if (catT === "Rendah" || catT === "Rendah Sekali") lowList.push("ketelitian");
-  if (catJ === "Rendah" || catJ === "Rendah Sekali") lowList.push("keajegan");
-  if (kategoriKetahanan === "Menurun")               lowList.push("ketahanan (ritme menurun)");
 
-  // Tuntutan peran (opsional)
+  if (catP === "Rendah" || catP === "Rendah Sekali") {
+    lowList.push("tempo kerja");
+  }
+
+  if (catT === "Rendah" || catT === "Rendah Sekali") {
+    lowList.push("ketelitian");
+  }
+
+  if (catJ === "Rendah" || catJ === "Rendah Sekali") {
+    lowList.push("keajegan");
+  }
+
+  if (kategoriKetahanan === "Menurun") {
+    lowList.push("ketahanan ritme kerja");
+  }
+
   function roleDemand(pos) {
     switch (pos) {
       case "Administrator":
@@ -3783,59 +3950,120 @@ function generateKraeplinReport(analysis) {
   }
 
   const posisi = (appState?.identity?.position || "").trim();
+
   function roleSentence(pos) {
-    const angka = ` (PANKER ${ (panker??0).toFixed(1) }/lajur; TIANKER ${ tianker??0 }; JANKER ${ (jankerAvgDev??0).toFixed(2) }; HANKER ${(hanker>=0?"+":"")}${ (hanker??0).toFixed(2) })`;
-    const dasar = `Untuk posisi ${pos}, profil menunjukkan kecepatan ${catP.toLowerCase()}, ketelitian ${catT.toLowerCase()}, keajegan ${catJ.toLowerCase()}, serta ketahanan yang ${kategoriKetahanan.toLowerCase()}; `;
-    if (!lowList.length) return dasar + `kombinasi ini mendukung ${roleDemand(pos)}.` + angka;
-    const joinLow = lowList.join(", ").replace(", ketahanan", " dan ketahanan");
-    return dasar + `perlu penguatan pada ${joinLow} agar lebih selaras dengan ${roleDemand(pos)}.` + angka;
+    const angka =
+      ` (PANKER ${(panker ?? 0).toFixed(1)}/lajur; ` +
+      `TIANKER ${tianker ?? 0} atau ${(tiankerPct ?? 0).toFixed(1)}%; ` +
+      `JANKER ${(jankerAvgDev ?? 0).toFixed(2)}; ` +
+      `HANKER ${(hanker >= 0 ? "+" : "")}${(hanker ?? 0).toFixed(2)})`;
+
+    const dasar =
+      `Untuk posisi ${pos}, profil menunjukkan kecepatan ${catP.toLowerCase()}, ` +
+      `ketelitian ${catT.toLowerCase()}, keajegan ${catJ.toLowerCase()}, ` +
+      `serta ketahanan yang ${kategoriKetahanan.toLowerCase()}; `;
+
+    if (!lowList.length) {
+      return dasar + `kombinasi ini mendukung ${roleDemand(pos)}.` + angka;
+    }
+
+    return (
+      dasar +
+      `perlu penguatan pada ${lowList.join(", ")} agar lebih selaras dengan ` +
+      `${roleDemand(pos)}.` +
+      angka
+    );
   }
-  const interpretasiPosisi = (posisi && posisi !== "Guru") ? roleSentence(posisi) : null;
+
+  const interpretasiPosisi =
+    posisi && posisi !== "Guru"
+      ? roleSentence(posisi)
+      : null;
 
   return {
     skor: {
-      // Inti UGM
       PANKER: panker,
+
+      // Nilai mentah dan persentase disimpan terpisah.
       TIANKER: tianker,
-      JANKER: { range: jankerRange, avgDev: jankerAvgDev },
+      TIANKER_PCT: tiankerPct,
+
+      JANKER: {
+        range: jankerRange,
+        avgDev: jankerAvgDev
+      },
+
       HANKER: hanker,
 
-      // Tambahan kompat
       kecepatan,
       ketelitian,
+      cakupanPengerjaan,
       konsistensi: analysis.koefisienKonsistensi,
       ketahanan: ketahananSlope,
       mentalFatigue
     },
+
     kategori: {
       panker: catP,
       tianker: catT,
       janker: catJ,
       ketahanan: kategoriKetahanan
     },
+
     interpretasi: {
-      // Narasi UGM generik (tetap ada)
-      panker: `Laju kerja (PANKER): rata-rata ${(panker??0).toFixed(1)} item per lajur (15 detik/lajur).`,
-      tianker: `Ketelitian (TIANKER): total kesalahan + loncatan = ${tianker??0}. Semakin kecil → semakin teliti.`,
-      janker: `Keajegan (JANKER): rentang ${jankerRange??0}, deviasi rata-rata ${(jankerAvgDev??0).toFixed(2)}. Semakin kecil → semakin ajeg/stabil.`,
-      hanker: `Ketahanan (HANKER): ${kategoriKetahanan} (Δ≈ ${(hanker??0).toFixed(2)} item dari awal menuju lajur 50).`,
+      panker:
+        `Laju kerja (PANKER): rata-rata ${(panker ?? 0).toFixed(1)} item ` +
+        `per lajur (15 detik/lajur).`,
 
-      // Ringkas tambahan kompat
-      kecepatan: `Total item diisi: ${kecepatan??0} (rata ${(avgIsi??0).toFixed(1)}/lajur, ${kolomTerisi??0} lajur dikerjakan).`,
-      ketelitian_lama: `Akurasi keseluruhan (informasi tambahan): ${(ketelitian??0).toFixed(1)}%.`,
+      tianker:
+        `Ketelitian (TIANKER): ${tianker ?? 0} kesalahan/loncatan nyata ` +
+        `dari ${totalDijangkau ?? 0} item yang dijangkau ` +
+        `(${(tiankerPct ?? 0).toFixed(1)}%). ` +
+        `${belumDikerjakan ?? 0} item yang belum sempat dijangkau ` +
+        `tidak dimasukkan sebagai kesalahan ketelitian.`,
 
-      // Kalimat psikologis sesuai posisi (kecuali Guru)
+      janker:
+        `Keajegan (JANKER): rentang ${jankerRange ?? 0}, ` +
+        `deviasi rata-rata ${(jankerAvgDev ?? 0).toFixed(2)}. ` +
+        `Semakin kecil nilainya, semakin stabil ritme kerja.`,
+
+      hanker:
+        `Ketahanan (HANKER): ${kategoriKetahanan} ` +
+        `(perubahan regresi ${(hanker >= 0 ? "+" : "")}` +
+        `${(hanker ?? 0).toFixed(2)} item dari lajur awal ke lajur akhir).`,
+
+      kecepatan:
+        `Total item diisi: ${kecepatan ?? 0}; rata-rata ` +
+        `${(avgIsi ?? 0).toFixed(1)} item per lajur; ` +
+        `${kolomTerisi ?? 0} dari ${jumlahKolomTerjadwal ?? 0} lajur terisi.`,
+
+      akurasi:
+        `Akurasi jawaban yang diberikan: ${(ketelitian ?? 0).toFixed(1)}%.`,
+
+      cakupan:
+        `Cakupan pengerjaan: ${totalDiisi ?? 0} dari ` +
+        `${totalSeharusnya ?? 0} item ` +
+        `(${(cakupanPengerjaan ?? 0).toFixed(1)}%).`,
+
       posisi: interpretasiPosisi
     },
+
     detail: {
       jawabanBenar: benar,
       jawabanSalah: salah,
       jawabanDibenarkan: dibenarkan,
-      totalDiisi: total,
-      kolomDikerjakan: kolomTerisi
+      loncatanNyata: skipped,
+      belumDikerjakan,
+      totalKosong,
+      totalDiisi,
+      totalDijangkau,
+      totalSeharusnya,
+      kolomDikerjakan: kolomTerisi,
+      jumlahKolomTerjadwal
     }
   };
 }
+
 
 
 // ====== KRAEPLIN: Render Grafik Per Kolom (tanpa Chart.js) ======
