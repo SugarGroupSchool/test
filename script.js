@@ -12202,30 +12202,33 @@ if (
     // Kosong setelahnya dianggap belum sempat dijangkau.
     let lastAnsweredRow = -1;
 
-    for (let r = Math.min(exp, jaw.length) - 1; r >= 0; r--) {
-      const v = jaw[r];
+for (let r = Math.min(exp, jaw.length) - 1; r >= 0; r--) {
+  const v = normalizeKraeplinValue(jaw[r]);
 
-      if (typeof v === "number" && !Number.isNaN(v)) {
-        lastAnsweredRow = r;
-        break;
-      }
+  if (v !== null) {
+    lastAnsweredRow = r;
+    break;
+  }
+}
+
+   for (let r = 0; r < exp; r++) {
+  const v = normalizeKraeplinValue(jaw[r]);
+  const kunci = normalizeKraeplinValue(k[r]);
+
+  if (v !== null) {
+    isi++;
+
+    if (kunci !== null && v === kunci) {
+      benar++;
+    } else {
+      salah++;
     }
-
-    for (let r = 0; r < exp; r++) {
-      const v = jaw[r];
-      const validNumber = typeof v === "number" && !Number.isNaN(v);
-
-      if (validNumber) {
-        isi++;
-
-        if (v === k[r]) benar++;
-        else salah++;
-      } else if (r <= lastAnsweredRow) {
-        skipped++;
-      } else {
-        belumDikerjakan++;
-      }
-    }
+  } else if (r <= lastAnsweredRow) {
+    skipped++;
+  } else {
+    belumDikerjakan++;
+  }
+}
 
     const kosong = skipped + belumDikerjakan;
     const dijangkau = isi + skipped;
