@@ -25,12 +25,12 @@
     rel="stylesheet"
   >
 
-  <!-- CSS Utama -->
+  <!-- CSS utama -->
   <link rel="stylesheet" href="./style.css">
 
   <style>
     /* =========================================
-       MENCEGAH SEMUA GAMBAR DITARIK / DI-DRAG
+       MENCEGAH SEMUA GAMBAR DI-DRAG
        ========================================= */
 
     img {
@@ -40,18 +40,26 @@
       -webkit-user-select: none;
       -moz-user-select: none;
       user-select: none;
+
+      pointer-events: auto;
     }
 
     /* =========================================
-       ANIMASI LOGO MELONCAT SAAT PERTAMA MUNCUL
+       ANIMASI LOGO
+       1. Meloncat saat pertama muncul
+       2. Bergerak naik-turun terus-menerus
        ========================================= */
 
     .password-logo {
-      animation: logoJumpIn 1s ease-out both;
+      animation:
+        logoJumpIn 1s ease-out both,
+        logoFloating 2.5s ease-in-out 1s infinite;
+
       transform-origin: center bottom;
       will-change: transform, opacity;
     }
 
+    /* Animasi saat pertama kali logo muncul */
     @keyframes logoJumpIn {
       0% {
         opacity: 0;
@@ -77,11 +85,15 @@
       }
     }
 
-    /* Menonaktifkan animasi jika perangkat meminta
-       pengurangan gerakan */
-    @media (prefers-reduced-motion: reduce) {
-      .password-logo {
-        animation: none;
+    /* Animasi naik-turun setelah logo selesai meloncat */
+    @keyframes logoFloating {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-12px);
       }
     }
   </style>
@@ -196,49 +208,45 @@
     src="https://cdn.jsdelivr.net/npm/chart.js"
   ></script>
 
-  <!-- JavaScript Utama -->
+  <!-- JavaScript utama -->
   <script src="./script.js"></script>
 
   <script>
     /* =========================================
-       MENCEGAH SEMUA GAMBAR DITARIK
-       Termasuk gambar yang dibuat secara dinamis
-       oleh script.js
+       MENCEGAH GAMBAR DI-DRAG
+       Termasuk gambar yang dibuat oleh script.js
        ========================================= */
 
     document.addEventListener("dragstart", function (event) {
-      if (
-        event.target instanceof HTMLImageElement
-      ) {
+      if (event.target instanceof HTMLImageElement) {
         event.preventDefault();
       }
     });
 
-    /* Menetapkan draggable=false pada semua gambar
-       yang sudah tersedia saat halaman dimuat */
+    /* Menonaktifkan draggable pada gambar
+       yang sudah ada ketika halaman dimuat */
     document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll("img").forEach(function (image) {
         image.setAttribute("draggable", "false");
       });
     });
 
-    /* Mengawasi gambar baru yang mungkin ditambahkan
+    /* Mengawasi gambar baru yang ditambahkan
        secara dinamis oleh aplikasi */
     const imageObserver = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
         mutation.addedNodes.forEach(function (node) {
+
           if (node instanceof HTMLImageElement) {
             node.setAttribute("draggable", "false");
           }
 
-          if (
-            node instanceof HTMLElement &&
-            node.querySelectorAll
-          ) {
+          if (node instanceof HTMLElement) {
             node.querySelectorAll("img").forEach(function (image) {
               image.setAttribute("draggable", "false");
             });
           }
+
         });
       });
     });
