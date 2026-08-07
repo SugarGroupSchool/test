@@ -1,263 +1,507 @@
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-<!DOCTYPE html>
-<html lang="id">
+<img
+  src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
+  alt="Logo Psikotes Sugar Group Schools"
+  class="password-logo"
+  id="passwordLogo"
+  draggable="false"
+>
 
-<head>
-  <meta charset="UTF-8">
+<div
+  class="welcome-message"
+  id="welcomeMessage"
+>
+  Selamat datang di Psikotes Sugar Group Schools
+</div>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
+<div
+  class="password-form"
+  id="passwordForm"
+>
+
+  <input
+    type="password"
+    class="password-input"
+    id="passwordInput"
+    placeholder="Masukkan Kode Akses"
+    autocomplete="off"
   >
 
-  <title>Psikotes Sugar Group Schools</title>
-
-  <!-- Favicon -->
-  <link
-    rel="icon"
-    type="image/png"
-    href="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
+  <button
+    type="button"
+    class="password-submit"
+    onclick="checkPassword()"
   >
-
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- CSS utama -->
-  <link rel="stylesheet" href="./style.css">
-
-  <style>
-    /* =========================================
-       MENCEGAH SEMUA GAMBAR DI-DRAG
-       ========================================= */
-
-    img {
-      -webkit-user-drag: none;
-      user-drag: none;
-
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-
-      pointer-events: auto;
-    }
-
-    /* =========================================
-       ANIMASI LOGO
-       1. Meloncat saat pertama muncul
-       2. Bergerak naik-turun terus-menerus
-       ========================================= */
-
-    .password-logo {
-      animation:
-        logoJumpIn 1s ease-out both,
-        logoFloating 2.5s ease-in-out 1s infinite;
-
-      transform-origin: center bottom;
-      will-change: transform, opacity;
-    }
-
-    /* Animasi saat pertama kali logo muncul */
-    @keyframes logoJumpIn {
-      0% {
-        opacity: 0;
-        transform: translateY(70px) scale(0.75);
-      }
-
-      42% {
-        opacity: 1;
-        transform: translateY(-25px) scale(1.08);
-      }
-
-      62% {
-        transform: translateY(8px) scale(0.97);
-      }
-
-      80% {
-        transform: translateY(-10px) scale(1.03);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    /* Animasi naik-turun setelah logo selesai meloncat */
-    @keyframes logoFloating {
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-12px);
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- =========================================
-       HALAMAN PASSWORD
-       ========================================= -->
+    Masuk
+  </button>
 
   <div
-    class="password-screen"
-    id="passwordScreen"
-  >
+    class="password-error"
+    id="passwordError"
+  ></div>
 
-    <img
-      src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
-      alt="Logo Psikotes Sugar Group Schools"
-      class="password-logo"
-      id="passwordLogo"
-      draggable="false"
-    >
+</div>
 
-    <div
-      class="welcome-message"
-      id="welcomeMessage"
-    >
-      Selamat datang di Psikotes Sugar Group Schools
-    </div>
 
-    <div
-      class="password-form"
-      id="passwordForm"
-    >
+<canvas
+id="discMost"
+width="170"
+height="420"
+style="display: none;"
+>
 
-      <input
-        type="password"
-        class="password-input"
-        id="passwordInput"
-        placeholder="Masukkan Kode Akses"
-        autocomplete="off"
-      >
+<canvas
+id="discLeast"
+width="170"
+height="420"
+style="display: none;"
+>
 
-      <button
-        type="button"
-        class="password-submit"
-        onclick="checkPassword()"
-      >
-        Masuk
-      </button>
+<canvas
+id="discChange"
+width="170"
+height="420"
+style="display: none;"
+>
 
-      <div
-        class="password-error"
-        id="passwordError"
-      ></div>
+<canvas
+id="kraeplinGraph"
+width="1000"
+height="320"
+style="display: none;"
+>
 
-    </div>
-  </div>
 
-  <!-- =========================================
-       TEMPAT APLIKASI UTAMA
-       ========================================= -->
+<!-- =====================================================
+     FUTURISTIC LOGO ANIMATION
+     HANYA MENAMBAHKAN GERAKAN PADA #passwordLogo
+     ===================================================== -->
 
-  <div id="app"></div>
+<style>
 
-  <!-- =========================================
-       CANVAS GRAFIK DISC
-       Hidden tetapi harus tetap ada di DOM
-       ========================================= -->
+#passwordLogo {
 
-  <canvas
-    id="discMost"
-    width="170"
-    height="420"
-    style="display: none;"
-  ></canvas>
+  transform-origin: center center;
 
-  <canvas
-    id="discLeast"
-    width="170"
-    height="420"
-    style="display: none;"
-  ></canvas>
+  transform-style: preserve-3d;
 
-  <canvas
-    id="discChange"
-    width="170"
-    height="420"
-    style="display: none;"
-  ></canvas>
+  backface-visibility: visible;
 
-  <!-- =========================================
-       CANVAS GRAFIK KRAEPELIN
-       Hidden dan digunakan untuk PDF
-       ========================================= -->
+  -webkit-backface-visibility: visible;
 
-  <canvas
-    id="kraeplinGraph"
-    width="1000"
-    height="320"
-    style="display: none;"
-  ></canvas>
+  will-change:
+    transform,
+    filter;
 
-  <!-- jsPDF -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-  ></script>
+  animation:
+    futuristicLogoMotion
+    6.5s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    infinite;
 
-  <!-- Chart.js -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/chart.js"
-  ></script>
+}
 
-  <!-- JavaScript utama -->
-  <script src="./script.js"></script>
 
-  <script>
-    /* =========================================
-       MENCEGAH GAMBAR DI-DRAG
-       Termasuk gambar yang dibuat oleh script.js
-       ========================================= */
+/* =====================================================
+   GERAKAN FUTURISTIK
+   ===================================================== */
 
-    document.addEventListener("dragstart", function (event) {
-      if (event.target instanceof HTMLImageElement) {
-        event.preventDefault();
-      }
-    });
+@keyframes futuristicLogoMotion {
 
-    /* Menonaktifkan draggable pada gambar
-       yang sudah ada ketika halaman dimuat */
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll("img").forEach(function (image) {
-        image.setAttribute("draggable", "false");
-      });
-    });
+  /* ---------------------------------------------------
+     POSISI AWAL
+     --------------------------------------------------- */
 
-    /* Mengawasi gambar baru yang ditambahkan
-       secara dinamis oleh aplikasi */
-    const imageObserver = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        mutation.addedNodes.forEach(function (node) {
+  0% {
 
-          if (node instanceof HTMLImageElement) {
-            node.setAttribute("draggable", "false");
-          }
+    transform:
+      perspective(1200px)
+      translate3d(0, 0, 0)
+      rotateX(0deg)
+      rotateY(0deg)
+      rotateZ(0deg)
+      scale3d(1, 1, 1);
 
-          if (node instanceof HTMLElement) {
-            node.querySelectorAll("img").forEach(function (image) {
-              image.setAttribute("draggable", "false");
-            });
-          }
+    filter:
+      brightness(1)
+      drop-shadow(
+        0 12px 24px
+        rgba(0, 0, 0, 0.12)
+      );
 
-        });
-      });
-    });
+  }
 
-    imageObserver.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  </script>
 
-</body>
+  /* ---------------------------------------------------
+     MULAI BERGERAK KE KIRI
+     --------------------------------------------------- */
 
-</html>
-```
+  10% {
+
+    transform:
+      perspective(1200px)
+      translate3d(-2px, -2px, 8px)
+      rotateX(1deg)
+      rotateY(-7deg)
+      rotateZ(-0.3deg)
+      scale3d(1.012, 1.012, 1.012);
+
+    filter:
+      brightness(1.02)
+      drop-shadow(
+        0 0 5px
+        rgba(255, 255, 255, 0.12)
+      )
+      drop-shadow(
+        0 15px 28px
+        rgba(0, 0, 0, 0.14)
+      );
+
+  }
+
+
+  /* ---------------------------------------------------
+     ROTASI KE SAMPING
+     --------------------------------------------------- */
+
+  22% {
+
+    transform:
+      perspective(1200px)
+      translate3d(-5px, 0, 18px)
+      rotateX(2deg)
+      rotateY(-18deg)
+      rotateZ(-0.7deg)
+      scale3d(1.035, 1.035, 1.035);
+
+    filter:
+      brightness(1.06)
+      drop-shadow(
+        0 0 12px
+        rgba(255, 255, 255, 0.18)
+      )
+      drop-shadow(
+        0 20px 38px
+        rgba(0, 0, 0, 0.17)
+      );
+
+  }
+
+
+  /* ---------------------------------------------------
+     OVERSHOOT KECIL
+     --------------------------------------------------- */
+
+  30% {
+
+    transform:
+      perspective(1200px)
+      translate3d(-3px, 1px, 12px)
+      rotateX(1deg)
+      rotateY(-13deg)
+      rotateZ(-0.4deg)
+      scale3d(1.025, 1.025, 1.025);
+
+  }
+
+
+  /* ---------------------------------------------------
+     KEMBALI KE TENGAH
+     --------------------------------------------------- */
+
+  42% {
+
+    transform:
+      perspective(1200px)
+      translate3d(0, 0, 0)
+      rotateX(0deg)
+      rotateY(0deg)
+      rotateZ(0deg)
+      scale3d(1, 1, 1);
+
+    filter:
+      brightness(1)
+      drop-shadow(
+        0 12px 24px
+        rgba(0, 0, 0, 0.12)
+      );
+
+  }
+
+
+  /* ---------------------------------------------------
+     JEDA NATURAL
+     --------------------------------------------------- */
+
+  48% {
+
+    transform:
+      perspective(1200px)
+      translate3d(0, 0, 0)
+      rotateX(0deg)
+      rotateY(0deg)
+      rotateZ(0deg)
+      scale3d(1, 1, 1);
+
+  }
+
+
+  /* ---------------------------------------------------
+     MULAI BERGERAK KE KANAN
+     --------------------------------------------------- */
+
+  58% {
+
+    transform:
+      perspective(1200px)
+      translate3d(2px, -2px, 8px)
+      rotateX(-1deg)
+      rotateY(7deg)
+      rotateZ(0.3deg)
+      scale3d(1.012, 1.012, 1.012);
+
+    filter:
+      brightness(1.02)
+      drop-shadow(
+        0 0 5px
+        rgba(255, 255, 255, 0.12)
+      )
+      drop-shadow(
+        0 15px 28px
+        rgba(0, 0, 0, 0.14)
+      );
+
+  }
+
+
+  /* ---------------------------------------------------
+     ROTASI KE SISI KANAN
+     --------------------------------------------------- */
+
+  70% {
+
+    transform:
+      perspective(1200px)
+      translate3d(5px, 0, 18px)
+      rotateX(-2deg)
+      rotateY(18deg)
+      rotateZ(0.7deg)
+      scale3d(1.035, 1.035, 1.035);
+
+    filter:
+      brightness(1.06)
+      drop-shadow(
+        0 0 12px
+        rgba(255, 255, 255, 0.18)
+      )
+      drop-shadow(
+        0 20px 38px
+        rgba(0, 0, 0, 0.17)
+      );
+
+  }
+
+
+  /* ---------------------------------------------------
+     OVERSHOOT
+     --------------------------------------------------- */
+
+  78% {
+
+    transform:
+      perspective(1200px)
+      translate3d(3px, 1px, 12px)
+      rotateX(-1deg)
+      rotateY(13deg)
+      rotateZ(0.4deg)
+      scale3d(1.025, 1.025, 1.025);
+
+  }
+
+
+  /* ---------------------------------------------------
+     KEMBALI KE TENGAH
+     --------------------------------------------------- */
+
+  90% {
+
+    transform:
+      perspective(1200px)
+      translate3d(0, 0, 0)
+      rotateX(0deg)
+      rotateY(0deg)
+      rotateZ(0deg)
+      scale3d(1, 1, 1);
+
+    filter:
+      brightness(1)
+      drop-shadow(
+        0 12px 24px
+        rgba(0, 0, 0, 0.12)
+      );
+
+  }
+
+
+  /* ---------------------------------------------------
+     SELESAI
+     --------------------------------------------------- */
+
+  100% {
+
+    transform:
+      perspective(1200px)
+      translate3d(0, 0, 0)
+      rotateX(0deg)
+      rotateY(0deg)
+      rotateZ(0deg)
+      scale3d(1, 1, 1);
+
+    filter:
+      brightness(1)
+      drop-shadow(
+        0 12px 24px
+        rgba(0, 0, 0, 0.12)
+      );
+
+  }
+
+}
+
+
+/* =====================================================
+   INTERAKSI MOUSE
+   ===================================================== */
+
+#passwordLogo:hover {
+
+  animation-play-state: paused;
+
+  transform:
+    perspective(900px)
+    translate3d(0, -3px, 20px)
+    rotateX(-3deg)
+    rotateY(14deg)
+    rotateZ(0deg)
+    scale3d(1.04, 1.04, 1.04);
+
+  filter:
+    brightness(1.08)
+    drop-shadow(
+      0 0 10px
+      rgba(255, 255, 255, 0.18)
+    )
+    drop-shadow(
+      0 20px 40px
+      rgba(0, 0, 0, 0.18)
+    );
+
+}
+
+
+/* =====================================================
+   MOBILE / REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  #passwordLogo {
+
+    animation: none;
+
+    transform:
+      translateZ(0);
+
+    transition: none;
+
+  }
+
+}
+
+</style>
+
+
+<script>
+
+/* =====================================================
+   FUTURISTIC MICRO PARALLAX
+   HANYA #passwordLogo
+   ===================================================== */
+
+(function () {
+
+  const logo =
+    document.getElementById("passwordLogo");
+
+  if (!logo) return;
+
+
+  let mouseX = 0;
+  let mouseY = 0;
+
+  let currentX = 0;
+  let currentY = 0;
+
+
+  document.addEventListener(
+    "mousemove",
+    function (event) {
+
+      const x =
+        (event.clientX /
+          window.innerWidth) -
+        0.5;
+
+      const y =
+        (event.clientY /
+          window.innerHeight) -
+        0.5;
+
+
+      mouseX = x * 4;
+
+      mouseY = y * -4;
+
+    },
+    { passive: true }
+  );
+
+
+  function updateLogo() {
+
+    currentX +=
+      (mouseX - currentX) * 0.035;
+
+    currentY +=
+      (mouseY - currentY) * 0.035;
+
+
+    if (!logo.matches(":hover")) {
+
+      logo.style.setProperty(
+        "--logoMouseX",
+        currentX.toFixed(3) + "deg"
+      );
+
+      logo.style.setProperty(
+        "--logoMouseY",
+        currentY.toFixed(3) + "deg"
+      );
+
+    }
+
+
+    requestAnimationFrame(updateLogo);
+
+  }
+
+
+  updateLogo();
+
+})();
+
+</script>
