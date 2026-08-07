@@ -1,263 +1,98 @@
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-<!DOCTYPE html>
-<html lang="id">
+<style>
+  .password-logo {
+    animation: passwordLogoSpin 2.2s linear infinite;
+    transform-origin: center center;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
 
-<head>
-  <meta charset="UTF-8">
+  @keyframes passwordLogoSpin {
+    0% {
+      transform: perspective(800px) rotateY(0deg);
+    }
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    90.9% {
+      transform: perspective(800px) rotateY(0deg);
+    }
+
+    100% {
+      transform: perspective(800px) rotateY(360deg);
+    }
+  }
+</style>
+
+<img
+  src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
+  alt="Logo Psikotes Sugar Group Schools"
+  class="password-logo"
+  id="passwordLogo"
+  draggable="false"
+>
+
+<div
+  class="welcome-message"
+  id="welcomeMessage"
+>
+  Selamat datang di Psikotes Sugar Group Schools
+</div>
+
+<div
+  class="password-form"
+  id="passwordForm"
+>
+
+  <input
+    type="password"
+    class="password-input"
+    id="passwordInput"
+    placeholder="Masukkan Kode Akses"
+    autocomplete="off"
   >
 
-  <title>Psikotes Sugar Group Schools</title>
-
-  <!-- Favicon -->
-  <link
-    rel="icon"
-    type="image/png"
-    href="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
+  <button
+    type="button"
+    class="password-submit"
+    onclick="checkPassword()"
   >
-
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- CSS utama -->
-  <link rel="stylesheet" href="./style.css">
-
-  <style>
-    /* =========================================
-       MENCEGAH SEMUA GAMBAR DI-DRAG
-       ========================================= */
-
-    img {
-      -webkit-user-drag: none;
-      user-drag: none;
-
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-
-      pointer-events: auto;
-    }
-
-    /* =========================================
-       ANIMASI LOGO
-       1. Meloncat saat pertama muncul
-       2. Bergerak naik-turun terus-menerus
-       ========================================= */
-
-    .password-logo {
-      animation:
-        logoJumpIn 1s ease-out both,
-        logoFloating 2.5s ease-in-out 1s infinite;
-
-      transform-origin: center bottom;
-      will-change: transform, opacity;
-    }
-
-    /* Animasi saat pertama kali logo muncul */
-    @keyframes logoJumpIn {
-      0% {
-        opacity: 0;
-        transform: translateY(70px) scale(0.75);
-      }
-
-      42% {
-        opacity: 1;
-        transform: translateY(-25px) scale(1.08);
-      }
-
-      62% {
-        transform: translateY(8px) scale(0.97);
-      }
-
-      80% {
-        transform: translateY(-10px) scale(1.03);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    /* Animasi naik-turun setelah logo selesai meloncat */
-    @keyframes logoFloating {
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-12px);
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- =========================================
-       HALAMAN PASSWORD
-       ========================================= -->
+    Masuk
+  </button>
 
   <div
-    class="password-screen"
-    id="passwordScreen"
-  >
+    class="password-error"
+    id="passwordError"
+  ></div>
 
-    <img
-      src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
-      alt="Logo Psikotes Sugar Group Schools"
-      class="password-logo"
-      id="passwordLogo"
-      draggable="false"
-    >
+</div>
 
-    <div
-      class="welcome-message"
-      id="welcomeMessage"
-    >
-      Selamat datang di Psikotes Sugar Group Schools
-    </div>
+<canvas
+  id="discMost"
+  width="170"
+  height="420"
+  style="display: none;"
+></canvas>
 
-    <div
-      class="password-form"
-      id="passwordForm"
-    >
+<canvas
+  id="discLeast"
+  width="170"
+  height="420"
+  style="display: none;"
+></canvas>
 
-      <input
-        type="password"
-        class="password-input"
-        id="passwordInput"
-        placeholder="Masukkan Kode Akses"
-        autocomplete="off"
-      >
+<canvas
+  id="discChange"
+  width="170"
+  height="420"
+  style="display: none;"
+></canvas>
 
-      <button
-        type="button"
-        class="password-submit"
-        onclick="checkPassword()"
-      >
-        Masuk
-      </button>
-
-      <div
-        class="password-error"
-        id="passwordError"
-      ></div>
-
-    </div>
-  </div>
-
-  <!-- =========================================
-       TEMPAT APLIKASI UTAMA
-       ========================================= -->
-
-  <div id="app"></div>
-
-  <!-- =========================================
-       CANVAS GRAFIK DISC
-       Hidden tetapi harus tetap ada di DOM
-       ========================================= -->
-
-  <canvas
-    id="discMost"
-    width="170"
-    height="420"
-    style="display: none;"
-  ></canvas>
-
-  <canvas
-    id="discLeast"
-    width="170"
-    height="420"
-    style="display: none;"
-  ></canvas>
-
-  <canvas
-    id="discChange"
-    width="170"
-    height="420"
-    style="display: none;"
-  ></canvas>
-
-  <!-- =========================================
-       CANVAS GRAFIK KRAEPELIN
-       Hidden dan digunakan untuk PDF
-       ========================================= -->
-
-  <canvas
-    id="kraeplinGraph"
-    width="1000"
-    height="320"
-    style="display: none;"
-  ></canvas>
-
-  <!-- jsPDF -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-  ></script>
-
-  <!-- Chart.js -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/chart.js"
-  ></script>
-
-  <!-- JavaScript utama -->
-  <script src="./script.js"></script>
-
-  <script>
-    /* =========================================
-       MENCEGAH GAMBAR DI-DRAG
-       Termasuk gambar yang dibuat oleh script.js
-       ========================================= */
-
-    document.addEventListener("dragstart", function (event) {
-      if (event.target instanceof HTMLImageElement) {
-        event.preventDefault();
-      }
-    });
-
-    /* Menonaktifkan draggable pada gambar
-       yang sudah ada ketika halaman dimuat */
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelectorAll("img").forEach(function (image) {
-        image.setAttribute("draggable", "false");
-      });
-    });
-
-    /* Mengawasi gambar baru yang ditambahkan
-       secara dinamis oleh aplikasi */
-    const imageObserver = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        mutation.addedNodes.forEach(function (node) {
-
-          if (node instanceof HTMLImageElement) {
-            node.setAttribute("draggable", "false");
-          }
-
-          if (node instanceof HTMLElement) {
-            node.querySelectorAll("img").forEach(function (image) {
-              image.setAttribute("draggable", "false");
-            });
-          }
-
-        });
-      });
-    });
-
-    imageObserver.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  </script>
-
-</body>
-
-</html>
-```
+<canvas
+  id="kraeplinGraph"
+  width="1000"
+  height="320"
+  style="display: none;"
+></canvas>
