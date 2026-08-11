@@ -2570,36 +2570,59 @@ SUBJECT: {
   ]
 }
 ,
-    {
+{
   id: "ISLAM",
   name: "Agama Islam",
   time: 2700, // 45 menit
+
   instruction: `
     <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
       SOAL REKRUTMEN GURU AGAMA ISLAM
     </div>
+
     <ul style="text-align:left;margin-left:18px;">
       <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
       <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
       <li><b>Total waktu pengerjaan: 45 menit.</b></li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
   `,
+
   questions: [
-    { type: "essay", question: "Tuliskanlah bacaan takhiat awal dalam sholat menggunakan tulisan arab." },
-    { type: "essay", question: "Jelaskan secara sistematis urutan sholat jenasah berikut laval/bacaan yang harus diucapkan." },
-    { type: "essay", question: "Analisislah kompetensi dasar pada kurikulum PAI tingkat SMP kelas VIII tentang materi 'Menghindari Perilaku Tercela'. Bagaimana Anda akan mengembangkan indikator pencapaian kompetensi dan materi pembelajaran yang relevan dengan konteks kehidupan siswa saat ini?!" },
-    { type: "essay", question: "Analisislah makna dan pesan yang terkandung dalam Q.S. Al-Hujurat ayat 13 tentang keragaman umat manusia. Bagaimana Anda akan menjelaskan ayat ini kepada siswa dengan latar belakang budaya yang beragam?" },
-    { type: "essay", question: "Bagaimana cara anda menganalisa tentang isu-isu yang sedang marak di kalangan siswa, seperti perundungan, penyalahgunaan media sosial, dan radikalisme dalam perspektif ajaran Islam?" },
-    { type: "essay", question: "Seorang siswa Anda seringkali terlambat datang ke sekolah dan menunjukkan sikap kurang hormat selama pelajaran. Setelah Anda telusuri, ternyata siswa tersebut mengalami masalah keluarga. Bagaimana Anda akan menangani situasi ini dengan pendekatan yang empatik dan sesuai dengan prinsip-prinsip pendidikan Islam?" },
-    { type: "essay", question: "Di sekolah Anda, terdapat perbedaan pendapat antara guru-guru PAI mengenai pelaksanaan suatu praktik ibadah. Bagaimana Anda akan memfasilitasi dialog yang konstruktif untuk mencapai kesepahaman bersama?" },
-    { type: "essay", question: "Dalam era digital, penggunaan teknologi dalam pembelajaran PAI menjadi suatu keniscayaan. Namun, ada kekhawatiran tentang dampak negatif penggunaan gawai terhadap akhlak siswa. Bagaimana Anda akan mengintegrasikan teknologi dalam pembelajaran PAI secara bijak dan bertanggung jawab?" },
-    { type: "essay", question: "Di kelas Anda terdapat siswa dengan beragam latar belakang agama dan budaya. Bagaimana anda akan menciptakan suasana pembelajaran yang inklusif dan menghargai perbedaan, serta menanamkan nilai-nilai toleransi dalam diri siswa?" }
+    {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7; text-align:center;">
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/islam.png"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            alt="Soal Rekrutmen Guru Agama Islam"
+            style="max-width:100%; height:auto; border-radius:8px;"
+          />
+        </div>
+      `
+    }
   ]
-}
-,
-    { id: "KRISTEN",      name: "Agama Kristen",       time: 900, questions: [] },
-    { id: "KATHOLIK",     name: "Agama Katholik",      time: 900, questions: [] },
+},
+
+{
+  id: "KRISTEN",
+  name: "Agama Kristen",
+  time: 900,
+  questions: []
+},
+
+{
+  id: "KATHOLIK",
+  name: "Agama Katholik",
+  time: 900,
+  questions: []
+},
     { id: "HINDU",        name: "Agama Hindu",         time: 900, questions: [] },
     { id: "SOSIAL",       name: "Sosial",              time: 900, questions: [] },
     { id: "SEJARAH",      name: "Sejarah",             time: 900, questions: [] },
