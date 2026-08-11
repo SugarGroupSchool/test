@@ -2230,10 +2230,11 @@ SUBJECT: {
     { type: "essay", question: "Selain mengajarkan mata pelajaran kimia, keterampilan apa yang menurut Anda perlu dikembangkan di sekolah untuk mendukung kesiapan siswa dalam menghadapi tantangan masa depan? Jelaskan bagaimana Anda akan berkontribusi dalam pengembangannya!" }
   ]
 },
-    {
+{
   id: "MATH",
   name: "Matematika",
   time: 2700, // 45 menit
+
   instruction: `
     <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
       SOAL REKRUTMEN GURU MATEMATIKA
@@ -2243,30 +2244,33 @@ SUBJECT: {
       <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
       <li><b>Total waktu pengerjaan: 45 menit.</b></li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
   `,
+
   questions: [
-    { type: "essay", question: "Tentukan angka satuan pada bilangan 2^999!" },
-    { type: "essay", question: "Nilai dari √(6150^2-6050^2 )= ?" },
-    { type: "essay", question: "Kedua akar persamaan kuadrat x^2-111x+k = 0 adalah bilangan prima. Nilai k adalah ..." },
-    { type: "essay", question: "Sebuah kapal berlayar dari Pelabuhan A ke Pelabuhan B sejauh 60 mil dengan arah 040° dari A, kemudian berputar haluan dilanjutkan ke Pelabuhan C sejauh 90 mil, dengan arah 160° dari B. Berapa jarak terdekat Pelabuhan A ke Pelabuhan C?" },
-    { type: "essay", question: "Dalam sebuah kelas yang jumlah siswanya 40 orang, 22 orang mengikuti IMO, 17 orang mengikuti IBO, dan 20 orang mengikuti ICO. Ada juga yang mengikuti sekaligus dua kegiatan, yaitu 12 orang mengikuti IMO dan IBO, 9 orang mengikuti IMO dan ICO, 8 orang mengikuti IBO dan ICO, sedangkan 5 orang tercatat mengikuti IMO, IBO, dan ICO. Jika dipilih satu orang siswa dari kelas tersebut, maka peluang terpilihnya seorang siswa yang tidak mengikuti IMO, IBO, maupun ICO adalah… ?" },
-    { type: "essay", question: "Sebuah toko alat tulis memberi diskon sebesar 20% khusus untuk pelajar. Pada awal tahun ajaran baru, toko memberi diskon tambahan sebesar 10% dari harga yang sudah didiskon. Ahmad adalah seorang pelajar SMA, yang membeli buku dengan harga Rp57.600,00 pada awal tahun ajaran baru. Berapakah harga awal dari buku tersebut?" },
-    { type: "essay", question: "Suatu bak air mempunyai 1 keran pengisi bak yaitu x dan 1 keran pengosong yaitu y. Bila keran x dibuka dan keran y ditutup, bak tersebut akan penuh dalam 6 jam. Sedangkan bila y dibuka dan keran x ditutup, maka bak tersebut kosong dalam 8 jam. Berapa waktu yang diperlukan untuk mengisi penuh bak dari keadaan kosong jika kedua keran dibuka?" },
     {
       type: "essay",
       question: `
-        Pada sebuah segi empat dibuat lingkaran seperti pada gambar berikut:<br>
-        <img src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/math_subject_test.jpg" alt="Gambar soal matematika nomor 8" style="max-width:340px;margin:10px 0;border-radius:9px;box-shadow:0 2px 8px #ccc"><br>
-        Keliling daerah yang diarsir adalah 100 cm. Luas daerah yang diarsir akan maksimum untuk nilai p =… (dalam π).
+        <div style="line-height:1.7; text-align:center;">
+
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/MATH.png"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            alt="Soal Rekrutmen Guru Matematika"
+            style="max-width:100%; height:auto; border-radius:8px;"
+          />
+
+        </div>
       `
-    },
-    { type: "essay", question: "Sebuah tangki berisi 50000 liter solar. Solar tersebut diisikan pada 5 drum berbentuk tabung dengan tinggi 100 cm dan jari-jari 70 cm. Berapa liter/jam debit solar jika waktu yang dihabiskan untuk mengisi ke-5 drum adalah 1 jam 17 menit? (asumsi tidak ada jeda pengisian)" },
-    { type: "essay", question: "Di dalam kelas terdapat berbagai siswa dengan kemampuan yang berbeda, output yang dihasilkan biasanya tidak sesuai yang diharapkan. Perbedaan yang ada akan membuat jarak siswa pintar dan lemah semakin nampak. Desainlah sebuah program pembelajaran dengan topik persamaan trigonometri yang dapat diberikan di kelas dengan berbagai model yang dapat dipahami oleh semua siswa baik siswa yang pintar ataupun yang lemah sehingga tujuan pembelajaran dapat tercapai." }
+    }
   ]
-}
-,
-    {
+},
+
+{
   id: "TIK",
   name: "TIK",
   time: 2700, // 45 menit
