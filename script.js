@@ -2146,7 +2146,6 @@ SUBJECT: {
     instruction: "Pilih salah satu subjek di bawah, lalu kerjakan soal yang muncul.",
     subjects: [
       {
- {
   id: "LAMPUNG",
   name: "Bahasa Lampung",
   time: 2700, // 45 menit
