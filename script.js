@@ -2343,44 +2343,47 @@ SUBJECT: {
   ]
 }
 ,
-    {
+  {
   id: "OLAHRAGA",
   name: "Olahraga",
   time: 2700, // 45 menit
+
   instruction: `
     <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
       TES TERTULIS SELEKSI GURU OLAHRAGA SEKOLAH SUGAR GROUP
     </div>
+
     <ul style="text-align:left;margin-left:18px;">
       <li>Waktu Pengerjaan: 45 menit</li>
       <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
       <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
   `,
+
   questions: [
-    // Bagian 1: Kompetensi Profesional
-    { type: "essay", question: "Jelaskan konsep dasar latihan fisik yang sesuai dengan tingkat perkembangan siswa SD/SMP/SMA!" },
-    { type: "essay", question: "Seorang siswa mengalami cedera ringan saat mengikuti pelajaran olahraga. Bagaimana langkah-langkah yang harus Anda lakukan sebagai guru olahraga dalam menangani cedera tersebut?" },
-    { type: "essay", question: "Dalam suatu pembelajaran olahraga, bagaimana cara Anda mengidentifikasi dan mengembangkan bakat siswa dalam bidang olahraga tertentu?" },
-    // Bagian 2: Keberpihakan pada Murid dalam Proses Pembelajaran
-    { type: "essay", question: "Bagaimana cara Anda memastikan bahwa semua siswa, termasuk mereka yang memiliki keterbatasan fisik, dapat berpartisipasi dalam pembelajaran olahraga secara optimal?" },
-    { type: "essay", question: "Dalam satu kelas, terdapat siswa dengan tingkat kemampuan fisik yang sangat beragam. Bagaimana strategi Anda agar setiap siswa tetap termotivasi dan merasa dihargai dalam proses pembelajaran?" },
-    // Bagian 3: Kreativitas dalam Pembelajaran
-    { type: "essay", question: "Sebutkan dan jelaskan tiga metode kreatif yang dapat digunakan dalam pembelajaran olahraga agar siswa lebih termotivasi dan aktif berpartisipasi!" },
-    { type: "essay", question: "Buatlah rancangan singkat sebuah permainan olahraga yang menggabungkan unsur edukatif dan kompetitif sehingga menarik bagi siswa!" },
-    // Bagian 4: Manajemen Perilaku dalam Pembelajaran
-    { type: "essay", question: "Dalam sesi pembelajaran olahraga, bagaimana Anda menangani siswa yang tidak disiplin dan mengganggu jalannya kegiatan?" },
-    { type: "essay", question: "Bagaimana cara Anda membangun lingkungan belajar yang positif dan mendukung nilai sportivitas di dalam kelas?" },
-    // Bagian 5: Pemahaman Perbedaan Kultur dan Budaya
-    { type: "essay", question: "Olahraga sering kali menjadi alat pemersatu dalam masyarakat yang memiliki perbedaan budaya. Bagaimana Anda mengakomodasi keberagaman budaya siswa dalam pembelajaran olahraga di sekolah?" },
-    // Bagian 6: Kompetensi Tambahan dan Pengembangan Siswa
-    { type: "essay", question: "Bagaimana cara Anda mengidentifikasi dan membimbing siswa berbakat dalam bidang olahraga agar bisa berprestasi di ajang kompetisi seperti O2SN?" },
-    { type: "essay", question: "Bagaimana Anda mengintegrasikan aspek kebugaran jasmani ke dalam kegiatan ekstrakurikuler agar tidak hanya berfokus pada kompetisi tetapi juga pada peningkatan kualitas hidup siswa?" }
-  ]
-}
-,
     {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7; text-align:center;">
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/olahraga.png"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            alt="Tes Tertulis Seleksi Guru Olahraga"
+            style="max-width:100%; height:auto; border-radius:8px;"
+          />
+        </div>
+      `
+    }
+  ]
+},
+
+{
   id: "VISUALART",
   name: "Visual Art",
   time: 2700, // 45 menit
