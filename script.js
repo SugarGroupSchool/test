@@ -2141,52 +2141,55 @@ BIGFIVE: {
   ]
 },
 SUBJECT: {
-    name: "Tes Subjek",
-    description: "Tes kemampuan akademik sesuai mata pelajaran pilihan Anda.",
-    instruction: "Pilih salah satu subjek di bawah, lalu kerjakan soal yang muncul.",
-    subjects: [
-      {
-  id: "LAMPUNG",
-  name: "Bahasa Lampung",
-  time: 2700, // 45 menit
+  name: "Tes Subjek",
+  description: "Tes kemampuan akademik sesuai mata pelajaran pilihan Anda.",
+  instruction: "Pilih salah satu subjek di bawah, lalu kerjakan soal yang muncul.",
 
-  instruction: `
-    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
-      SOAL REKRUTMEN GURU BAHASA LAMPUNG
-    </div>
-    <ul style="text-align:left;margin-left:18px;">
-      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
-      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
-      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
-    </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">
-      Selamat mengerjakan!
-    </div>
-  `,
-
-  questions: [
+  subjects: [
     {
-      type: "essay",
-      question: `
-        <div style="line-height:1.7; text-align:center;">
+      id: "LAMPUNG",
+      name: "Bahasa Lampung",
+      time: 2700, // 45 menit
 
-          <img
-            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/lampung.png"
-            loading="lazy"
-            decoding="async"
-            width="1200"
-            alt="Soal Rekrutmen Guru Bahasa Lampung"
-            style="max-width:100%; height:auto; border-radius:8px;"
-          />
-
+      instruction: `
+        <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+          SOAL REKRUTMEN GURU BAHASA LAMPUNG
         </div>
-      `
-    }
-  ]
-},
 
-{
-  id: "BIOLOGI",
+        <ul style="text-align:left;margin-left:18px;">
+          <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+          <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+          <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+        </ul>
+
+        <div style="margin-top:8px;font-weight:600;color:#278d28;">
+          Selamat mengerjakan!
+        </div>
+      `,
+
+      questions: [
+        {
+          type: "essay",
+          question: `
+            <div style="line-height:1.7; text-align:center;">
+
+              <img
+                src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/lampung.png"
+                loading="lazy"
+                decoding="async"
+                width="1200"
+                alt="Soal Rekrutmen Guru Bahasa Lampung"
+                style="max-width:100%; height:auto; border-radius:8px;"
+              />
+
+            </div>
+          `
+        }
+      ]
+    },
+
+    {
+      id: "BIOLOGI",
       name: "Biologi",
       time: 2700, // 45 menit
       instruction: `
