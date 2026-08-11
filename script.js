@@ -2146,9 +2146,11 @@ SUBJECT: {
     instruction: "Pilih salah satu subjek di bawah, lalu kerjakan soal yang muncul.",
     subjects: [
       {
+ {
   id: "LAMPUNG",
   name: "Bahasa Lampung",
   time: 2700, // 45 menit
+
   instruction: `
     <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
       SOAL REKRUTMEN GURU BAHASA LAMPUNG
@@ -2158,23 +2160,34 @@ SUBJECT: {
       <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
       <li><b>Total waktu pengerjaan: 45 menit.</b></li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
   `,
-   questions: [
-        { type: "essay", question: "Lampung memiliki berbagai macam upacara adat. Jelaskan salah satu upacara adat yang kamu ketahui, mulai dari prosesi, makna, hingga nilai-nilai yang terkandung di dalamnya!" },
-        { type: "essay", question: "Bagaimana pengaruh budaya luar terhadap kebudayaan Lampung saat ini? Berikan contohnya!" },
-        { type: "essay", question: "Sebuah sanggar tari di Lampung ingin mementaskan tari Sembah. Apa saja persiapan yang perlu dilakukan dan bagaimana cara mereka melestarikan tarian tersebut agar tetap dikenal oleh generasi muda?" },
-        { type: "essay", question: "Jelaskan ciri-ciri bahasa Lampung dialek Abung dan dialek Pesisir!" },
-        { type: "essay", question: "Salah satu tantangan dalam mengajar Bahasa dan Budaya Lampung adalah menarik minat siswa terhadap hal yang dianggap sulit. Berikan contoh metode pembelajaran kreatif yang dapat meningkatkan motivasi belajar siswa! Tentukan salah satu topik yang akan dibahas." },
-        { type: "essay", question: "Pada saat belajar budaya Lampung, ada beberapa siswa yang cenderung menggangu temannya sehingga pembelajaran tidak kondusif. Bagaimanakan Anda menerapkan disiplin kelas dalam menangani situasi ini, dengan melihat gaya belajar siswa yang beragam, bagaimanakah membuat proses pembelajaran yang berdeferensiasi untuk mengakomodasi kebutuhan siswa." },
-        { type: "essay", question: "Jelaskan prinsip-prinsip utama dalam manajemen kelas yang efektif dan bagaimana Anda akan menerapkannya dalam mengajar Bahasa/Budaya Lampung?" },
-        { type: "essay", question: "Dalam kelas Anda terdapat siswa dari berbagai latar belakang budaya dan ekonomi yang berbeda. Bagaimana Anda menciptakan lingkungan belajar yang inklusif dan mendukung keberagaman?" },
-        { type: "essay", question: "Selain mengajarkan mata pelajaran Budaya Lampung, keterampilan apa yang menurut Anda perlu dikembangkan di sekolah untuk mendukung kesiapan siswa dalam menghadapi tantangan masa depan? Jelaskan bagaimana Anda akan berkontribusi dalam pengembangannya!" },
-        { type: "essay", question: "Dewasa ini, teknologi semakin terintegrasi dalam pendidikan. Bagaimana Anda akan memanfaatkan teknologi untuk meningkatkan efektivitas pembelajaran Budaya Lampung di kelas Anda? Berikan contoh aplikasi atau platform yang akan Anda gunakan dan bagaimana Anda akan mengintegrasikannya dalam rencana pembelajaran Anda." }
-      ]
-    },
-      {
-      id: "BIOLOGI",
+
+  questions: [
+    {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7; text-align:center;">
+
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/lampung.png"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            alt="Soal Rekrutmen Guru Bahasa Lampung"
+            style="max-width:100%; height:auto; border-radius:8px;"
+          />
+
+        </div>
+      `
+    }
+  ]
+},
+
+{
+  id: "BIOLOGI",
       name: "Biologi",
       time: 2700, // 45 menit
       instruction: `
