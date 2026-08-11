@@ -2396,27 +2396,29 @@ SUBJECT: {
       <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
       <li><b>Total waktu pengerjaan: 45 menit.</b></li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
   `,
   questions: [
-    // DASAR
-    { type: "essay", question: "Apa saja unsur-unsur seni rupa? Jelaskan masing-masing secara singkat saja!" },
-    { type: "essay", question: "Apa yang dimaksud dengan garis semu dan bagaimana terjadinya?" },
-    { type: "essay", question: "Jelaskan hal apa saja yang Anda ketahui tentang warna!" },
-    // KETERAMPILAN MENGAJAR
-    { type: "essay", question: "Uraikan bagaimana Anda mengajarkan konsep 'warna' kepada siswa kelas 10 SMA kaitannya dengan STEAM (Sains-Teknologi-Engineering-Art-Math)." },
-    { type: "essay", question: "Bagaimana Anda mengelola penilaian atas kinerja siswa dalam pembelajar seni rupa?" },
-    { type: "essay", question: "Apa yang Anda lakukan atas fakta bahwa tidak semua siswa punya ketertarikan dan keterampilan atas seni rupa? Hal apa pula yang Anda lakukan terhadap siswa yang mempunyai bakat dan ketertarikan yang tinggi atas seni rupa?" },
-    { type: "essay", question: "Terkait dengan perkembangan teknologi, software atau aplikasi apa saja yang Anda kuasai dan yang akan Anda terap/ajarkan pada beberapa bagian pembelajaran seni rupa?" },
-    // PENGETAHUAN UMUM
-    { type: "essay", question: "Apa yang dimaksud dengan kurikulum? Kurikulum apa saja yg Anda ketahui dan pernah diterapkan di Indonesia?" },
-    { type: "essay", question: "Bagaimana Anda akan mengintegrasikan penekanan atas pentingnya pembentukan nilai-nilai dan karakter yang baik dalam pembelajaran seni rupa?" },
-    // PRAKTIK
-    { type: "essay", question: "Pada selembar kertas, buatlah gambar rumah sederhana dengan menerapkan prinsip ‘2 titik hilang’." }
+    {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7;text-align:center;">
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/art.png"
+            loading="lazy"
+            decoding="async"
+            alt="Soal Seleksi Guru Visual Art"
+            style="display:block;width:100%;max-width:794px;height:auto;margin:0 auto;border-radius:8px;"
+          />
+        </div>
+      `
+    }
   ]
-}
-,
-   {
+},
+
+{
   id: "PRIMARY",
   name: "Primary",
   time: 2700, // 45 menit
@@ -2429,39 +2431,29 @@ SUBJECT: {
       <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
       <li><b>Total waktu pengerjaan: 45 menit.</b></li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
   `,
   questions: [
-    // 1. Pertanyaan Konseptual
-    { type: "essay", question: `Jelaskan apa yang dimaksud dengan "pembelajaran yang memerdekakan" dalam konteks Kurikulum Merdeka dan bagaimana peran guru dalam pembelajaran yang memerdekakan?` },
-    // 2. Studi Kasus: Keragaman Budaya Indonesia
-    { type: "essay", question: `Anda adalah seorang guru kelas 3 SD. Tema yang akan Anda ajarkan adalah "Keragaman Budaya Indonesia".<br>
-      <b>Tujuan pembelajaran:</b><br>
-      • Siswa dapat mengidentifikasi berbagai macam budaya yang ada di Indonesia (misalnya, pakaian adat, tarian, lagu daerah, makanan khas).<br>
-      • Siswa dapat menjelaskan pentingnya melestarikan keragaman budaya Indonesia.<br>
-      • Siswa termotivasi untuk mempelajari lebih lanjut tentang budaya Indonesia.<br>
-      <br>
-      <b>Pertanyaan:</b><br>
-      Bagaimana anda mendesain kegiatan pembelajaran yang kreatif dan inovatif untuk mencapai tujuan pembelajaran di atas? Kegiatan tersebut harus berpusat pada siswa (student-centered), melibatkan siswa secara aktif, menggunakan berbagai media dan sumber belajar, menyenangkan dan memotivasi siswa, serta mengembangkan kompetensi siswa (pengetahuan, keterampilan, sikap).`
-    },
-    // 3. Studi Kasus: Andi, Siswa dengan Disleksia
-    { type: "essay", question: `Andi adalah siswa kelas 3 SD yang sangat antusias dan aktif di kelas. Dia memiliki banyak teman dan suka berpartisipasi dalam kegiatan kelompok. Namun, Andi mengalami kesulitan dalam membaca dan menulis. Dia seringkali tertukar huruf, sulit mengeja kata-kata sederhana, dan membutuhkan waktu lebih lama untuk menyelesaikan tugas-tugas yang melibatkan membaca dan menulis. Berdasarkan observasi dan asesmen yang dilakukan guru, Andi diduga mengalami disleksia.<br>
-      <br>
-      <b>Pertanyaan:</b> Akomodasi dan modifikasi apa yang akan Anda berikan kepada Andi dalam kegiatan pembelajaran di kelas?`
-    },
-    // 4. Studi Kasus: Rina, Siswa yang Sering Mengganggu Teman
-    { type: "essay", question: `Rina adalah siswa kelas 4 SD yang pintar dan kreatif. Namun, dia seringkali melakukan perundungan dengan mencubit, mendorong, atau mengejek teman-temannya, sehingga membuat mereka merasa tidak nyaman dan terganggu. Perilaku Rina ini sudah berlangsung cukup lama dan tampaknya semakin sering terjadi.<br>
-      <br>
-      <b>Pertanyaan:</b> Bagaimana Anda akan mengidentifikasi dan memahami akar penyebab perilaku Rina yang suka melakukan perundungan teman-temannya dan strategi apa yang akan Anda gunakan untuk mengatasi perilaku Rina yang mengganggu teman-temannya?`
-    },
-    // 5. Pertanyaan Konseptual: Asesmen
-    { type: "essay", question: `Jelaskan apa yang dimaksud dengan asesmen formatif dan sumatif, serta berikan contohnya dalam konteks pembelajaran di kelas SD.` },
-    // 6. Pertanyaan Reflektif: Peran Guru
-    { type: "essay", question: `Bagaimana Anda memahami peran guru dalam konteks pendidikan abad ke-21?` }
-  ]
-}
-,
     {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7;text-align:center;">
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/bsd.png"
+            loading="lazy"
+            decoding="async"
+            alt="Soal Tes Tertulis Seleksi Guru SD"
+            style="display:block;width:100%;max-width:794px;height:auto;margin:0 auto;border-radius:8px;"
+          />
+        </div>
+      `
+    }
+  ]
+},
+
+{
   id: "KINDERGARTEN",
   name: "Kindergarten",
   time: 2700, // 45 menit
@@ -2474,23 +2466,29 @@ SUBJECT: {
       <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
       <li><b>Total waktu pengerjaan: 45 menit.</b></li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
   `,
   questions: [
-    { type: "essay", question: `Siswa/i Taman Kanak-kanak dapat melakukan kegiatan pembelajaran yang menekankan pada pembelajaran yang kontekstual, berbasis kompetensi dan berfokus pada pengembangan pribadi dan sosial mereka.<br>
-      Jelaskan integrasi antara kurikulum merdeka dengan pembelajaran di Taman Kanak-kanak yang dapat diaplikasikan anda dengan keunikan karakteristik dari siswa/i yang orang tua mereka memiliki tingkat Pendidikan beragam!` },
-    { type: "essay", question: `Banyak teori tentang metode pembelajaran yang dapat meningkatkan kreatifitas siswa.<br>
-      Jabarkan pendapat anda mengenai metode pembelajaran yang tepat untuk diterapkan sehingga mampu meningkatkan kreatifitas siswa/i Taman Kanak-kanak yang dapat memacu motivasi dan kompetensi siswa!` },
-    { type: "essay", question: `Setiap anak memiliki kebutuhan uniknya sendiri.<br>
-      Bagaimana cara anda untuk menangani anak berkebutuhan khusus yang berkisar dari gangguan perkembangan seperti autism, ADHD, hingga kesulitan belajar untuk siswa/i Taman Kanak-kanak?` },
-    { type: "essay", question: `Perilaku siswa/i Taman Kanak-kanak dapat diobservasi, diukur dan dipelajari melalui interaksi dengan lingkungan sekitarnya.<br>
-      Bagaimana manajemen perilaku siswa yang dapat anda kelola sehingga siswa/i Taman Kanak-kanak dapat meningkatkan disiplin, respon dan ketaatan atau perilaku baik lainnya?` },
-    { type: "essay", question: `Apa kompetensi yang dapat anda berikan untuk mengembangkan sekolah terkhusus Taman Kanak-kanak!` },
-    { type: "essay", question: `Apa yang kamu anggap sebagai keberhasilan terbesarmu sebagai seorang guru?` }
+    {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7;text-align:center;">
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/ctk.png"
+            loading="lazy"
+            decoding="async"
+            alt="Soal Tes Tertulis Seleksi Guru TK"
+            style="display:block;width:100%;max-width:794px;height:auto;margin:0 auto;border-radius:8px;"
+          />
+        </div>
+      `
+    }
   ]
-}
-,
-   {
+},
+
+{
   id: "INDO",
   name: "Bahasa Indonesia",
   time: 2700, // 45 menit
@@ -2503,39 +2501,29 @@ SUBJECT: {
       <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
       <li><b>Total waktu pengerjaan: 45 menit.</b></li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
   `,
   questions: [
-    // I. Kasus Kelas VIII C
-    { type: "essay", question: `Bapak Doni adalah wali kelas VIII C yang berjumlah 24 orang dengan kemampuan belajar yang beragam. Beberapa diantara mereka adalah siswa yang pintar, aktif, antusias dan cekatan. Sehingga tugas yang diberikan selalu dikumpulkan lebih cepat dari waktu yang diberikan. Dan kemudian kelas menjadi ramai. Sementara beberapa murid masih belum selesai mengerjakan dan terganggu akan kondisi kelas yang ramai.<br>
-    <br>
-    Melihat situasi tersebut, bagaimana tindakan Bapak Doni?` },
-    // II. Pembelajaran Diferensiasi
-    { type: "essay", question: `Anda adalah seorang guru mata pelajaran Bahasa Indonesia yang mengajar di kelas VI dengan jumlah peserta didik sebanyak 30 orang. Setelah melakukan observasi awal dan beberapa penilaian formatif, Anda menyadari bahwa kemampuan peserta didik sangat beragam. Di kelas tersebut, terdapat beberapa peserta didik yang masih kesulitan memahami teks sederhana, beberapa lainnya mampu membaca dan memahami teks dengan baik, sementara ada juga yang sudah sangat mahir, bahkan menunjukkan kemampuan untuk menganalisis teks yang lebih kompleks dan melakukan penelitian mandiri.<br>
-    Selama pelajaran sebelumnya, Anda menggunakan metode pengajaran yang sama untuk seluruh kelas. Namun, Anda melihat bahwa beberapa peserta didik merasa bosan karena tugas terlalu mudah, sementara beberapa lainnya merasa kewalahan dan kesulitan mengikuti pelajaran.<br>
-    <br>
-    Karena itulah, Anda memutuskan untuk menerapkan pembelajaran diferensiasi. Tujuannya adalah agar setiap peserta didik mendapatkan tantangan yang sesuai dengan kemampuan mereka, dan semua peserta didik dapat berkembang optimal.<br>
-    <ol style="margin-left:20px;">
-      <li>Bagaimana Anda mengidentifikasi kemampuan awal peserta didik untuk menentukan kelompok diferensiasi yang sesuai?</li>
-      <li>Bagaimana Anda memastikan setiap peserta didik mendapatkan tantangan yang sesuai dengan kemampuannya?</li>
-      <li>Bagaimana Anda menilai keberhasilan pembelajaran diferensiasi yang Anda terapkan?</li>
-    </ol>
-    `},
-    // III. Kasus Ibu Retno
-    { type: "essay", question: `Ibu Retno adalah guru mata pelajaran matematika kelas XB. Ibu Retno baru saja masuk setelah cuti melahirkan. Ibu Retno beberapa kali dalam 1 minggu terlambat datang ke sekolah. Di dalam kelas ia sering memarahi murid tanpa alasan yang jelas. Saat wakil kepala sekolah menegur, ia terlihat sedih dan menangis.<br>
-    <ol style="margin-left:20px;">
-      <li>Bagaimana pendapat Anda atas sikap dan perilaku Ibu Retno?</li>
-      <li>Jika Anda pada posisi Ibu Retno, bagaimana sikap dan solusi yang harus Anda lakukan?</li>
-    </ol>
-    `},
-    // IV. Kelebihan
-    { type: "essay", question: `Apakah kelebihan lain yang Anda miliki? Bagaimana cara Anda membagikan kelebihan Anda pada murid?` },
-    // V. Pengalaman Mengajar
-    { type: "essay", question: `Tuliskan pengalaman Anda selama mengajar. Apakah pengalaman yang paling mengesankan? Pernahkah Anda menghadapi masalah dan bagaimana mengatasinya?` }
-  ]
-}
-,
     {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7;text-align:center;">
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/dindo.png"
+            loading="lazy"
+            decoding="async"
+            alt="Soal Tes Tertulis Seleksi Guru Bahasa Indonesia"
+            style="display:block;width:100%;max-width:794px;height:auto;margin:0 auto;border-radius:8px;"
+          />
+        </div>
+      `
+    }
+  ]
+},
+
+{
   id: "FISIKA",
   name: "Fisika",
   time: 2700, // 45 menit
@@ -2551,28 +2539,31 @@ SUBJECT: {
       <li>Nah, sampai disini ada pertanyaan? ………….JANGAN! ……kami yang Tanya… kan ini ..tes.. 😊</li>
       <li><b>Total waktu pengerjaan: 45 menit.</b></li>
     </ul>
-    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">
+      Selamat mengerjakan!
+    </div>
     <div style="margin-top:10px;font-size:0.97em;color:#888;font-style:italic;">
       “Cahaya tetap berdifraksi dan berinterferensi, walau Snellius dan Huygens tidak menceritakan Alhazen” ~ Nur
     </div>
   `,
   questions: [
-    { type: "essay", question: "Mas, mbak, teh, aa’, bang, non, …. FISIKA itu belajar apa yak? Trus, buat apa kita belajar fisika inii?" },
-    { type: "essay", question: "Mas, mbak, katanya fisika tu ada yang modern, ada juga fisika klasik. Jelasin se-clear-clear nya" },
-    { type: "essay", question: `Lagi nih, waktu itu, ada yang namanya Isaac Newton, yang lagi di bawah pohon apel, kalo ga salah. Trus beliau merumuskan hukum Fisika. Ada 3 ya? Bagaimana cerita ini?<br>
-      Lalu rangkailah sebuah soal beserta kemungkinan jawabannya yang menggunakan 3 hukum Newton` },
-    { type: "essay", question: "Selanjutnya, Fisika sangat erat kaitannya dengan matematika. Konsep-konsep matematika apa saja yang diperlukan dalam fisika serta topik fisika yang mana yang menerapkan konsep matematika itu?" },
-    { type: "essay", question: "Alat ukur dalam Fisika sangat penting. Alat ukur apa saja yang digunakan dalam fisika, untuk mengukur apa dengan satuan apa saja, dan bagaimana cara menggunakannya? Urutkan jawaban anda dari yang paling jarang digunakan hingga yang paling sering digunakan." },
-    { type: "essay", question: "Pada fisika tentang kinematika gerak, variabel utama apa yang perlu dijelaskan kepada siswa? Bagaimana anda menjelaskan materi ini secara lengkap dan menyeluruh agar siswa memahami dengan tuntas" },
-    { type: "essay", question: "Berikutnya, tentang energi. Energi ini tidak terlihat, tetapi merupakan salah satu materi inti dalam fisika. Bagaimana anda mengadakan pembelajan ini agar menjadi unik dan menarik" },
-    { type: "essay", question: "Nah, beberapa materi Fisika sangat berkaitan dengan mata pelajaran lain, seperti teori kinetik gas, listrik dinamis, mekanika fluida, fisika inti, gelombang dan banyak materi lain. Ceritakan bagaimana suatu skenario pembelajaran yang mengolaborasikan fisika pada satu materi tertentu dengan mata pelajaran lain sehingga tampak kerjasama anda dengan mata pelajaran lain tersebut" },
-    { type: "essay", question: "Mas, mbak, saat belajar fisika, terkadang ada siswa yang sangat antusias, sering memberi peran dalam kelas, ada yang mengabaikan, ada yang hanya diam, ada yang merespon dengan destruktif, ada juga yang berperilaku lain. Nah, ceritakan pengalaman anda mengatasi hal ini." },
-    { type: "essay", question: "Bagian penting lainnya, gimana caranya bikin kelas anda menjadi kelas yang semua siswanya dan semua warga sekolah memiliki penghargaan yang tinggi terhadap perbedaan dalam segala hal." },
-    { type: "essay", question: "Bagian yang menantang nih. Dua bulan lagi anda akan membawa beberapa siswa ke olimpiade fisika. Bagaimana cara anda?" },
-    { type: "essay", question: "Terakhir, nih… beberapa tahun ke depan siswa akan menghadapi tantangan sesuai era mereka. Nah, jelaskan bagaimana anda memberikan bekal keterampilan yang membuat siswa siap menghadapi tantangan masa depan." }
+    {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7;text-align:center;">
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/efisika.png"
+            loading="lazy"
+            decoding="async"
+            alt="Soal Seleksi Guru Fisika"
+            style="display:block;width:100%;max-width:794px;height:auto;margin:0 auto;border-radius:8px;"
+          />
+        </div>
+      `
+    }
   ]
-}
-,
+},
+
 {
   id: "ISLAM",
   name: "Agama Islam",
