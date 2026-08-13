@@ -5269,12 +5269,12 @@ function renderTestSelection() {
     {
       title: 'Psikotes',
       tests: [
-        { id: 'IST', label: 'Tes IST 🧠' },
-        { id: 'KRAEPLIN', label: 'Tes Kraeplin 🧮' },
-        { id: 'DISC', label: 'Tes DISC 👤' },
-        { id: 'PAPI', label: 'Tes PAPI 📊' },
-        { id: 'BIGFIVE', label: 'Tes Big Five 📝' },
-        { id: 'GRAFIS', label: 'Tes Grafis 🎨' }
+        { id: 'IST', label: 'Tes IQ 🧠' },
+        { id: 'KRAEPLIN', label: 'Tes KORAN 🧮' },
+        { id: 'DISC', label: 'Tes KEPEMIMPINAN 👤' },
+        { id: 'PAPI', label: 'Tes SIKAP KERJA 📊' },
+        { id: 'BIGFIVE', label: 'Tes KEPRIBADIAN 📝' },
+        { id: 'GRAFIS', label: 'Tes GAMBAR 🎨' }
       ]
     },
     {
