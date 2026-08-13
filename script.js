@@ -2649,7 +2649,7 @@ SUBJECT: {
         <div style="line-height:1.7; text-align:center;">
 
           <img 
-            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/subject%20test%20counselor_page-0001.jpg"
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/akonselor.png"
             loading="lazy"
             decoding="async"
             width="900"
@@ -2689,7 +2689,7 @@ SUBJECT: {
         <div style="line-height:1.7; text-align:center;">
 
           <img 
-            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/ENG%20TEACHERS%20RECRUITMENT%20PROBLEM_page-0001.jpg"
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/1english.png"
             loading="lazy"
             decoding="async"
             width="900"
@@ -2698,7 +2698,7 @@ SUBJECT: {
           />
 
           <img 
-            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/ENG%20TEACHERS%20RECRUITMENT%20PROBLEM_page-0002.jpg"
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/2english.png"
             loading="lazy"
             decoding="async"
             width="900"
@@ -2707,7 +2707,7 @@ SUBJECT: {
           />
 
           <img 
-            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/ENG%20TEACHERS%20RECRUITMENT%20PROBLEM_page-0003.jpg"
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/3english.png"
             loading="lazy"
             decoding="async"
             width="900"
