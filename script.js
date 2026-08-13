@@ -2869,7 +2869,7 @@ function renderSubjectQuestionSlide(qIdx) {
         <div style="font-size:1.05em;background:#f2fbe5;padding:7px 16px;border-radius:9px;">${timerHTML}</div>
       </div>
       <div style="margin:14px 0 17px 0;font-weight:500;font-size:1.05em;">
-        Kerjakan soal berikut di kertas Anda lalu klik <b>Lanjut</b>!
+        Kerjakan soal berikut di kertas Anda. Jika selesai, klik <b>Selesai & Upload</b>!
       </div>
       <div style="font-size:1.3em;font-weight:700;color:#3d4f7c;margin-bottom:12px;">
         Soal ${qIdx + 1}
