@@ -170,18 +170,19 @@
 
     /* =========================================
        EFEK MERAH PADA HALAMAN PASSWORD
-       SAAT PASSWORD SALAH
        ========================================= */
 
     .password-screen-error {
-      animation: passwordScreenError 0.6s ease-in-out;
+      animation:
+        passwordScreenError 0.6s ease-in-out;
     }
 
 
     @keyframes passwordScreenError {
 
       0% {
-        box-shadow: inset 0 0 0 rgba(255, 0, 0, 0);
+        box-shadow:
+          inset 0 0 0 rgba(255, 0, 0, 0);
       }
 
       30% {
@@ -195,7 +196,8 @@
       }
 
       100% {
-        box-shadow: inset 0 0 0 rgba(255, 0, 0, 0);
+        box-shadow:
+          inset 0 0 0 rgba(255, 0, 0, 0);
       }
 
     }
@@ -275,7 +277,6 @@
 
   <!-- =========================================
        CANVAS GRAFIK DISC
-       Hidden tetapi harus tetap ada di DOM
        ========================================= -->
 
   <canvas
@@ -304,7 +305,6 @@
 
   <!-- =========================================
        CANVAS GRAFIK KRAEPELIN
-       Hidden dan digunakan untuk PDF
        ========================================= -->
 
   <canvas
@@ -350,6 +350,7 @@
 
     let wrongPasswordAudioContext = null;
 
+
     function playWrongPasswordAlarm() {
 
       try {
@@ -358,11 +359,13 @@
           window.AudioContext ||
           window.webkitAudioContext;
 
-        if (!AudioContext) return;
+
+        if (!AudioContext) {
+          return;
+        }
 
 
-        /* Buat AudioContext hanya ketika
-           diperlukan */
+        /* Buat AudioContext jika belum ada */
 
         if (!wrongPasswordAudioContext) {
 
@@ -376,8 +379,7 @@
           wrongPasswordAudioContext;
 
 
-        /* Jika browser sedang suspend,
-           lanjutkan kembali */
+        /* Aktifkan kembali jika suspended */
 
         if (
           audioContext.state === "suspended"
@@ -391,6 +393,7 @@
         const oscillator =
           audioContext.createOscillator();
 
+
         const gainNode =
           audioContext.createGain();
 
@@ -402,7 +405,7 @@
         oscillator.type = "square";
 
 
-        /* Frekuensi awal */
+        /* Nada awal */
 
         oscillator.frequency.setValueAtTime(
           720,
@@ -410,8 +413,7 @@
         );
 
 
-        /* Turun seperti suara alarm
-           "TTEEEEET" */
+        /* Nada turun */
 
         oscillator.frequency.exponentialRampToValueAtTime(
           420,
@@ -441,7 +443,7 @@
         );
 
 
-        /* Hubungkan suara */
+        /* Hubungkan */
 
         oscillator.connect(gainNode);
 
@@ -488,7 +490,7 @@
 
       images.forEach(function (image) {
 
-        /* Hapus class terlebih dahulu */
+        /* Hapus animasi sebelumnya */
 
         image.classList.remove(
           "password-image-error"
@@ -500,7 +502,7 @@
         void image.offsetWidth;
 
 
-        /* Tambahkan efek */
+        /* Jalankan animasi */
 
         image.classList.add(
           "password-image-error"
@@ -509,7 +511,9 @@
       });
 
 
-      /* Efek merah pada password screen */
+      /* =====================================
+         EFEK PADA PASSWORD SCREEN
+         ===================================== */
 
       const passwordScreen =
         document.getElementById(
@@ -534,7 +538,9 @@
       }
 
 
-      /* Hapus efek setelah animasi */
+      /* =====================================
+         HAPUS EFEK SETELAH SELESAI
+         ===================================== */
 
       setTimeout(function () {
 
@@ -564,17 +570,12 @@
 
 
     /* =========================================
-       MENJALANKAN SEMUA EFEK PASSWORD SALAH
+       JALANKAN SEMUA EFEK PASSWORD SALAH
        ========================================= */
 
     function runWrongPasswordEffects() {
 
-      /* Efek visual */
-
       passwordWrongImageEffect();
-
-
-      /* Suara alarm */
 
       playWrongPasswordAlarm();
 
@@ -584,7 +585,6 @@
 
     /* =========================================
        MENCEGAH GAMBAR DI-DRAG
-       Termasuk gambar yang dibuat oleh script.js
        ========================================= */
 
     document.addEventListener(
@@ -607,7 +607,6 @@
 
     /* =========================================
        MENONAKTIFKAN KLIK KANAN
-       DI SELURUH HALAMAN
        ========================================= */
 
     document.addEventListener(
@@ -664,8 +663,7 @@
                 function (node) {
 
 
-                  /* Jika node langsung
-                     berupa gambar */
+                  /* Gambar langsung */
 
                   if (
                     node instanceof
@@ -680,8 +678,7 @@
                   }
 
 
-                  /* Jika node berupa elemen
-                     yang memiliki gambar */
+                  /* Gambar di dalam elemen */
 
                   if (
                     node instanceof
@@ -713,10 +710,6 @@
       );
 
 
-    /* =========================================
-       AKTIFKAN IMAGE OBSERVER
-       ========================================= */
-
     imageObserver.observe(
       document.body,
       {
@@ -728,16 +721,30 @@
 
 
     /* =========================================
-       DETEKSI PASSWORD SALAH
+       DETEKSI SETIAP KLIK MASUK
        
-       Memantau perubahan pada
-       #passwordError yang digunakan
-       oleh checkPassword() di script.js.
+       Tidak menggunakan previousErrorText.
+       
+       Jadi walaupun pesan error tetap sama,
+       efek tetap dijalankan pada percobaan
+       berikutnya.
        ========================================= */
 
     document.addEventListener(
       "DOMContentLoaded",
       function () {
+
+        const loginButton =
+          document.querySelector(
+            ".password-submit"
+          );
+
+
+        const passwordInput =
+          document.getElementById(
+            "passwordInput"
+          );
+
 
         const passwordError =
           document.getElementById(
@@ -745,57 +752,113 @@
           );
 
 
-        if (!passwordError) return;
+        if (
+          !loginButton ||
+          !passwordInput ||
+          !passwordError
+        ) {
+
+          return;
+
+        }
 
 
-        let previousErrorText = "";
+        /* =====================================
+           KLIK TOMBOL MASUK
+           ===================================== */
+
+        loginButton.addEventListener(
+          "click",
+          function () {
+
+            /* checkPassword() dari
+               onclick HTML akan diproses.
+
+               Kita tunggu sebentar agar
+               hasil validasi sudah selesai. */
+
+            setTimeout(
+              function () {
+
+                /* Jika passwordError berisi
+                   pesan, berarti password salah */
+
+                const errorText =
+                  passwordError.textContent.trim();
 
 
-        const passwordErrorObserver =
-          new MutationObserver(
-            function () {
+                /* Pastikan masih di halaman
+                   password */
 
-              const errorText =
-                passwordError.textContent.trim();
-
-
-              /* Jalankan hanya jika pesan error
-                 berubah dari kosong menjadi
-                 pesan error baru */
-
-              if (
-                errorText !== "" &&
-                errorText !== previousErrorText
-              ) {
-
-                previousErrorText =
-                  errorText;
+                const passwordScreen =
+                  document.getElementById(
+                    "passwordScreen"
+                  );
 
 
-                runWrongPasswordEffects();
+                if (
+                  errorText !== "" &&
+                  passwordScreen
+                ) {
 
-              }
+                  runWrongPasswordEffects();
+
+                }
+
+              },
+              100
+            );
+
+          }
+        );
 
 
-              /* Reset status ketika error
-                 kembali kosong */
 
-              if (errorText === "") {
+        /* =====================================
+           ENTER PADA KOLOM PASSWORD
+           ===================================== */
 
-                previousErrorText = "";
+        passwordInput.addEventListener(
+          "keydown",
+          function (event) {
 
-              }
+            if (
+              event.key !== "Enter"
+            ) {
+
+              return;
 
             }
-          );
 
 
-        passwordErrorObserver.observe(
-          passwordError,
-          {
-            childList: true,
-            characterData: true,
-            subtree: true
+            /* Tunggu checkPassword() */
+
+            setTimeout(
+              function () {
+
+                const errorText =
+                  passwordError.textContent.trim();
+
+
+                const passwordScreen =
+                  document.getElementById(
+                    "passwordScreen"
+                  );
+
+
+                if (
+                  errorText !== "" &&
+                  passwordScreen
+                ) {
+
+                  runWrongPasswordEffects();
+
+                }
+
+              },
+              100
+            );
+
           }
         );
 
