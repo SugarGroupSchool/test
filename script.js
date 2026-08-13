@@ -2192,34 +2192,43 @@ SUBJECT: {
       ]
     },
 
+   {
+  id: "BIOLOGI",
+  name: "Biologi",
+  time: 2700, // 45 menit
+  instruction: `
+    <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
+      SOAL REKRUTMEN GURU BIOLOGI
+    </div>
+    <ul style="text-align:left;margin-left:18px;">
+      <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
+      <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
+      <li><b>Total waktu pengerjaan: 45 menit.</b></li>
+    </ul>
+    <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
+  `,
+  questions: [
     {
-      id: "BIOLOGI",
-      name: "Biologi",
-      time: 2700, // 45 menit
-      instruction: `
-        <div style="margin-bottom:10px;font-size:1.1em;font-weight:600;">
-          SOAL REKRUTMEN GURU BIOLOGI
+      type: "essay",
+      question: `
+        <div style="line-height:1.7; text-align:center;">
+
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/aabiologi.png"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            alt="Soal Rekrutmen Guru Biologi"
+            style="max-width:100%; height:auto; border-radius:8px;"
+          />
+
         </div>
-        <ul style="text-align:left;margin-left:18px;">
-          <li>Jawablah setiap pertanyaan dengan jelas dan sistematis.</li>
-          <li>Gunakan contoh konkret atau pengalaman yang relevan jika memungkinkan.</li>
-          <li><b>Total waktu pengerjaan: 45 menit.</b></li>
-        </ul>
-        <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
-      `,
-      questions: [
-        { type: "essay", question: "Jelaskan secara rinci proses fotosintesis, mulai dari tahap penyerapan cahaya hingga pembentukan glukosa. Sebutkan faktor-faktor yang mempengaruhi fotosintesis dan bagaimana masing-masing faktor tersebut dapat mempengaruhi laju fotosintesis." },
-        { type: "essay", question: "Sistem kekebalan tubuh memiliki peran penting dalam melindungi tubuh dari infeksi. Analisis bagaimana sistem kekebalan tubuh mengenali dan merespons antigen, serta bagaimana mekanisme kekebalan humoral dan kekebalan seluler bekerja sama untuk melawan infeksi." },
-        { type: "essay", question: "Suatu populasi hewan mengalami isolasi geografis dari populasi aslinya. Setelah beberapa generasi, populasi yang terisolasi tersebut menunjukkan perbedaan morfologi dan perilaku yang signifikan dibandingkan dengan populasi aslinya. Analisis bagaimana isolasi geografis dapat menyebabkan spesiasi, dan faktor-faktor apa saja yang dapat mempengaruhi proses spesiasi tersebut." },
-        { type: "essay", question: "Seorang siswa mengalami kesulitan dalam memahami konsep metabolisme karbohidrat. Bagaimana strategi pembelajaran yang akan Anda gunakan untuk membantunya memahami konsep tersebut?" },
-        { type: "essay", question: "Pada saat anda mengajar materi pewarisan sifat, ada siswa yang sangat aktif sehingga menggu pembelajaran. Dalam situasi tersebut, bagaimana Anda akan menyesuaikan pembelajaran agar lebih inklusif dan mendukung keberagaman gaya belajar siswa?" },
-        { type: "essay", question: "Jelaskan bagaimana Anda menerapkan pendekatan diferensiasi dalam pembelajaran biologi untuk memastikan bahwa setiap siswa dapat mencapai kompetensi yang diharapkan!" },
-        { type: "essay", question: "Dalam suatu praktikum biologi, ada beberapa siswa yang tidak mengikuti prosedur keamanan dengan benar meskipun sudah diberikan instruksi sebelumnya. Bagaimana Anda menangani situasi ini agar tetap mendidik namun tetap menjaga disiplin di kelas?" },
-        { type: "essay", question: "Dewasa ini, teknologi semakin terintegrasi dalam pendidikan. Bagaimana Anda akan memanfaatkan teknologi untuk meningkatkan efektivitas pembelajaran Biologi di kelas Anda? Berikan contoh aplikasi atau platform yang akan Anda gunakan dan bagaimana Anda akan mengintegrasikannya dalam rencana pembelajaran Anda." },
-        { type: "essay", question: "Selain mengajarkan mata pelajaran biologi, keterampilan apa yang menurut Anda perlu dikembangkan di sekolah untuk mendukung kesiapan siswa dalam menghadapi tantangan masa depan? Jelaskan bagaimana Anda akan berkontribusi dalam pengembangannya!" }
-      ]
-    },
-    {
+      `
+    }
+  ]
+},
+
+{
   id: "KIMIA",
   name: "Kimia",
   time: 2700, // 45 menit
@@ -2235,20 +2244,26 @@ SUBJECT: {
     <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
   `,
   questions: [
-    { type: "essay", question: "Jelaskan bagaimana konsep kesetimbangan kimia dapat diaplikasikan dalam industri! Berikan contoh nyata dan analisis dampaknya terhadap lingkungan." },
-    { type: "essay", question: "Sebuah reaksi kimia berlangsung dengan kecepatan yang sangat lambat pada suhu ruang. Sebutkan dan jelaskan tiga cara yang dapat dilakukan untuk meningkatkan laju reaksi tersebut dengan tetap memperhatikan faktor keselamatan laboratorium." },
-    { type: "essay", question: "Seorang siswa mengalami kesulitan memahami konsep stoikiometri dalam reaksi pembakaran hidrokarbon. Bagaimana strategi pembelajaran yang akan Anda gunakan untuk membantunya memahami konsep tersebut?" },
-    { type: "essay", question: "Dalam kelas Anda terdapat seorang siswa dengan gaya belajar kinestetik yang sulit memahami materi larutan asam dan basa. Bagaimana Anda akan menyesuaikan pembelajaran agar lebih inklusif dan mendukung keberagaman gaya belajar siswa?" },
-    { type: "essay", question: "Jelaskan bagaimana Anda menerapkan pendekatan diferensiasi dalam pembelajaran kimia untuk memastikan bahwa setiap siswa dapat mencapai kompetensi yang diharapkan!" },
-    { type: "essay", question: "Salah satu tantangan dalam mengajar kimia adalah menarik minat siswa terhadap materi yang dianggap sulit. Berikan contoh metode pembelajaran kreatif berbasis teknologi atau eksperimen sederhana yang dapat meningkatkan motivasi belajar siswa!" },
-    { type: "essay", question: "Anda mengajar kelas XII dan hendak mengajarkan materi elektrokimia. Bagaimana Anda mendesain pembelajaran yang interaktif dan membuat siswa lebih tertarik dengan materi tersebut?" },
-    { type: "essay", question: "Dalam suatu praktikum kimia, ada beberapa siswa yang tidak mengikuti prosedur keamanan dengan benar meskipun sudah diberikan instruksi sebelumnya. Bagaimana Anda menangani situasi ini agar tetap mendidik namun tetap menjaga disiplin di kelas?" },
-    { type: "essay", question: "Jelaskan prinsip-prinsip utama dalam manajemen kelas yang efektif dan bagaimana Anda akan menerapkannya dalam mengajar kimia?" },
-    { type: "essay", question: "Dalam kelas Anda terdapat siswa dari berbagai latar belakang budaya dan ekonomi yang berbeda. Bagaimana Anda menciptakan lingkungan belajar yang inklusif dan mendukung keberagaman?" },
-    { type: "essay", question: "Sekolah Anda ingin meningkatkan partisipasi siswa dalam kompetisi sains seperti OSN Kimia. Sebagai guru, bagaimana strategi Anda dalam mengidentifikasi, membimbing, dan mengembangkan potensi siswa untuk berprestasi dalam kompetisi tersebut?" },
-    { type: "essay", question: "Selain mengajarkan mata pelajaran kimia, keterampilan apa yang menurut Anda perlu dikembangkan di sekolah untuk mendukung kesiapan siswa dalam menghadapi tantangan masa depan? Jelaskan bagaimana Anda akan berkontribusi dalam pengembangannya!" }
+    {
+      type: "essay",
+      question: `
+        <div style="line-height:1.7; text-align:center;">
+
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/aakimia.png"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            alt="Soal Rekrutmen Guru Kimia"
+            style="max-width:100%; height:auto; border-radius:8px;"
+          />
+
+        </div>
+      `
+    }
   ]
 },
+
 {
   id: "MATH",
   name: "Matematika",
@@ -2307,43 +2322,27 @@ SUBJECT: {
     <div style="margin-top:8px;font-weight:600;color:#278d28;">Selamat mengerjakan!</div>
   `,
   questions: [
-    { type: "essay", question: "Sebagai guru komputer, deskripsikan master plan pelajaran komputer dari tingkat dasar kelas 4 SD hingga tingkat atas 12 SMA/SMK ?" },
-    { type: "essay", question: "Ketika ada 3 kelas yang akan mengikuti pelajaran komputer dalam 1 hari, kelas A jam 07.30-09.00, kelas B jam 09.00-10.30, kelas C jam 13.15-14.45. Jumlah siswa di setiap kelas 25 orang, jumlah komputer yang tersedia di lab. Komputer 30 unit. Tindakan apa saja yang dilakukan guru ketika terjadi kerusakan sebuah unit komputer di kelas B ?" },
     {
       type: "essay",
       question: `
-        Ketika ada 3 kelas yang akan mengikuti pelajaran komputer dalam 1 hari, kelas A jam 07.30-09.00, kelas B jam 09.00-10.30, kelas C jam 13.15-14.45. Jumlah siswa di setiap kelas 30 orang, jumlah komputer yang tersedia di lab. Komputer 20 unit.<br>
-        a. Bagaimana rencana pembelajaran teori hari tersebut?<br>
-        b. Bagaimana rencana pembelajaran praktik hari tersebut?<br>
-        c. Apa tindakan yang dilakukan jika terjadi kerusakan sebuah unit komputer di kelas B?
+        <div style="line-height:1.7; text-align:center;">
+
+          <img
+            src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/aatik.png"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            alt="Soal Rekrutmen Guru TIK"
+            style="max-width:100%; height:auto; border-radius:8px;"
+          />
+
+        </div>
       `
-    },
-    { type: "essay", question: "Ketika proses belajar di lab computer sedang berlangsung, seorang siswa yang sangat aktif menggangu proses belajar sehingga menimbulkan sedikit keributan. Apa tindakan yang sebaiknya dilakukan oleh seorang guru ?" },
-    {
-      type: "essay",
-      question: `
-        Salah satu materi pelajaran TIK/ komputer adalah Pengenalan Hardware & Software (Jumlah pertemuan disesuaikan dengan fasilitas, intake siswa & kemampuan gurunya):<br>
-        a. Bagaimana rancangan pembelajaran untuk tingkat SD (kelas 4/ 5/ 6)?<br>
-        b. Bagaimana rancangan pembelajaran untuk tingkat SMP (kelas 7/ 8/ 9)?<br>
-        c. Bagaimana rancangan pembelajaran untuk tingkat SMA (kelas 10/ 11/ 12)?<br>
-        d. Bagaimana rancangan pembelajaran untuk tingkat SMK (kelas 10/ 11/ 12)?
-      `
-    },
-    {
-      type: "essay",
-      question: `
-        Salah satu materi pelajaran TIK/ komputer adalah Jaringan Komputer & Internet (Jumlah pertemuan disesuaikan dengan fasilitas, intake siswa & kemampuan gurunya):<br>
-        a. Bagaimana rancangan pembelajaran untuk tingkat SD (kelas 4/ 5/ 6)?<br>
-        b. Bagaimana rancangan pembelajaran untuk tingkat SMP (kelas 7/ 8/ 9)?<br>
-        c. Bagaimana rancangan pembelajaran untuk tingkat SMA (kelas 10/ 11/ 12)?<br>
-        d. Bagaimana rancangan pembelajaran untuk tingkat SMK (kelas 10/ 11/ 12)?
-      `
-    },
-    { type: "essay", question: "Jelaskan apakah seorang guru komputer juga harus memiliki kemampuan teknis untuk memperbaiki kerusakan perangkat keras/ perangkat lunak komputer ?" }
+    }
   ]
 }
 ,
-  {
+{
   id: "OLAHRAGA",
   name: "Olahraga",
   time: 2700, // 45 menit
