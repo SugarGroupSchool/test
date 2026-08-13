@@ -47,8 +47,6 @@
 
     /* =========================================
        ANIMASI LOGO
-       1. Meloncat saat pertama muncul
-       2. Bergerak naik-turun terus-menerus
        ========================================= */
 
     .password-logo {
@@ -61,7 +59,9 @@
     }
 
 
-    /* Animasi saat pertama kali logo muncul */
+    /* =========================================
+       LOGO JUMP IN
+       ========================================= */
 
     @keyframes logoJumpIn {
 
@@ -91,7 +91,9 @@
     }
 
 
-    /* Animasi naik-turun setelah logo selesai meloncat */
+    /* =========================================
+       LOGO FLOATING
+       ========================================= */
 
     @keyframes logoFloating {
 
@@ -128,7 +130,7 @@
 
 
     /* =========================================
-       ANIMASI GETAR PASSWORD SALAH
+       ANIMASI GETAR
        ========================================= */
 
     @keyframes passwordImageError {
@@ -169,7 +171,7 @@
 
 
     /* =========================================
-       EFEK MERAH PADA HALAMAN PASSWORD
+       EFEK MERAH PASSWORD SCREEN
        ========================================= */
 
     .password-screen-error {
@@ -344,8 +346,12 @@
 
 
     /* =========================================
-       SUARA ALARM PASSWORD SALAH
-       TTEEEEET!
+       SUARA PASSWORD SALAH
+       
+       POLA:
+       TET → TEEEEET
+       
+       Suara dibuat menggunakan Web Audio API.
        ========================================= */
 
     let wrongPasswordAudioContext = null;
@@ -365,7 +371,9 @@
         }
 
 
-        /* Buat AudioContext jika belum ada */
+        /* =====================================
+           BUAT AUDIO CONTEXT
+           ===================================== */
 
         if (!wrongPasswordAudioContext) {
 
@@ -375,49 +383,102 @@
         }
 
 
-        const audioContext =
+        const ctx =
           wrongPasswordAudioContext;
 
 
-        /* Aktifkan kembali jika suspended */
+        /* Browser tertentu melakukan suspend
+           terhadap AudioContext */
 
-        if (
-          audioContext.state === "suspended"
-        ) {
+        if (ctx.state === "suspended") {
 
-          audioContext.resume();
+          ctx.resume();
 
         }
 
 
-        const oscillator =
-          audioContext.createOscillator();
-
-
-        const gainNode =
-          audioContext.createGain();
+        const now =
+          ctx.currentTime;
 
 
         /* =====================================
-           KARAKTER SUARA
+           OSCILLATOR
            ===================================== */
+
+        const oscillator =
+          ctx.createOscillator();
+
+
+        const gain =
+          ctx.createGain();
+
+
+        /*
+          Square wave memberikan karakter
+          elektronik / digital.
+        */
 
         oscillator.type = "square";
 
 
-        /* Nada awal */
+        /* =====================================
+           POLA FREKUENSI
+           
+           TET
+           ↓
+           jeda pendek
+           ↓
+           TEEEEET
+           ===================================== */
+
+
+        /* TET pertama */
 
         oscillator.frequency.setValueAtTime(
-          720,
-          audioContext.currentTime
+          880,
+          now
         );
 
 
-        /* Nada turun */
+        oscillator.frequency.setValueAtTime(
+          880,
+          now + 0.12
+        );
 
-        oscillator.frequency.exponentialRampToValueAtTime(
-          420,
-          audioContext.currentTime + 0.75
+
+        /* Jeda */
+
+        oscillator.frequency.setValueAtTime(
+          520,
+          now + 0.15
+        );
+
+
+        /* TEEEEET kedua */
+
+        oscillator.frequency.setValueAtTime(
+          660,
+          now + 0.18
+        );
+
+
+        oscillator.frequency.setValueAtTime(
+          660,
+          now + 0.55
+        );
+
+
+        /* Sedikit naik di bagian akhir */
+
+        oscillator.frequency.setValueAtTime(
+          740,
+          now + 0.60
+        );
+
+
+        oscillator.frequency.setValueAtTime(
+          740,
+          now + 0.68
         );
 
 
@@ -425,49 +486,71 @@
            VOLUME
            ===================================== */
 
-        gainNode.gain.setValueAtTime(
+        gain.gain.setValueAtTime(
           0.0001,
-          audioContext.currentTime
+          now
         );
 
 
-        gainNode.gain.exponentialRampToValueAtTime(
-          0.38,
-          audioContext.currentTime + 0.025
+        /* TET pertama */
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.45,
+          now + 0.015
         );
 
 
-        gainNode.gain.exponentialRampToValueAtTime(
+        gain.gain.exponentialRampToValueAtTime(
           0.0001,
-          audioContext.currentTime + 0.85
+          now + 0.13
         );
 
 
-        /* Hubungkan */
+        /* TEEEEET kedua */
 
-        oscillator.connect(gainNode);
-
-        gainNode.connect(
-          audioContext.destination
+        gain.gain.exponentialRampToValueAtTime(
+          0.45,
+          now + 0.18
         );
 
 
-        /* Mulai */
+        gain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          now + 0.74
+        );
 
-        oscillator.start();
+
+        /* =====================================
+           HUBUNGKAN AUDIO
+           ===================================== */
+
+        oscillator.connect(gain);
+
+        gain.connect(
+          ctx.destination
+        );
 
 
-        /* Berhenti */
+        /* =====================================
+           MULAI SUARA
+           ===================================== */
+
+        oscillator.start(now);
+
+
+        /* =====================================
+           HENTIKAN SUARA
+           ===================================== */
 
         oscillator.stop(
-          audioContext.currentTime + 0.85
+          now + 0.78
         );
 
 
       } catch (error) {
 
         console.warn(
-          "Alarm audio tidak dapat diputar:",
+          "Alarm password salah gagal diputar:",
           error
         );
 
@@ -490,19 +573,17 @@
 
       images.forEach(function (image) {
 
-        /* Hapus animasi sebelumnya */
-
         image.classList.remove(
           "password-image-error"
         );
 
 
-        /* Paksa browser melakukan reflow */
+        /* Paksa reflow */
 
         void image.offsetWidth;
 
 
-        /* Jalankan animasi */
+        /* Jalankan ulang */
 
         image.classList.add(
           "password-image-error"
@@ -512,7 +593,7 @@
 
 
       /* =====================================
-         EFEK PADA PASSWORD SCREEN
+         EFEK MERAH PASSWORD SCREEN
          ===================================== */
 
       const passwordScreen =
@@ -539,7 +620,7 @@
 
 
       /* =====================================
-         HAPUS EFEK SETELAH SELESAI
+         HAPUS EFEK
          ===================================== */
 
       setTimeout(function () {
@@ -575,7 +656,12 @@
 
     function runWrongPasswordEffects() {
 
+      /* Visual */
+
       passwordWrongImageEffect();
+
+
+      /* Audio */
 
       playWrongPasswordAlarm();
 
@@ -624,7 +710,6 @@
 
     /* =========================================
        MENONAKTIFKAN DRAG GAMBAR
-       SAAT HALAMAN DIMUAT
        ========================================= */
 
     document.addEventListener(
@@ -648,8 +733,7 @@
 
 
     /* =========================================
-       MENGAWASI GAMBAR BARU
-       YANG DITAMBAHKAN script.js
+       OBSERVER GAMBAR DINAMIS
        ========================================= */
 
     const imageObserver =
@@ -663,7 +747,7 @@
                 function (node) {
 
 
-                  /* Gambar langsung */
+                  /* Node langsung berupa gambar */
 
                   if (
                     node instanceof
@@ -678,7 +762,7 @@
                   }
 
 
-                  /* Gambar di dalam elemen */
+                  /* Elemen yang berisi gambar */
 
                   if (
                     node instanceof
@@ -723,11 +807,8 @@
     /* =========================================
        DETEKSI SETIAP KLIK MASUK
        
-       Tidak menggunakan previousErrorText.
-       
-       Jadi walaupun pesan error tetap sama,
-       efek tetap dijalankan pada percobaan
-       berikutnya.
+       Efek dijalankan SETIAP KALI password
+       salah, meskipun pesan error tetap sama.
        ========================================= */
 
     document.addEventListener(
@@ -771,24 +852,12 @@
           "click",
           function () {
 
-            /* checkPassword() dari
-               onclick HTML akan diproses.
-
-               Kita tunggu sebentar agar
-               hasil validasi sudah selesai. */
-
             setTimeout(
               function () {
-
-                /* Jika passwordError berisi
-                   pesan, berarti password salah */
 
                 const errorText =
                   passwordError.textContent.trim();
 
-
-                /* Pastikan masih di halaman
-                   password */
 
                 const passwordScreen =
                   document.getElementById(
@@ -830,8 +899,6 @@
 
             }
 
-
-            /* Tunggu checkPassword() */
 
             setTimeout(
               function () {
