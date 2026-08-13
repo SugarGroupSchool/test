@@ -5399,1128 +5399,273 @@ function renderTestSelection() {
       }
     </style>
   `;
-const instruksiList = [`
-<div style="text-align:center;padding:10px;">
-  <img
-    src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/Aturan.png"
-    alt="Instruksi Tes Sugar Group Schools"
-    style="
-      width:100%;
-      max-width:1000px;
-      height:auto;
-      display:block;
-      margin:auto;
-      border-radius:12px;
-      box-shadow:0 4px 16px rgba(0,0,0,.15);
-    "
-  >
+
+// Handle Submit Test Selection Form
+document.getElementById('testSelectionForm').onsubmit = function(e) {
+  e.preventDefault();
+  const selected = Array.from(document.querySelectorAll('input[name="selectedTests"]:checked')).map(el => el.value);
+  appState.selectedTests = selected;
+  localStorage.setItem('selectedTests', JSON.stringify(selected));
+  appState.showTestCards = false;
+  renderHome();
+};
+}
+const instruksiList = [
+`<WELCOME>Selamat datang di platform tes Sugar Group Schools.</WELCOME>
+<HEADNOTE>Sebelum memulai, perhatikan beberapa hal penting berikut:</HEADNOTE>
+<div class="instruksi-section">
+    <div class="section-title">📚 Jenis Tes</div>
+    <div class="section-content">
+        • Anda akan mengikuti beberapa jenis tes<br>
+        • Setiap tes memiliki instruksi khusus yang berbeda<br>
+        • Pastikan memahami instruksi masing-masing tes sebelum mengerjakan
+    </div>
 </div>
-`];
+<div class="instruksi-section">
+    <div class="section-title">📥 Pengunduhan Hasil</div>
+    <div class="section-content">
+        • Unduh hasil hanya setelah <b>SEMUA TES SELESAI</b><br>
+        • Hasil akhir akan terkumpul dalam satu file PDF
+    </div>
+</div>
+<div class="instruksi-section">
+    <div class="section-title">🔧 Verifikasi Sistem & Urutan Langkah</div>
+<div class="section-content">
+    • Setelah membaca instruksi ini dan menekan tombol <b>Selesai</b>, layar akan otomatis bergulir ke tombol <b>Download</b>.<br>
+    • Klik tombol <b>Download</b> untuk memastikan file PDF dapat diunduh dengan baik.<br>
+    • Tombol <b>Download</b> akan aktif kembali setelah seluruh tes yang dipilih selesai dikerjakan.<br>
+    • Setelah tombol aktif, silakan unduh file dengan menekan <b>Download</b>.<br>
+    • Setelah file berhasil diunduh, sistem akan otomatis melakukan <i>logout</i> dan mengarahkan Anda ke Google Form untuk mengumpulkan hasil tes.<br>
+    • Jika mengalami kendala, segera hubungi tim rekrutmen.
+</div>
 
-// ============================================================
-// RENDER HOME
-// ============================================================
+</div>
+<PENTING>
+    <div class="warning-header">🚫 PENTING: LARANGAN SELAMA TES 🚫</div>
+    <div class="warning-content">
+        Selama mengerjakan tes, Anda <b>TIDAK DIPERBOLEHKAN</b>:<br>
+        • Membuka tab/jendela browser lain<br>
+        • Beralih ke aplikasi lain<br>
+        • Meninggalkan halaman tes<br>
+        <div class="warning-alert">Sistem akan mendeteksi dan mendiskualifikasi secara otomatis jika terjadi pelanggaran!</div>
+    </div>
+</PENTING>
+<div style="text-align:center;margin-top:24px;font-size:1.2em;">
+    Selamat mengerjakan. Semoga sukses! 💪
+</div>`
+];
+
+// Render Home
 function renderHome() {
-
   if (window.__inTestView === true) return;
-
-  setTimeout(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  }, 20);
+  setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 20);
 
   // Pastikan appState dasar aman
   window.appState = window.appState || {};
   appState.completed = appState.completed || {};
 
-  const nickname =
-    appState.identity?.nickname || "Peserta";
+  const nickname = appState.identity?.nickname || "Peserta";
+  const selectedTests = appState.selectedTests || JSON.parse(localStorage.getItem('selectedTests') || '[]');
+  const psikotesList = ['IST','KRAEPLIN','DISC','PAPI','BIGFIVE','GRAFIS'];
+  const adminList   = ['EXCEL','TYPING','SUBJECT'];
+  const hasPsikotes = psikotesList.some(t => selectedTests.includes(t));
+  const hasAdmin    = adminList.some(t => selectedTests.includes(t));
+  const isBoth      = hasPsikotes && hasAdmin;
 
-  const selectedTests =
-    appState.selectedTests ||
-    JSON.parse(
-      localStorage.getItem('selectedTests') || '[]'
-    );
-
-  const psikotesList = [
-    'IST',
-    'KRAEPLIN',
-    'DISC',
-    'PAPI',
-    'BIGFIVE',
-    'GRAFIS'
-  ];
-
-  const adminList = [
-    'EXCEL',
-    'TYPING',
-    'SUBJECT'
-  ];
-
-  const hasPsikotes =
-    psikotesList.some(t =>
-      selectedTests.includes(t)
-    );
-
-  const hasAdmin =
-    adminList.some(t =>
-      selectedTests.includes(t)
-    );
-
-  const isBoth =
-    hasPsikotes && hasAdmin;
-
-
-  // ==========================================================
-  // GREETING
-  // ==========================================================
-
+  // Blok greeting
   let greetingHTML = '';
-
   if (!appState.showTestCards) {
-
     greetingHTML = `
-      <div
-        class="personal-greeting"
-        style="
-          margin:30px auto 30px auto;
-          padding:30px 24px 23px 24px;
-          max-width:480px;
-          background:linear-gradient(
-            113deg,
-            #fff8fc 88%,
-            #eaf6ff 100%
-          );
-          border-radius:19px;
-          font-size:1.29rem;
-          color:#234;
-          box-shadow:
-            0 4px 32px #bbd0ff36,
-            0 1.5px 4px #d1f7f920;
-          text-align:center;
-          border:1.5px solid #d6e6fa;
-          position:relative;
-        "
-      >
-
-        <div
-          style="
-            font-size:2.3em;
-            margin-bottom:8px;
-          "
-        >
-          👋
+      <div class="personal-greeting"
+        style="margin:30px auto 30px auto;
+        padding:30px 24px 23px 24px;
+        max-width:480px;
+        background:linear-gradient(113deg,#fff8fc 88%,#eaf6ff 100%);
+        border-radius:19px;
+        font-size:1.29rem;
+        color:#234;
+        box-shadow:0 4px 32px #bbd0ff36,0 1.5px 4px #d1f7f920;
+        text-align:center;
+        border:1.5px solid #d6e6fa;
+        position:relative;">
+        <div style="font-size:2.3em;margin-bottom:8px;">👋</div>
+        <b style="font-size:1.13em;">Halo, ${nickname}!</b>
+        <div style="margin-top:7px;font-size:1.08em;line-height:1.55;">
+          Untuk memastikan Anda memahami seluruh proses, silakan baca dan dengarkan <span style="color:#117ad1;font-weight:700;">instruksi tes</span> terlebih dahulu.<br>
+          <span style="color:#1d6c3a;font-size:1.05em;font-weight:600;">Klik tombol di bawah sebelum mulai mengerjakan!</span>
         </div>
-
-        <b style="font-size:1.13em;">
-          Halo, ${nickname}!
-        </b>
-
-        <div
-          style="
-            margin-top:7px;
-            font-size:1.08em;
-            line-height:1.55;
-          "
-        >
-          Untuk memastikan Anda memahami seluruh proses,
-          silakan baca dan dengarkan
-          <span
-            style="
-              color:#117ad1;
-              font-weight:700;
-            "
-          >
-            instruksi tes
-          </span>
-          terlebih dahulu.
-          <br>
-
-          <span
-            style="
-              color:#1d6c3a;
-              font-size:1.05em;
-              font-weight:600;
-            "
-          >
-            Klik tombol di bawah sebelum mulai mengerjakan!
-          </span>
-        </div>
-
         <div style="margin-top:21px;">
-
-          <button
-            class="btn blink"
+          <button class="btn blink"
             id="btnShowInstruksi"
-            style="
-              padding:13px 42px;
-              font-size:1.15rem;
-              font-weight:800;
-              border:2.5px solid #FFD600;
-              background:
-                linear-gradient(
-                  91deg,
-                  #fffde4 65%,
-                  #ffe178 100%
-                );
-              color:#1b222e;
-              box-shadow:
-                0 0 18px #ffd600b6,
-                0 1px 10px #eaeaba50;
-              border-radius:11px;
-              transition:
-                background .17s,
-                box-shadow .14s;
-              cursor:pointer;
-              letter-spacing:.2px;
-            "
-          >
+            style="padding:13px 42px;font-size:1.15rem;font-weight:800;border:2.5px solid #FFD600;
+              background:linear-gradient(91deg,#fffde4 65%,#ffe178 100%);color:#1b222e;
+              box-shadow:0 0 18px #ffd600b6,0 1px 10px #eaeaba50;border-radius:11px;
+              transition:background .17s,box-shadow .14s;cursor:pointer;letter-spacing:.2px;">
             📢 Lihat &amp; Pahami Instruksi
           </button>
-
         </div>
-
       </div>
     `;
-
   } else {
-
     greetingHTML = `
-      <div
-        class="personal-greeting"
-        style="
-          margin:30px auto 30px auto;
-          padding:22px 24px 18px 24px;
-          max-width:480px;
-          background:linear-gradient(
-            113deg,
-            #fff8fc 88%,
-            #eaf6ff 100%
-          );
-          border-radius:19px;
-          font-size:1.22rem;
-          color:#234;
-          box-shadow:
-            0 4px 24px #bbd0ff22,
-            0 1.5px 4px #d1f7f910;
-          text-align:center;
-          border:1.5px solid #d6e6fa;
-          position:relative;
-        "
-      >
-
-        <div
-          style="
-            font-size:2.1em;
-            margin-bottom:8px;
-          "
-        >
-          👋
+      <div class="personal-greeting"
+        style="margin:30px auto 30px auto;
+        padding:22px 24px 18px 24px;
+        max-width:480px;
+        background:linear-gradient(113deg,#fff8fc 88%,#eaf6ff 100%);
+        border-radius:19px;
+        font-size:1.22rem;
+        color:#234;
+        box-shadow:0 4px 24px #bbd0ff22,0 1.5px 4px #d1f7f910;
+        text-align:center;
+        border:1.5px solid #d6e6fa;
+        position:relative;">
+        <div style="font-size:2.1em;margin-bottom:8px;">👋</div>
+        <b style="font-size:1.11em;">Halo, ${nickname}!</b>
+        <div style="margin-top:7px;font-size:1.06em;line-height:1.48;">
+          Instruksi sudah selesai.<br>
+          Silakan mulai mengerjakan tes yang telah dipilih di bawah ini.<br>
+          <span style="color:#278f36;font-size:1em;font-weight:600;">Semoga lancar!</span>
         </div>
-
-        <b style="font-size:1.11em;">
-          Halo, ${nickname}!
-        </b>
-
-        <div
-          style="
-            margin-top:7px;
-            font-size:1.06em;
-            line-height:1.48;
-          "
-        >
-          Instruksi sudah selesai.
-          <br>
-
-          Silakan mulai mengerjakan
-          tes yang telah dipilih di bawah ini.
-          <br>
-
-          <span
-            style="
-              color:#278f36;
-              font-size:1em;
-              font-weight:600;
-            "
-          >
-            Semoga lancar!
-          </span>
-
-        </div>
-
       </div>
     `;
   }
 
-
-  // ==========================================================
-  // HEADER HOME
-  // ==========================================================
-
   let html = `
-    <div
-      class="card"
-      id="homeCard"
-      style="
-        max-width:900px;
-        margin:36px auto 0 auto;
-        padding:0 0 38px 0;
-        border-radius:27px;
-        background:
-          linear-gradient(
-            135deg,
-            #f5faff 88%,
-            #e5f3ff 100%
-          );
-        box-shadow:
-          0 10px 36px #c9eaff33,
-          0 1.5px 6px #fff9;
-        border:1.7px solid #bfe3fc;
-        overflow:hidden;
-      "
-    >
-
-      <div
-        style="
-          display:flex;
-          align-items:center;
-          gap:18px;
-          padding:38px 34px 0 34px;
-        "
-      >
-
-        <img
-          src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
-          alt="Logo Psikotes"
-          style="
-            width:68px;
-            height:68px;
-            object-fit:contain;
-            border-radius:16px;
-            box-shadow:0 2px 12px #bddff930;
-          "
-        >
-
+    <div class="card" id="homeCard" style="max-width:900px;margin:36px auto 0 auto;padding:0 0 38px 0;border-radius:27px;
+      background:linear-gradient(135deg,#f5faff 88%,#e5f3ff 100%);
+      box-shadow:0 10px 36px #c9eaff33, 0 1.5px 6px #fff9;border:1.7px solid #bfe3fc;overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:18px;padding:38px 34px 0 34px;">
+        <img src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
+          alt="Logo Psikotes" style="width:68px;height:68px;object-fit:contain;border-radius:16px;box-shadow:0 2px 12px #bddff930;">
         <div>
-
-          <h1
-            style="
-              margin:0 0 8px 0;
-              font-size:2.09rem;
-              font-weight:900;
-              color:#1662a5;
-              letter-spacing:0.2px;
-              text-shadow:0 1.5px 10px #e1efff99;
-            "
-          >
-            Platform Tes Sugar Group Schools
+          <h1 style="margin:0 0 8px 0;font-size:2.09rem;font-weight:900;color:#1662a5;letter-spacing:0.2px;text-shadow:0 1.5px 10px #e1efff99;">
+            Platfoform Tes Sugar Group Schools
           </h1>
-
-          <div
-            style="
-              font-size:1.11rem;
-              color:#337;
-              font-weight:600;
-              opacity:.95;
-            "
-          >
+          <div style="font-size:1.11rem;color:#337;font-weight:600;opacity:.95;">
             Platform Seleksi & Pengembangan
           </div>
-
         </div>
-
       </div>
-
       ${greetingHTML}
   `;
 
-
-  // ==========================================================
-  // KARTU TES
-  // ==========================================================
-
+  // Kartu tes & tombol download (jika instruksi selesai)
   if (appState.showTestCards) {
-
-    // ========================================================
-    // TES PSIKOLOGI
-    // ========================================================
-
     if (hasPsikotes) {
-
-      if (isBoth) {
-
-        html += `
-          <div
-            style="
-              margin-bottom:14px;
-              font-weight:800;
-              color:#14672e;
-              font-size:1.19em;
-              letter-spacing:.01em;
-              text-align:center;
-              border-bottom:2.5px solid #dbe6e0;
-              padding-bottom:5px;
-              max-width:370px;
-              margin-left:auto;
-              margin-right:auto;
-            "
-          >
-            Kategori 1: Tes Psikologi
-          </div>
-        `;
-      }
-
-
-      html += `
-        <div
-          class="test-selection"
-          style="padding:0 24px;"
-        >
-      `;
-
-
-      // IST
-      if (selectedTests.includes('IST')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.IST
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('IST')"
-          >
-
-            <div class="test-icon">
-              🧠
-            </div>
-
-            <h3>
-              KECERDASAN
-            </h3>
-
-            <p>
-              ${tests.IST.description}
-            </p>
-
-            <div class="time">
-              Waktu: ~60 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.IST
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      // KRAEPLIN
-      if (selectedTests.includes('KRAEPLIN')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.KRAEPLIN
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('KRAEPLIN')"
-          >
-
-            <div class="test-icon">
-              🧮
-            </div>
-
-            <h3>
-              KORAN
-            </h3>
-
-            <p>
-              ${tests.KRAEPLIN.description}
-            </p>
-
-            <div class="time">
-              Waktu: ±5-10 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.KRAEPLIN
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      // DISC
-      if (selectedTests.includes('DISC')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.DISC
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('DISC')"
-          >
-
-            <div class="test-icon">
-              👤
-            </div>
-
-            <h3>
-              KEPEMIMPINAN
-            </h3>
-
-            <p>
-              ${tests.DISC.description}
-            </p>
-
-            <div class="time">
-              Waktu: ~5 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.DISC
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      // PAPI
-      if (selectedTests.includes('PAPI')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.PAPI
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('PAPI')"
-          >
-
-            <div class="test-icon">
-              📊
-            </div>
-
-            <h3>
-              SIKAP KERJA
-            </h3>
-
-            <p>
-              ${tests.PAPI.description}
-            </p>
-
-            <div class="time">
-              Waktu: ~5 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.PAPI
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      // BIG FIVE
-      if (selectedTests.includes('BIGFIVE')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.BIGFIVE
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('BIGFIVE')"
-          >
-
-            <div class="test-icon">
-              📝
-            </div>
-
-            <h3>
-              KEPRIBADIAN
-            </h3>
-
-            <p>
-              ${tests.BIGFIVE.description}
-            </p>
-
-            <div class="time">
-              Waktu: ~5 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.BIGFIVE
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      // GRAFIS
-      if (selectedTests.includes('GRAFIS')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.GRAFIS
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('GRAFIS')"
-          >
-
-            <div class="test-icon">
-              🎨
-            </div>
-
-            <h3>
-              GAMBAR
-            </h3>
-
-            <p>
-              Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.
-            </p>
-
-            <div class="time">
-              Waktu: ~10 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.GRAFIS
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      html += `
-        </div>
-      `;
+      if (isBoth) html += `<div style="
+        margin-bottom:14px;font-weight:800;color:#14672e;font-size:1.19em;
+        letter-spacing:.01em;text-align:center;
+        border-bottom:2.5px solid #dbe6e0;
+        padding-bottom:5px;max-width:370px;
+        margin-left:auto;margin-right:auto;">
+        Kategori 1: Tes Psikologi
+      </div>`;
+      html += `<div class="test-selection" style="padding:0 24px;">`;
+      if (selectedTests.includes('IST'))      html += `<div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')"><div class="test-icon">🧠</div><h3>KECERDASAN</h3><p>${tests.IST.description}</p><div class="time">Waktu: ~60 menit</div><div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('KRAEPLIN')) html += `<div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')"><div class="test-icon">🧮</div><h3>KORAN</h3><p>${tests.KRAEPLIN.description}</p><div class="time">Waktu: ±5-10 menit</div><div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('DISC'))     html += `<div class="test-card ${appState.completed.DISC ? 'completed' : ''}" onclick="startTest('DISC')"><div class="test-icon">👤</div><h3>KEPEMIMPINAN</h3><p>${tests.DISC.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.DISC ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('PAPI'))     html += `<div class="test-card ${appState.completed.PAPI ? 'completed' : ''}" onclick="startTest('PAPI')"><div class="test-icon">📊</div><h3>SIKAP KERJA</h3><p>${tests.PAPI.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.PAPI ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('BIGFIVE'))  html += `<div class="test-card ${appState.completed.BIGFIVE ? 'completed' : ''}" onclick="startTest('BIGFIVE')"><div class="test-icon">📝</div><h3>KEPRIBADIAN</h3><p>${tests.BIGFIVE.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.BIGFIVE ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('GRAFIS'))   html += `<div class="test-card ${appState.completed.GRAFIS ? 'completed' : ''}" onclick="startTest('GRAFIS')"><div class="test-icon">🎨</div><h3>GAMBAR</h3><p>Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.</p><div class="time">Waktu: ~10 menit</div><div class="status">${appState.completed.GRAFIS ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      html += `</div>`;
     }
-
-
-    // ========================================================
-    // TES KEMAMPUAN / ADMINISTRASI
-    // ========================================================
-
     if (hasAdmin) {
-
-      if (isBoth) {
-
-        html += `
-          <div
-            style="
-              margin:38px auto 14px auto;
-              font-weight:800;
-              color:#1c4e81;
-              font-size:1.19em;
-              letter-spacing:.01em;
-              text-align:center;
-              border-bottom:2.5px solid #e1eaff;
-              padding-bottom:5px;
-              max-width:430px;
-            "
-          >
-            Kategori 2: Tes Kemampuan/Administrasi
-          </div>
-        `;
-      }
-
-
-      html += `
-        <div
-          class="test-selection"
-          style="padding:0 24px;"
-        >
-      `;
-
-
-      // EXCEL
-      if (selectedTests.includes('EXCEL')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.EXCEL
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('EXCEL')"
-          >
-
-            <div class="test-icon">
-              📑
-            </div>
-
-            <h3>
-              EXCEL
-            </h3>
-
-            <p>
-              Mengerjakan soal administrasi sekolah di spreadsheet online.
-            </p>
-
-            <div class="time">
-              Waktu: ~15 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.EXCEL
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      // TYPING
-      if (selectedTests.includes('TYPING')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.TYPING
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('TYPING')"
-          >
-
-            <div class="test-icon">
-              ⌨️
-            </div>
-
-            <h3>
-              KETIK
-            </h3>
-
-            <p>
-              Uji kecepatan dan akurasi mengetik kalimat tertentu.
-            </p>
-
-            <div class="time">
-              Waktu: ~5 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.TYPING
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      // SUBJECT
-      if (selectedTests.includes('SUBJECT')) {
-
-        html += `
-          <div
-            class="test-card ${
-              appState.completed.SUBJECT
-                ? 'completed'
-                : ''
-            }"
-            onclick="startTest('SUBJECT')"
-          >
-
-            <div class="test-icon">
-              📚
-            </div>
-
-            <h3>
-              SUBJEK
-            </h3>
-
-            <p>
-              Pilih dan kerjakan soal sesuai mata pelajaran
-              (Math, Indonesia, Inggris, dll).
-            </p>
-
-            <div class="time">
-              Waktu: ~15 menit
-            </div>
-
-            <div class="status">
-              ${
-                appState.completed.SUBJECT
-                  ? '✓ Selesai'
-                  : 'Belum dikerjakan'
-              }
-            </div>
-
-          </div>
-        `;
-      }
-
-
-      html += `
-        </div>
-      `;
+      if (isBoth) html += `<div style="
+        margin:38px auto 14px auto;font-weight:800;
+        color:#1c4e81;font-size:1.19em;
+        letter-spacing:.01em;text-align:center;
+        border-bottom:2.5px solid #e1eaff;
+        padding-bottom:5px;max-width:430px;">
+        Kategori 2: Tes Kemampuan/Administrasi
+      </div>`;
+      html += `<div class="test-selection" style="padding:0 24px;">`;
+      if (selectedTests.includes('EXCEL'))   html += `<div class="test-card ${appState.completed.EXCEL ? 'completed' : ''}" onclick="startTest('EXCEL')"><div class="test-icon">📑</div><h3>EXCEL</h3><p>Mengerjakan soal administrasi sekolah di spreadsheet online.</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.EXCEL ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('TYPING'))  html += `<div class="test-card ${appState.completed.TYPING ? 'completed' : ''}" onclick="startTest('TYPING')"><div class="test-icon">⌨️</div><h3>KETIK</h3><p>Uji kecepatan dan akurasi mengetik kalimat tertentu.</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.TYPING ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('SUBJECT')) html += `<div class="test-card ${appState.completed.SUBJECT ? 'completed' : ''}" onclick="startTest('SUBJECT')"><div class="test-icon">📚</div><h3>SUBJEK</h3><p>Pilih dan kerjakan soal sesuai mata pelajaran (Math, Indonesia, Inggris, dll).</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.SUBJECT ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      html += `</div>`;
     }
-
-
-    // ========================================================
-    // DOWNLOAD PDF
-    // ========================================================
-
     html += `
-
-      <div
-        id="downloadPDFBox"
-        style="
-          text-align:center;
-          margin:48px 0 0 0;
-        "
-      >
-
-        <button
-          class="btn btn-download"
-          id="btnDownloadPDF"
-          style="
-            padding:19px 48px;
-            font-size:1.25rem;
-            font-weight:900;
-            border:2.4px solid #31b729;
-            background:
-              linear-gradient(
-                92deg,
-                #f7fff1 65%,
-                #d3ffb8 100%
-              );
-            color:#15772a;
-            box-shadow:
-              0 0 18px #45ff6190,
-              0 0 7px #eaffea55,
-              0 1.5px 6px #fafdf6;
-            border-radius:15px;
-            margin-bottom:0;
-            transition:
-              background 0.16s,
-              box-shadow 0.15s;
-            letter-spacing:.1px;
-            position:relative;
-          "
-          onclick="generatePDF()"
-        >
-
-          <span
-            style="
-              font-size:1.23em;
-              vertical-align:-3px;
-            "
-          >
-            📄
-          </span>
-
-          Cek Tombol Download (uji unduh PDF)
-
-        </button>
-
-
-        <div
-          style="
-            margin-top:13px;
-            font-size:1.01em;
-            color:#486908;
-            letter-spacing:.01em;
-            opacity:.97;
-          "
-        >
-
-          <span
-            style="
-              background:#fffde8;
-              border-radius:8px;
-              padding:3px 13px 3px 11px;
-              display:inline-block;
-              border:1px solid #ffe066;
-            "
-          >
-
-            <b>PENTING:</b>
-            Unduh hasil hanya setelah semua tes selesai.
-
-          </span>
-
-        </div>
-
+    <div id="downloadPDFBox" style="text-align:center;margin:48px 0 0 0;">
+      <button class="btn btn-download"
+        id="btnDownloadPDF"
+        style="padding:19px 48px;font-size:1.25rem;font-weight:900;border:2.4px solid #31b729;
+          background:linear-gradient(92deg,#f7fff1 65%,#d3ffb8 100%);color:#15772a;
+          box-shadow:0 0 18px #45ff6190,0 0 7px #eaffea55,0 1.5px 6px #fafdf6;
+          border-radius:15px;margin-bottom:0;transition:background 0.16s,box-shadow 0.15s;
+          letter-spacing:.1px;position:relative;"
+        onclick="generatePDF()">
+       <span style="font-size:1.23em;vertical-align:-3px;">📄</span> Cek Tombol Download (uji unduh PDF)
+</button>
+      <div style="margin-top:13px;font-size:1.01em;color:#486908;letter-spacing:.01em;opacity:.97;">
+        <span style="background:#fffde8;border-radius:8px;padding:3px 13px 3px 11px;display:inline-block;border:1px solid #ffe066;">
+          <b>PENTING:</b> Unduh hasil hanya setelah semua tes selesai.
+        </span>
       </div>
-
-
-      <div
-        id="cekDownloadMsg"
-        style="
-          margin:24px auto 16px auto;
-          max-width:485px;
-          background:#fffbe0;
-          border:1.6px solid #ffe066;
-          border-radius:12px;
-          padding:15px 25px 13px 22px;
-          color:#6b5a05;
-          font-size:1.13em;
-          box-shadow:0 2px 12px #ffe06624;
-          display:none;
-        "
-      >
-
-        <div
-          style="
-            font-weight:800;
-            color:#bb9300;
-            margin-bottom:4px;
-          "
-        >
-          ⚠️ Cek Fungsi Download
-        </div>
-
-        <div>
-
-          <b>
-            Silakan klik tombol
-            <u>Download Hasil Tes</u>
-            di atas satu kali untuk memastikan
-            file berhasil diunduh.
-          </b>
-
-          <br>
-          <br>
-
-          Jika file PDF/Excel berhasil diunduh,
-          Anda dapat lanjut mengerjakan seluruh tes.
-
-          <br>
-
-          <b>
-            Jika <u>tidak</u> ada file terunduh,
-          </b>
-
-          segera hubungi tim rekrutmen
-          untuk bantuan.
-
-        </div>
-
+    </div>
+    <div id="cekDownloadMsg"
+      style="margin:24px auto 16px auto; max-width:485px; background:#fffbe0; border:1.6px solid #ffe066; border-radius:12px;
+      padding:15px 25px 13px 22px; color:#6b5a05; font-size:1.13em; box-shadow:0 2px 12px #ffe06624; display:none;">
+      <div style="font-weight:800;color:#bb9300;margin-bottom:4px;">
+        ⚠️ Cek Fungsi Download
       </div>
-
+      <div>
+        <b>Silakan klik tombol <u>Download Hasil Tes</u> di atas satu kali untuk memastikan file berhasil diunduh.</b><br><br>
+        Jika file PDF/Excel berhasil diunduh, Anda dapat lanjut mengerjakan seluruh tes.<br>
+        <b>Jika <u>tidak</u> ada file terunduh</b>, segera hubungi tim rekrutmen untuk bantuan.
+      </div>
+    </div>
     `;
   }
 
-
-  // ==========================================================
-  // CLOSE HOME CARD + CSS
-  // ==========================================================
-
-  html += `
-    </div>
-
-    <style>
-
-      .btn-download:hover {
-        background:
-          linear-gradient(
-            92deg,
-            #fafff3 62%,
-            #e1ffd4 100%
-          ) !important;
-
-        box-shadow:
-          0 0 22px #66ffb190,
-          0 0 10px #eafff0b0;
-
-        color:#17852c;
-        border-color:#2cd645;
-      }
-
-
-      .btn-download:active {
-        background:
-          linear-gradient(
-            92deg,
-            #edffe1 67%,
-            #c9ffb2 100%
-          ) !important;
-
-        color:#18692d;
-        border-color:#1ab529;
-      }
-
-
-      .btn.blink {
-        animation:
-          blink 1.6s infinite;
-      }
-
-
-      @keyframes blink {
-
-        0%,
-        100% {
-          box-shadow:
-            0 0 18px #ffd600b6,
-            0 1px 10px #eaeaba50;
-        }
-
-        50% {
-          box-shadow:
-            0 0 30px #fff972,
-            0 1px 16px #ffe178aa;
-        }
-
-      }
-
-    </style>
-  `;
-
-
-  // ==========================================================
-  // RENDER KE DOM
-  // ==========================================================
+  html += `</div>
+  <style>
+    .btn-download:hover {background:linear-gradient(92deg,#fafff3 62%,#e1ffd4 100%) !important;box-shadow:0 0 22px #66ffb190,0 0 10px #eafff0b0;color:#17852c;border-color:#2cd645;}
+    .btn-download:active {background:linear-gradient(92deg,#edffe1 67%,#c9ffb2 100%) !important;color:#18692d;border-color:#1ab529;}
+    .btn.blink {animation: blink 1.6s infinite;}
+    @keyframes blink {0%,100% { box-shadow:0 0 18px #ffd600b6,0 1px 10px #eaeaba50;}50% { box-shadow:0 0 30px #fff972,0 1px 16px #ffe178aa;}}
+  </style>`;
 
   document.getElementById('app').innerHTML = html;
 
-
-  // ==========================================================
-  // TOMBOL INSTRUKSI
-  // ==========================================================
-
+  // Tombol instruksi (jika belum instruksi)
   setTimeout(() => {
-
-    const instruksiBtn =
-      document.getElementById('btnShowInstruksi');
-
+    const instruksiBtn = document.getElementById('btnShowInstruksi');
     if (instruksiBtn) {
-
       instruksiBtn.classList.add('blink');
-
-      instruksiBtn.onclick = () => {
-
-        showInstruksiOverlay(
-          nickname,
-          instruksiList
-        );
-
-      };
-
+      instruksiBtn.onclick = () => showInstruksiOverlay(nickname, instruksiList);
     }
-
   }, 300);
 
+  // =========================
+  // [D] Sinkronisasi tombol PDF (panggilan saja)
+  // =========================
 
-  // ==========================================================
-  // [D] SINKRONISASI TOMBOL PDF
-  // ==========================================================
+  
+  // 1) counter
+window.downloadClickCount = (typeof window.downloadClickCount === "number") ? window.downloadClickCount : 0;
 
-  // 1. Counter klik download
-  window.downloadClickCount =
-    (
-      typeof window.downloadClickCount === "number"
-    )
-      ? window.downloadClickCount
-      : 0;
-
-
-  // 2. Netralisir onclick inline
-  (function () {
-
-    const pdfBtnImmediate =
-      document.getElementById('btnDownloadPDF');
-
-    if (pdfBtnImmediate) {
-
-      pdfBtnImmediate.removeAttribute(
-        'onclick'
-      );
-
-    }
-
-  })();
-
-
-  // 3. Sinkronisasi state awal tombol
-  if (
-    typeof window.updateDownloadButtonState ===
-    "function"
-  ) {
-
-    window.updateDownloadButtonState();
-
+// 2) netralisir onclick inline
+(function () {
+  const pdfBtnImmediate = document.getElementById('btnDownloadPDF');
+  if (pdfBtnImmediate) {
+    pdfBtnImmediate.removeAttribute('onclick');
   }
+})();
 
+// 3) (opsional) sinkronisasi state awal tombolmu jika punya fungsi itu
+if (typeof window.updateDownloadButtonState === "function") {
+  window.updateDownloadButtonState();
+}
 
-  // 4. Pasang handler PDF
-  if (
-    typeof window.installPdfButtonHandler ===
-    'function'
-  ) {
-
-    window.installPdfButtonHandler();
-
-  }
+// 4) pasang handler
+if (typeof window.installPdfButtonHandler === 'function') {
+  window.installPdfButtonHandler();
+}
 
 }
 
-
-// ============================================================
-// [PDF-HANDLER v3]
-// Klik pertama = cek download
-// ============================================================
-
-/*
-  Handler PDF tetap menggunakan fungsi yang
-  sudah tersedia di sistem Anda.
-
-  Jangan membuat generatePDF() baru di sini
-  apabila fungsi generatePDF() sudah ada
-  di bagian lain kode.
-*/
+// [PDF-HANDLER v3] Klik-1 = cek download (disable tombol).
 // Saat semua tes selesai, tombol aktif lagi. Klik-2 (final) = download lagi + auto Form & auto logout.
 window.installPdfButtonHandler = function () {
   const box    = document.getElementById('downloadPDFBox');
