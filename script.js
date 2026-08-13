@@ -5400,60 +5400,23 @@ function renderTestSelection() {
     </style>
   `;
 
-// Handle Submit Test Selection Form
-document.getElementById('testSelectionForm').onsubmit = function(e) {
-  e.preventDefault();
-  const selected = Array.from(document.querySelectorAll('input[name="selectedTests"]:checked')).map(el => el.value);
-  appState.selectedTests = selected;
-  localStorage.setItem('selectedTests', JSON.stringify(selected));
-  appState.showTestCards = false;
-  renderHome();
-};
-}
-const instruksiList = [
-`<WELCOME>Selamat datang di platform tes Sugar Group Schools.</WELCOME>
-<HEADNOTE>Sebelum memulai, perhatikan beberapa hal penting berikut:</HEADNOTE>
-<div class="instruksi-section">
-    <div class="section-title">📚 Jenis Tes</div>
-    <div class="section-content">
-        • Anda akan mengikuti beberapa jenis tes<br>
-        • Setiap tes memiliki instruksi khusus yang berbeda<br>
-        • Pastikan memahami instruksi masing-masing tes sebelum mengerjakan
-    </div>
+const instruksiList = [`
+<div style="text-align:center;padding:10px;">
+  <img
+    src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/Aturan.png"
+    alt="Instruksi Tes Sugar Group Schools"
+    style="
+      width:100%;
+      max-width:1000px;
+      height:auto;
+      display:block;
+      margin:auto;
+      border-radius:12px;
+      box-shadow:0 4px 16px rgba(0,0,0,.15);
+    "
+  >
 </div>
-<div class="instruksi-section">
-    <div class="section-title">📥 Pengunduhan Hasil</div>
-    <div class="section-content">
-        • Unduh hasil hanya setelah <b>SEMUA TES SELESAI</b><br>
-        • Hasil akhir akan terkumpul dalam satu file PDF
-    </div>
-</div>
-<div class="instruksi-section">
-    <div class="section-title">🔧 Verifikasi Sistem & Urutan Langkah</div>
-<div class="section-content">
-    • Setelah membaca instruksi ini dan menekan tombol <b>Selesai</b>, layar akan otomatis bergulir ke tombol <b>Download</b>.<br>
-    • Klik tombol <b>Download</b> untuk memastikan file PDF dapat diunduh dengan baik.<br>
-    • Tombol <b>Download</b> akan aktif kembali setelah seluruh tes yang dipilih selesai dikerjakan.<br>
-    • Setelah tombol aktif, silakan unduh file dengan menekan <b>Download</b>.<br>
-    • Setelah file berhasil diunduh, sistem akan otomatis melakukan <i>logout</i> dan mengarahkan Anda ke Google Form untuk mengumpulkan hasil tes.<br>
-    • Jika mengalami kendala, segera hubungi tim rekrutmen.
-</div>
-
-</div>
-<PENTING>
-    <div class="warning-header">🚫 PENTING: LARANGAN SELAMA TES 🚫</div>
-    <div class="warning-content">
-        Selama mengerjakan tes, Anda <b>TIDAK DIPERBOLEHKAN</b>:<br>
-        • Membuka tab/jendela browser lain<br>
-        • Beralih ke aplikasi lain<br>
-        • Meninggalkan halaman tes<br>
-        <div class="warning-alert">Sistem akan mendeteksi dan mendiskualifikasi secara otomatis jika terjadi pelanggaran!</div>
-    </div>
-</PENTING>
-<div style="text-align:center;margin-top:24px;font-size:1.2em;">
-    Selamat mengerjakan. Semoga sukses! 💪
-</div>`
-];
+`];
 
 // Render Home
 function renderHome() {
