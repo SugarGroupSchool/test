@@ -46,7 +46,9 @@
 
 
     /* =========================================
-       ANIMASI LOGO NORMAL
+       ANIMASI LOGO
+       1. Meloncat saat pertama muncul
+       2. Bergerak naik-turun terus-menerus
        ========================================= */
 
     .password-logo {
@@ -59,9 +61,7 @@
     }
 
 
-    /* =========================================
-       LOGO JUMP IN
-       ========================================= */
+    /* Animasi saat pertama kali logo muncul */
 
     @keyframes logoJumpIn {
 
@@ -91,9 +91,7 @@
     }
 
 
-    /* =========================================
-       LOGO FLOATING
-       ========================================= */
+    /* Animasi naik-turun setelah logo selesai meloncat */
 
     @keyframes logoFloating {
 
@@ -110,183 +108,27 @@
 
 
     /* =========================================
-       OVERLAY MERAH FULL SCREEN
-       ========================================= */
-
-    #passwordErrorOverlay {
-
-      position: fixed;
-
-      inset: 0;
-
-      width: 100vw;
-      height: 100vh;
-
-      background:
-        radial-gradient(
-          circle at center,
-          rgba(255, 0, 0, 0.42) 0%,
-          rgba(255, 0, 0, 0.28) 35%,
-          rgba(180, 0, 0, 0.38) 65%,
-          rgba(100, 0, 0, 0.52) 100%
-        );
-
-      opacity: 0;
-
-      pointer-events: none;
-
-      z-index: 99999;
-
-      mix-blend-mode: multiply;
-
-    }
-
-
-    /* =========================================
-       ANIMASI FLASH MERAH FULL SCREEN
-       ========================================= */
-
-    #passwordErrorOverlay.password-error-flash {
-
-      animation:
-        passwordFullRedFlash 1.15s ease-in-out;
-
-    }
-
-
-    @keyframes passwordFullRedFlash {
-
-      0% {
-        opacity: 0;
-      }
-
-      8% {
-        opacity: 0.95;
-      }
-
-      18% {
-        opacity: 0.25;
-      }
-
-      28% {
-        opacity: 0.85;
-      }
-
-      40% {
-        opacity: 0.18;
-      }
-
-      55% {
-        opacity: 0.72;
-      }
-
-      70% {
-        opacity: 0.12;
-      }
-
-      85% {
-        opacity: 0.45;
-      }
-
-      100% {
-        opacity: 0;
-      }
-
-    }
-
-
-    /* =========================================
-       PASSWORD SCREEN BERGETAR
-       ========================================= */
-
-    .password-screen-error {
-
-      animation:
-        passwordScreenShake 0.95s cubic-bezier(.36,.07,.19,.97);
-
-    }
-
-
-    @keyframes passwordScreenShake {
-
-      0% {
-        transform: translate3d(0, 0, 0);
-      }
-
-      8% {
-        transform: translate3d(-10px, 3px, 0);
-      }
-
-      16% {
-        transform: translate3d(12px, -3px, 0);
-      }
-
-      24% {
-        transform: translate3d(-14px, 2px, 0);
-      }
-
-      32% {
-        transform: translate3d(13px, -2px, 0);
-      }
-
-      40% {
-        transform: translate3d(-11px, 2px, 0);
-      }
-
-      48% {
-        transform: translate3d(10px, -2px, 0);
-      }
-
-      56% {
-        transform: translate3d(-8px, 1px, 0);
-      }
-
-      64% {
-        transform: translate3d(7px, -1px, 0);
-      }
-
-      72% {
-        transform: translate3d(-5px, 1px, 0);
-      }
-
-      82% {
-        transform: translate3d(4px, 0, 0);
-      }
-
-      92% {
-        transform: translate3d(-2px, 0, 0);
-      }
-
-      100% {
-        transform: translate3d(0, 0, 0);
-      }
-
-    }
-
-
-    /* =========================================
-       LOGO PASSWORD SALAH
+       EFEK PASSWORD SALAH
+       SEMUA GAMBAR BERGETAR + MERAH
        ========================================= */
 
     .password-image-error {
 
       animation:
-        passwordImageError 0.95s cubic-bezier(.36,.07,.19,.97);
+        passwordImageError 0.6s ease-in-out;
 
       filter:
-        brightness(0.55)
-        saturate(3)
-        contrast(1.25)
-        drop-shadow(0 0 10px rgba(255, 0, 0, 1))
-        drop-shadow(0 0 25px rgba(255, 0, 0, 1))
-        drop-shadow(0 0 50px rgba(255, 0, 0, 0.95))
-        drop-shadow(0 0 80px rgba(255, 0, 0, 0.7));
+        brightness(0.75)
+        saturate(2)
+        drop-shadow(0 0 8px rgba(255, 0, 0, 0.95))
+        drop-shadow(0 0 18px rgba(255, 0, 0, 0.8))
+        drop-shadow(0 0 30px rgba(255, 0, 0, 0.5));
 
     }
 
 
     /* =========================================
-       GETAR LOGO KUAT
+       ANIMASI GETAR PASSWORD SALAH
        ========================================= */
 
     @keyframes passwordImageError {
@@ -295,164 +137,28 @@
         transform: translateX(0) scale(1);
       }
 
-      8% {
-        transform: translateX(-18px) rotate(-2deg) scale(1.04);
-      }
-
-      16% {
-        transform: translateX(20px) rotate(2deg) scale(1.06);
-      }
-
-      24% {
-        transform: translateX(-22px) rotate(-2deg) scale(1.05);
-      }
-
-      32% {
-        transform: translateX(21px) rotate(2deg) scale(1.04);
-      }
-
-      40% {
-        transform: translateX(-18px) rotate(-1.5deg) scale(1.03);
-      }
-
-      48% {
-        transform: translateX(16px) rotate(1.5deg) scale(1.02);
-      }
-
-      56% {
-        transform: translateX(-13px) rotate(-1deg);
-      }
-
-      64% {
-        transform: translateX(10px) rotate(1deg);
-      }
-
-      72% {
-        transform: translateX(-7px);
-      }
-
-      80% {
-        transform: translateX(5px);
-      }
-
-      90% {
-        transform: translateX(-2px);
-      }
-
-      100% {
-        transform: translateX(0) rotate(0) scale(1);
-      }
-
-    }
-
-
-    /* =========================================
-       INPUT PASSWORD SALAH
-       ========================================= */
-
-    .password-input-error {
-
-      animation:
-        passwordInputShake 0.8s ease-in-out;
-
-      border-color: #ff0000 !important;
-
-      box-shadow:
-        0 0 0 3px rgba(255, 0, 0, 0.25),
-        0 0 18px rgba(255, 0, 0, 0.8),
-        0 0 35px rgba(255, 0, 0, 0.55) !important;
-
-      background-color:
-        rgba(255, 0, 0, 0.12) !important;
-
-    }
-
-
-    @keyframes passwordInputShake {
-
-      0% {
-        transform: translateX(0);
-      }
-
       15% {
-        transform: translateX(-9px);
+        transform: translateX(-12px) scale(1.02);
       }
 
       30% {
-        transform: translateX(9px);
+        transform: translateX(12px) scale(1.02);
       }
 
       45% {
-        transform: translateX(-8px);
+        transform: translateX(-10px) scale(1.01);
       }
 
       60% {
-        transform: translateX(7px);
+        transform: translateX(10px) scale(1.01);
       }
 
       75% {
-        transform: translateX(-5px);
+        transform: translateX(-6px) scale(1);
       }
 
       90% {
-        transform: translateX(3px);
-      }
-
-      100% {
-        transform: translateX(0);
-      }
-
-    }
-
-
-    /* =========================================
-       TOMBOL MASUK SALAH
-       ========================================= */
-
-    .password-submit-error {
-
-      animation:
-        passwordButtonShake 0.8s ease-in-out;
-
-      background:
-        linear-gradient(
-          135deg,
-          #ff0000,
-          #b00000
-        ) !important;
-
-      box-shadow:
-        0 0 12px rgba(255, 0, 0, 0.8),
-        0 0 28px rgba(255, 0, 0, 0.7),
-        0 0 50px rgba(255, 0, 0, 0.45) !important;
-
-    }
-
-
-    @keyframes passwordButtonShake {
-
-      0% {
-        transform: translateX(0) scale(1);
-      }
-
-      15% {
-        transform: translateX(-8px) scale(1.04);
-      }
-
-      30% {
-        transform: translateX(8px) scale(1.04);
-      }
-
-      45% {
-        transform: translateX(-7px) scale(1.03);
-      }
-
-      60% {
-        transform: translateX(6px) scale(1.02);
-      }
-
-      75% {
-        transform: translateX(-4px);
+        transform: translateX(6px) scale(1);
       }
 
       100% {
@@ -463,147 +169,36 @@
 
 
     /* =========================================
-       PESAN ERROR
+       EFEK MERAH PADA HALAMAN PASSWORD
        ========================================= */
 
-    .password-error-active {
-
+    .password-screen-error {
       animation:
-        passwordErrorPulse 0.95s ease-in-out;
-
-      color: #ff0000 !important;
-
-      font-weight: 700;
-
-      text-shadow:
-        0 0 5px rgba(255, 0, 0, 0.5),
-        0 0 15px rgba(255, 0, 0, 0.7);
-
+        passwordScreenError 0.6s ease-in-out;
     }
 
 
-    @keyframes passwordErrorPulse {
+    @keyframes passwordScreenError {
 
       0% {
-        opacity: 0.4;
-        transform: scale(0.9);
-      }
-
-      20% {
-        opacity: 1;
-        transform: scale(1.08);
-      }
-
-      40% {
-        opacity: 0.8;
-        transform: scale(1);
-      }
-
-      60% {
-        opacity: 1;
-        transform: scale(1.05);
-      }
-
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-    }
-
-
-    /* =========================================
-       FLASH MERAH TAMBAHAN DI PASSWORD SCREEN
-       ========================================= */
-
-    .password-screen::after {
-
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      pointer-events: none;
-
-      background:
-        radial-gradient(
-          circle at center,
-          transparent 20%,
-          rgba(255, 0, 0, 0.0) 40%,
-          rgba(255, 0, 0, 0.0) 100%
-        );
-
-      opacity: 0;
-
-      z-index: 5;
-
-    }
-
-
-    .password-screen.password-red-active::after {
-
-      animation:
-        passwordRedPulse 1.15s ease-in-out;
-
-    }
-
-
-    @keyframes passwordRedPulse {
-
-      0% {
-        opacity: 0;
-        background:
-          radial-gradient(
-            circle at center,
-            transparent 10%,
-            rgba(255, 0, 0, 0.0) 30%,
-            rgba(255, 0, 0, 0.0) 100%
-          );
-      }
-
-      15% {
-        opacity: 1;
-        background:
-          radial-gradient(
-            circle at center,
-            rgba(255, 0, 0, 0.10) 0%,
-            rgba(255, 0, 0, 0.45) 50%,
-            rgba(120, 0, 0, 0.75) 100%
-          );
+        box-shadow:
+          inset 0 0 0 rgba(255, 0, 0, 0);
       }
 
       30% {
-        opacity: 0.25;
-      }
-
-      45% {
-        opacity: 0.9;
+        box-shadow:
+          inset 0 0 80px rgba(255, 0, 0, 0.18);
       }
 
       60% {
-        opacity: 0.2;
-      }
-
-      75% {
-        opacity: 0.7;
+        box-shadow:
+          inset 0 0 120px rgba(255, 0, 0, 0.25);
       }
 
       100% {
-        opacity: 0;
+        box-shadow:
+          inset 0 0 0 rgba(255, 0, 0, 0);
       }
-
-    }
-
-
-    /* =========================================
-       PASTIKAN PASSWORD SCREEN BISA
-       MENJADI CONTAINER OVERLAY
-       ========================================= */
-
-    .password-screen {
-
-      position: relative;
 
     }
 
@@ -612,16 +207,6 @@
 
 
 <body>
-
-
-  <!-- =========================================
-       OVERLAY ERROR FULL SCREEN
-       ========================================= -->
-
-  <div
-    id="passwordErrorOverlay"
-    aria-hidden="true"
-  ></div>
 
 
   <!-- =========================================
@@ -757,8 +342,10 @@
 
   <script>
 
+
     /* =========================================
-       SUARA PASSWORD SALAH
+       SUARA ALARM PASSWORD SALAH
+       TTEEEEET!
        ========================================= */
 
     let wrongPasswordAudioContext = null;
@@ -773,8 +360,12 @@
           window.webkitAudioContext;
 
 
-        if (!AudioContext) return;
+        if (!AudioContext) {
+          return;
+        }
 
+
+        /* Buat AudioContext jika belum ada */
 
         if (!wrongPasswordAudioContext) {
 
@@ -784,138 +375,99 @@
         }
 
 
-        const ctx =
+        const audioContext =
           wrongPasswordAudioContext;
 
 
-        if (ctx.state === "suspended") {
+        /* Aktifkan kembali jika suspended */
 
-          ctx.resume();
+        if (
+          audioContext.state === "suspended"
+        ) {
+
+          audioContext.resume();
 
         }
 
 
-        const now =
-          ctx.currentTime;
+        const oscillator =
+          audioContext.createOscillator();
+
+
+        const gainNode =
+          audioContext.createGain();
 
 
         /* =====================================
-           SUARA "TET"
+           KARAKTER SUARA
            ===================================== */
 
-        const osc1 =
-          ctx.createOscillator();
-
-        const gain1 =
-          ctx.createGain();
+        oscillator.type = "square";
 
 
-        osc1.type = "square";
+        /* Nada awal */
 
-
-        osc1.frequency.setValueAtTime(
-          880,
-          now
+        oscillator.frequency.setValueAtTime(
+          720,
+          audioContext.currentTime
         );
 
 
-        gain1.gain.setValueAtTime(
-          0.0001,
-          now
-        );
+        /* Nada turun */
 
-
-        gain1.gain.exponentialRampToValueAtTime(
-          0.48,
-          now + 0.015
-        );
-
-
-        gain1.gain.exponentialRampToValueAtTime(
-          0.0001,
-          now + 0.13
-        );
-
-
-        osc1.connect(gain1);
-
-        gain1.connect(
-          ctx.destination
-        );
-
-
-        osc1.start(now);
-
-        osc1.stop(
-          now + 0.14
+        oscillator.frequency.exponentialRampToValueAtTime(
+          420,
+          audioContext.currentTime + 0.75
         );
 
 
         /* =====================================
-           SUARA "TEEEEEET"
+           VOLUME
            ===================================== */
 
-        const osc2 =
-          ctx.createOscillator();
-
-        const gain2 =
-          ctx.createGain();
-
-
-        osc2.type = "square";
-
-
-        osc2.frequency.setValueAtTime(
-          650,
-          now + 0.18
-        );
-
-
-        osc2.frequency.linearRampToValueAtTime(
-          760,
-          now + 0.65
-        );
-
-
-        gain2.gain.setValueAtTime(
+        gainNode.gain.setValueAtTime(
           0.0001,
-          now + 0.18
+          audioContext.currentTime
         );
 
 
-        gain2.gain.exponentialRampToValueAtTime(
-          0.48,
-          now + 0.20
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.38,
+          audioContext.currentTime + 0.025
         );
 
 
-        gain2.gain.exponentialRampToValueAtTime(
+        gainNode.gain.exponentialRampToValueAtTime(
           0.0001,
-          now + 0.78
+          audioContext.currentTime + 0.85
         );
 
 
-        osc2.connect(gain2);
+        /* Hubungkan */
 
-        gain2.connect(
-          ctx.destination
+        oscillator.connect(gainNode);
+
+        gainNode.connect(
+          audioContext.destination
         );
 
 
-        osc2.start(
-          now + 0.18
-        );
+        /* Mulai */
+
+        oscillator.start();
 
 
-        osc2.stop(
-          now + 0.80
+        /* Berhenti */
+
+        oscillator.stop(
+          audioContext.currentTime + 0.85
         );
 
 
       } catch (error) {
 
         console.warn(
-          "Alarm password salah gagal diputar:",
+          "Alarm audio tidak dapat diputar:",
           error
         );
 
@@ -924,11 +476,44 @@
     }
 
 
+
     /* =========================================
        EFEK PASSWORD SALAH
+       SEMUA GAMBAR BERGETAR + MERAH
        ========================================= */
 
     function passwordWrongImageEffect() {
+
+      const images =
+        document.querySelectorAll("img");
+
+
+      images.forEach(function (image) {
+
+        /* Hapus animasi sebelumnya */
+
+        image.classList.remove(
+          "password-image-error"
+        );
+
+
+        /* Paksa browser melakukan reflow */
+
+        void image.offsetWidth;
+
+
+        /* Jalankan animasi */
+
+        image.classList.add(
+          "password-image-error"
+        );
+
+      });
+
+
+      /* =====================================
+         EFEK PADA PASSWORD SCREEN
+         ===================================== */
 
       const passwordScreen =
         document.getElementById(
@@ -936,219 +521,56 @@
         );
 
 
-      const overlay =
-        document.getElementById(
-          "passwordErrorOverlay"
-        );
-
-
-      const logo =
-        document.getElementById(
-          "passwordLogo"
-        );
-
-
-      const input =
-        document.getElementById(
-          "passwordInput"
-        );
-
-
-      const button =
-        document.querySelector(
-          ".password-submit"
-        );
-
-
-      const error =
-        document.getElementById(
-          "passwordError"
-        );
-
-
-      /* =====================================
-         OVERLAY FULL SCREEN
-         ===================================== */
-
-      if (overlay) {
-
-        overlay.classList.remove(
-          "password-error-flash"
-        );
-
-        void overlay.offsetWidth;
-
-        overlay.classList.add(
-          "password-error-flash"
-        );
-
-      }
-
-
-      /* =====================================
-         PASSWORD SCREEN
-         ===================================== */
-
       if (passwordScreen) {
 
         passwordScreen.classList.remove(
-          "password-screen-error",
-          "password-red-active"
+          "password-screen-error"
         );
+
 
         void passwordScreen.offsetWidth;
 
+
         passwordScreen.classList.add(
-          "password-screen-error",
-          "password-red-active"
+          "password-screen-error"
         );
 
       }
 
 
       /* =====================================
-         LOGO
-         ===================================== */
-
-      if (logo) {
-
-        logo.classList.remove(
-          "password-image-error"
-        );
-
-        void logo.offsetWidth;
-
-        logo.classList.add(
-          "password-image-error"
-        );
-
-      }
-
-
-      /* =====================================
-         INPUT
-         ===================================== */
-
-      if (input) {
-
-        input.classList.remove(
-          "password-input-error"
-        );
-
-        void input.offsetWidth;
-
-        input.classList.add(
-          "password-input-error"
-        );
-
-      }
-
-
-      /* =====================================
-         BUTTON
-         ===================================== */
-
-      if (button) {
-
-        button.classList.remove(
-          "password-submit-error"
-        );
-
-        void button.offsetWidth;
-
-        button.classList.add(
-          "password-submit-error"
-        );
-
-      }
-
-
-      /* =====================================
-         ERROR TEXT
-         ===================================== */
-
-      if (error) {
-
-        error.classList.remove(
-          "password-error-active"
-        );
-
-        void error.offsetWidth;
-
-        error.classList.add(
-          "password-error-active"
-        );
-
-      }
-
-
-      /* =====================================
-         HAPUS CLASS SETELAH SELESAI
+         HAPUS EFEK SETELAH SELESAI
          ===================================== */
 
       setTimeout(function () {
 
-        if (overlay) {
+        document
+          .querySelectorAll("img")
+          .forEach(function (image) {
 
-          overlay.classList.remove(
-            "password-error-flash"
-          );
+            image.classList.remove(
+              "password-image-error"
+            );
 
-        }
+          });
 
 
         if (passwordScreen) {
 
           passwordScreen.classList.remove(
-            "password-screen-error",
-            "password-red-active"
+            "password-screen-error"
           );
 
         }
 
-
-        if (logo) {
-
-          logo.classList.remove(
-            "password-image-error"
-          );
-
-        }
-
-
-        if (input) {
-
-          input.classList.remove(
-            "password-input-error"
-          );
-
-        }
-
-
-        if (button) {
-
-          button.classList.remove(
-            "password-submit-error"
-          );
-
-        }
-
-
-        if (error) {
-
-          error.classList.remove(
-            "password-error-active"
-          );
-
-        }
-
-      }, 1200);
+      }, 650);
 
     }
 
 
+
     /* =========================================
-       JALANKAN SEMUA EFEK
+       JALANKAN SEMUA EFEK PASSWORD SALAH
        ========================================= */
 
     function runWrongPasswordEffects() {
@@ -1158,6 +580,7 @@
       playWrongPasswordAlarm();
 
     }
+
 
 
     /* =========================================
@@ -1181,6 +604,7 @@
     );
 
 
+
     /* =========================================
        MENONAKTIFKAN KLIK KANAN
        ========================================= */
@@ -1197,8 +621,10 @@
     );
 
 
+
     /* =========================================
-       DRAG GAMBAR
+       MENONAKTIFKAN DRAG GAMBAR
+       SAAT HALAMAN DIMUAT
        ========================================= */
 
     document.addEventListener(
@@ -1220,8 +646,10 @@
     );
 
 
+
     /* =========================================
-       OBSERVER GAMBAR DINAMIS
+       MENGAWASI GAMBAR BARU
+       YANG DITAMBAHKAN script.js
        ========================================= */
 
     const imageObserver =
@@ -1233,6 +661,9 @@
 
               mutation.addedNodes.forEach(
                 function (node) {
+
+
+                  /* Gambar langsung */
 
                   if (
                     node instanceof
@@ -1246,6 +677,8 @@
 
                   }
 
+
+                  /* Gambar di dalam elemen */
 
                   if (
                     node instanceof
@@ -1286,9 +719,15 @@
     );
 
 
+
     /* =========================================
-       DETEKSI PASSWORD SALAH
-       SETIAP KLIK
+       DETEKSI SETIAP KLIK MASUK
+       
+       Tidak menggunakan previousErrorText.
+       
+       Jadi walaupun pesan error tetap sama,
+       efek tetap dijalankan pada percobaan
+       berikutnya.
        ========================================= */
 
     document.addEventListener(
@@ -1325,19 +764,31 @@
 
 
         /* =====================================
-           KLIK TOMBOL
+           KLIK TOMBOL MASUK
            ===================================== */
 
         loginButton.addEventListener(
           "click",
           function () {
 
+            /* checkPassword() dari
+               onclick HTML akan diproses.
+
+               Kita tunggu sebentar agar
+               hasil validasi sudah selesai. */
+
             setTimeout(
               function () {
+
+                /* Jika passwordError berisi
+                   pesan, berarti password salah */
 
                 const errorText =
                   passwordError.textContent.trim();
 
+
+                /* Pastikan masih di halaman
+                   password */
 
                 const passwordScreen =
                   document.getElementById(
@@ -1362,8 +813,9 @@
         );
 
 
+
         /* =====================================
-           ENTER
+           ENTER PADA KOLOM PASSWORD
            ===================================== */
 
         passwordInput.addEventListener(
@@ -1378,6 +830,8 @@
 
             }
 
+
+            /* Tunggu checkPassword() */
 
             setTimeout(
               function () {
