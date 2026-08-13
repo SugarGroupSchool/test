@@ -2860,32 +2860,41 @@ function renderSubjectQuestionSlide(qIdx) {
   let m = Math.floor(appState.timeLeft / 60), s = appState.timeLeft % 60;
   let timerHTML = `<span id="subject-timer">${(m<10?"0":"")+m}:${(s<10?"0":"")+s}</span>`;
 
-  // Nomor & soal
+  // Pertanyaan
   const q = subj.questions[qIdx];
+
   document.getElementById('app').innerHTML = `
     <div class="card" style="max-width:650px;margin:40px auto 0;padding:32px 18px 30px 18px;border-radius:18px;">
+      
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <h2 style="margin-bottom:0;">${subj.name}</h2>
-        <div style="font-size:1.05em;background:#f2fbe5;padding:7px 16px;border-radius:9px;">${timerHTML}</div>
+        <div style="font-size:1.05em;background:#f2fbe5;padding:7px 16px;border-radius:9px;">
+          ${timerHTML}
+        </div>
       </div>
+
       <div style="margin:14px 0 17px 0;font-weight:500;font-size:1.05em;">
         Kerjakan soal berikut di kertas Anda. Jika selesai, klik <b>Selesai & Upload</b>!
       </div>
-      <div style="font-size:1.3em;font-weight:700;color:#3d4f7c;margin-bottom:12px;">
-        Soal ${qIdx + 1}
-      </div>
+
       <div style="font-size:1.14em;margin-bottom:34px;min-height:100px;">
         ${q.question}
-        ${q.type === "multiple-choice"
-          ? `<div style="margin-top:16px;font-size:1em;">${q.options.map(opt => `<div style="margin:2px 0 2px 18px;">${opt}</div>`).join("")}</div>`
-          : ""}
       </div>
+
       <div style="display:flex;justify-content:${qIdx===0?'flex-end':'space-between'}">
-        ${qIdx > 0 ? `<button class="btn btn-outline" onclick="renderSubjectQuestionSlide(${qIdx-1})">Sebelumnya</button>` : ""}
-        <button class="btn" onclick="nextSubjectQuestionSlide(${qIdx})">${qIdx === subj.questions.length-1 ? 'Selesai & Upload' : 'Lanjut'}</button>
+        ${qIdx > 0 
+          ? `<button class="btn btn-outline" onclick="renderSubjectQuestionSlide(${qIdx-1})">Sebelumnya</button>` 
+          : ""
+        }
+
+        <button class="btn" onclick="nextSubjectQuestionSlide(${qIdx})">
+          ${qIdx === subj.questions.length-1 ? 'Selesai & Upload' : 'Lanjut'}
+        </button>
       </div>
+
     </div>
   `;
+
   startSubjectCountdown();
 }
 
