@@ -5269,7 +5269,7 @@ function renderTestSelection() {
     {
       title: 'Psikotes',
       tests: [
-        { id: 'IST', label: 'IQ 🧠' },
+        { id: 'IST', label: 'KECERDASAN 🧠' },
         { id: 'KRAEPLIN', label: 'KORAN 🧮' },
         { id: 'DISC', label: 'KEPEMIMPINAN 👤' },
         { id: 'PAPI', label: 'SIKAP KERJA 📊' },
@@ -5563,7 +5563,7 @@ function renderHome() {
         Kategori 1: Tes Psikologi
       </div>`;
       html += `<div class="test-selection" style="padding:0 24px;">`;
-      if (selectedTests.includes('IST'))      html += `<div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')"><div class="test-icon">🧠</div><h3>IQ</h3><p>${tests.IST.description}</p><div class="time">Waktu: ~60 menit</div><div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('IST'))      html += `<div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')"><div class="test-icon">🧠</div><h3>KECERDASAN</h3><p>${tests.IST.description}</p><div class="time">Waktu: ~60 menit</div><div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       if (selectedTests.includes('KRAEPLIN')) html += `<div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')"><div class="test-icon">🧮</div><h3>KORAN</h3><p>${tests.KRAEPLIN.description}</p><div class="time">Waktu: ±5-10 menit</div><div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       if (selectedTests.includes('DISC'))     html += `<div class="test-card ${appState.completed.DISC ? 'completed' : ''}" onclick="startTest('DISC')"><div class="test-icon">👤</div><h3>KEPEMIMPINAN</h3><p>${tests.DISC.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.DISC ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       if (selectedTests.includes('PAPI'))     html += `<div class="test-card ${appState.completed.PAPI ? 'completed' : ''}" onclick="startTest('PAPI')"><div class="test-icon">📊</div><h3>SIKAP KERJA</h3><p>${tests.PAPI.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.PAPI ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
@@ -5895,15 +5895,15 @@ function showInstruksiOverlay(nickname, instruksiList) {
     JSON.parse(localStorage.getItem("selectedTests") || "[]");
 
   const testLabels = {
-    IST: { icon: "🧠", label: "Tes IST" },
-    KRAEPLIN: { icon: "🧮", label: "Tes Kraeplin" },
-    DISC: { icon: "👤", label: "Tes DISC" },
-    PAPI: { icon: "📊", label: "Tes PAPI" },
-    BIGFIVE: { icon: "📝", label: "Tes Big Five" },
-    GRAFIS: { icon: "🎨", label: "Tes Grafis" },
-    EXCEL: { icon: "📑", label: "Tes Excel" },
-    TYPING: { icon: "⌨️", label: "Tes Mengetik" },
-    SUBJECT: { icon: "📚", label: "Tes Subjek" },
+    IST: { icon: "🧠", label: "KECERDASAN" },
+    KRAEPLIN: { icon: "🧮", label: "KORAN" },
+    DISC: { icon: "👤", label: "KEPEMIMPINAN" },
+    PAPI: { icon: "📊", label: "SIKAP KERJA" },
+    BIGFIVE: { icon: "📝", label: "KEPRIBADIAN" },
+    GRAFIS: { icon: "🎨", label: "GAMBAR" },
+    EXCEL: { icon: "📑", label: "EXCEL" },
+    TYPING: { icon: "⌨️", label: "MENGETIK" },
+    SUBJECT: { icon: "📚", label: "SUBJEK" },
   };
 
   const chips = selectedTests
