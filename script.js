@@ -5269,20 +5269,20 @@ function renderTestSelection() {
     {
       title: 'Psikotes',
       tests: [
-        { id: 'IST', label: 'Tes IQ 🧠' },
-        { id: 'KRAEPLIN', label: 'Tes KORAN 🧮' },
-        { id: 'DISC', label: 'Tes KEPEMIMPINAN 👤' },
-        { id: 'PAPI', label: 'Tes SIKAP KERJA 📊' },
-        { id: 'BIGFIVE', label: 'Tes KEPRIBADIAN 📝' },
-        { id: 'GRAFIS', label: 'Tes GAMBAR 🎨' }
+        { id: 'IST', label: 'IQ 🧠' },
+        { id: 'KRAEPLIN', label: 'KORAN 🧮' },
+        { id: 'DISC', label: 'KEPEMIMPINAN 👤' },
+        { id: 'PAPI', label: 'SIKAP KERJA 📊' },
+        { id: 'BIGFIVE', label: 'KEPRIBADIAN 📝' },
+        { id: 'GRAFIS', label: 'GAMBAR 🎨' }
       ]
     },
     {
       title: 'Tes Kemampuan',
       tests: [
-        { id: 'EXCEL', label: 'Tes Excel 📑' },
-        { id: 'TYPING', label: 'Tes Mengetik ⌨️' },
-        { id: 'SUBJECT', label: 'Tes Subjek 📚' }
+        { id: 'EXCEL', label: 'EXCEL 📑' },
+        { id: 'TYPING', label: 'MENGETIK ⌨️' },
+        { id: 'SUBJECT', label: 'SUBJEK 📚' }
       ]
     }
   ];
@@ -5563,12 +5563,12 @@ function renderHome() {
         Kategori 1: Tes Psikologi
       </div>`;
       html += `<div class="test-selection" style="padding:0 24px;">`;
-      if (selectedTests.includes('IST'))      html += `<div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')"><div class="test-icon">🧠</div><h3>Tes IST</h3><p>${tests.IST.description}</p><div class="time">Waktu: ~60 menit</div><div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('KRAEPLIN')) html += `<div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')"><div class="test-icon">🧮</div><h3>Tes Kraeplin</h3><p>${tests.KRAEPLIN.description}</p><div class="time">Waktu: ±5-10 menit</div><div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('DISC'))     html += `<div class="test-card ${appState.completed.DISC ? 'completed' : ''}" onclick="startTest('DISC')"><div class="test-icon">👤</div><h3>Tes DISC</h3><p>${tests.DISC.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.DISC ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('PAPI'))     html += `<div class="test-card ${appState.completed.PAPI ? 'completed' : ''}" onclick="startTest('PAPI')"><div class="test-icon">📊</div><h3>Tes PAPI</h3><p>${tests.PAPI.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.PAPI ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('BIGFIVE'))  html += `<div class="test-card ${appState.completed.BIGFIVE ? 'completed' : ''}" onclick="startTest('BIGFIVE')"><div class="test-icon">📝</div><h3>Tes Big Five</h3><p>${tests.BIGFIVE.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.BIGFIVE ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('GRAFIS'))   html += `<div class="test-card ${appState.completed.GRAFIS ? 'completed' : ''}" onclick="startTest('GRAFIS')"><div class="test-icon">🎨</div><h3>Tes Grafis</h3><p>Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.</p><div class="time">Waktu: ~10 menit</div><div class="status">${appState.completed.GRAFIS ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('IST'))      html += `<div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')"><div class="test-icon">🧠</div><h3>IQ</h3><p>${tests.IST.description}</p><div class="time">Waktu: ~60 menit</div><div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('KRAEPLIN')) html += `<div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')"><div class="test-icon">🧮</div><h3>KORAN</h3><p>${tests.KRAEPLIN.description}</p><div class="time">Waktu: ±5-10 menit</div><div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('DISC'))     html += `<div class="test-card ${appState.completed.DISC ? 'completed' : ''}" onclick="startTest('DISC')"><div class="test-icon">👤</div><h3>KEPEMIMPINAN</h3><p>${tests.DISC.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.DISC ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('PAPI'))     html += `<div class="test-card ${appState.completed.PAPI ? 'completed' : ''}" onclick="startTest('PAPI')"><div class="test-icon">📊</div><h3>SIKAP KERJA</h3><p>${tests.PAPI.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.PAPI ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('BIGFIVE'))  html += `<div class="test-card ${appState.completed.BIGFIVE ? 'completed' : ''}" onclick="startTest('BIGFIVE')"><div class="test-icon">📝</div><h3>KEPRIBADIAN</h3><p>${tests.BIGFIVE.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.BIGFIVE ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('GRAFIS'))   html += `<div class="test-card ${appState.completed.GRAFIS ? 'completed' : ''}" onclick="startTest('GRAFIS')"><div class="test-icon">🎨</div><h3>GAMBAR</h3><p>Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.</p><div class="time">Waktu: ~10 menit</div><div class="status">${appState.completed.GRAFIS ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       html += `</div>`;
     }
     if (hasAdmin) {
@@ -5581,9 +5581,9 @@ function renderHome() {
         Kategori 2: Tes Kemampuan/Administrasi
       </div>`;
       html += `<div class="test-selection" style="padding:0 24px;">`;
-      if (selectedTests.includes('EXCEL'))   html += `<div class="test-card ${appState.completed.EXCEL ? 'completed' : ''}" onclick="startTest('EXCEL')"><div class="test-icon">📑</div><h3>Tes Excel</h3><p>Mengerjakan soal administrasi sekolah di spreadsheet online.</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.EXCEL ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('TYPING'))  html += `<div class="test-card ${appState.completed.TYPING ? 'completed' : ''}" onclick="startTest('TYPING')"><div class="test-icon">⌨️</div><h3>Tes Mengetik</h3><p>Uji kecepatan dan akurasi mengetik kalimat tertentu.</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.TYPING ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('SUBJECT')) html += `<div class="test-card ${appState.completed.SUBJECT ? 'completed' : ''}" onclick="startTest('SUBJECT')"><div class="test-icon">📚</div><h3>Tes Subjek</h3><p>Pilih dan kerjakan soal sesuai mata pelajaran (Math, Indonesia, Inggris, dll).</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.SUBJECT ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('EXCEL'))   html += `<div class="test-card ${appState.completed.EXCEL ? 'completed' : ''}" onclick="startTest('EXCEL')"><div class="test-icon">📑</div><h3>EXCEL</h3><p>Mengerjakan soal administrasi sekolah di spreadsheet online.</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.EXCEL ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('TYPING'))  html += `<div class="test-card ${appState.completed.TYPING ? 'completed' : ''}" onclick="startTest('TYPING')"><div class="test-icon">⌨️</div><h3>KETIK</h3><p>Uji kecepatan dan akurasi mengetik kalimat tertentu.</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.TYPING ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
+      if (selectedTests.includes('SUBJECT')) html += `<div class="test-card ${appState.completed.SUBJECT ? 'completed' : ''}" onclick="startTest('SUBJECT')"><div class="test-icon">📚</div><h3>SUBJEK</h3><p>Pilih dan kerjakan soal sesuai mata pelajaran (Math, Indonesia, Inggris, dll).</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.SUBJECT ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
       html += `</div>`;
     }
     html += `
