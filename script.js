@@ -7453,7 +7453,7 @@ document.addEventListener(
 
     window.scrollToPDFButton();
 
-  }
+  } }
 );
 
 
