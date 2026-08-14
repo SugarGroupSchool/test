@@ -8007,14 +8007,13 @@ setTimeout(() => {
     });
 
 
-  observer.observe(
+   observer.observe(
     document.body,
     {
-      childList:true,
-      subtree:true
+      childList: true,
+      subtree: true
     }
   );
-
 
 })();
 
@@ -8025,11 +8024,14 @@ setTimeout(() => {
 // Jika fungsi overlay Anda sudah memiliki event custom
 // "instruksiSelesai", maka bagian ini juga akan menangkapnya.
 // ============================================================
+
 document.addEventListener(
   'instruksiSelesai',
   () => {
 
-    window.scrollToPDFButton();
+    if (typeof window.scrollToPDFButton === "function") {
+      window.scrollToPDFButton();
+    }
 
   }
 );
@@ -8039,234 +8041,656 @@ document.addEventListener(
   'instructionComplete',
   () => {
 
-    window.scrollToPDFButton();
+    if (typeof window.scrollToPDFButton === "function") {
+      window.scrollToPDFButton();
+    }
 
-  } }
+  }
 );
 
 
-// ==============================
-// Instruksi Overlay (aman & rapih)
-// ==============================
-function showInstruksiOverlay(nickname, instruksiList) {
-  // Scroll ke atas pelan2
-  setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 20);
+// ============================================================
+// INSTRUKSI OVERLAY
+// ============================================================
+// Overlay instruksi sebelum peserta masuk ke halaman tes.
+// ============================================================
 
-  // ---- Helpers aman ----
-  const htmlIdOnce = (id) => document.getElementById(id);
-  const escapeHtml = (s = "") =>
-    String(s)
+function showInstruksiOverlay(nickname, instruksiList) {
+
+  // ----------------------------------------------------------
+  // Scroll ke atas
+  // ----------------------------------------------------------
+
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }, 20);
+
+
+  // ----------------------------------------------------------
+  // Helpers
+  // ----------------------------------------------------------
+
+  const htmlIdOnce = (id) => {
+    return document.getElementById(id);
+  };
+
+
+  const escapeHtml = (s = "") => {
+    return String(s)
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  };
 
-  // Sanitize minimal: hapus script/style/iframe, on* attr, javascript: URL
+
+  // ----------------------------------------------------------
+  // Sanitize HTML minimal
+  // ----------------------------------------------------------
+
   function sanitizeHTML(unsafe = "") {
+
     let safe = String(unsafe);
-    // remove whole blocks
-    safe = safe.replace(/<\/?(script|style|iframe|object|embed|link|meta)[\s\S]*?>/gi, "");
-    // remove on* event handlers
-    safe = safe.replace(/\son\w+="[^"]*"/gi, "").replace(/\son\w+='[^']*'/gi, "").replace(/\son\w+=\S+/gi, "");
-    // disallow javascript:*
-    safe = safe.replace(/(href|src)\s*=\s*(['"]?)\s*javascript:[^'"]*\2/gi, '$1="#"');
+
+    // Hapus seluruh blok berbahaya
+    safe = safe.replace(
+      /<\/?(script|style|iframe|object|embed|link|meta)[\s\S]*?>/gi,
+      ""
+    );
+
+    // Hapus event handler on*
+    safe = safe
+      .replace(/\son\w+="[^"]*"/gi, "")
+      .replace(/\son\w+='[^']*'/gi, "")
+      .replace(/\son\w+=\S+/gi, "");
+
+    // Blokir javascript:
+    safe = safe.replace(
+      /(href|src)\s*=\s*(['"]?)\s*javascript:[^'"]*\2/gi,
+      '$1="#"'
+    );
+
     return safe;
   }
 
-  // ---- Overlay container ----
+
+  // ----------------------------------------------------------
+  // Overlay container
+  // ----------------------------------------------------------
+
   let overlay = htmlIdOnce("overlayInstruksi");
+
   if (!overlay) {
+
     overlay = document.createElement("div");
+
     overlay.id = "overlayInstruksi";
+
     overlay.setAttribute("role", "dialog");
+
     overlay.setAttribute("aria-modal", "true");
+
     overlay.style.cssText = `
-      position:fixed; inset:0; background:rgba(16,27,48,0.93);
-      z-index:9999; display:flex; align-items:center; justify-content:center;
-      padding:20px; overflow-y:auto;
+      position:fixed;
+      inset:0;
+      background:rgba(16,27,48,0.93);
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      overflow-y:auto;
     `;
+
     document.body.appendChild(overlay);
   }
-  // lock scroll
+
+
+  // ----------------------------------------------------------
+  // Lock scroll
+  // ----------------------------------------------------------
+
   const prevBodyOverflow = document.body.style.overflow;
+
   document.body.style.overflow = "hidden";
 
-  // ---- Tes dipilih chips ----
+
+  // ----------------------------------------------------------
+  // Tes yang dipilih
+  // ----------------------------------------------------------
+
   const selectedTests =
-    (window.appState?.selectedTests) ||
-    JSON.parse(localStorage.getItem("selectedTests") || "[]");
+    window.appState?.selectedTests ||
+    JSON.parse(
+      localStorage.getItem("selectedTests") || "[]"
+    );
+
 
   const testLabels = {
-    IST: { icon: "🧠", label: "KECERDASAN" },
-    KRAEPLIN: { icon: "🧮", label: "KORAN" },
-    DISC: { icon: "👤", label: "KEPEMIMPINAN" },
-    PAPI: { icon: "📊", label: "SIKAP KERJA" },
-    BIGFIVE: { icon: "📝", label: "KEPRIBADIAN" },
-    GRAFIS: { icon: "🎨", label: "GAMBAR" },
-    EXCEL: { icon: "📑", label: "EXCEL" },
-    TYPING: { icon: "⌨️", label: "MENGETIK" },
-    SUBJECT: { icon: "📚", label: "SUBJEK" },
+
+    IST: {
+      icon: "🧠",
+      label: "KECERDASAN"
+    },
+
+    KRAEPLIN: {
+      icon: "🧮",
+      label: "KORAN"
+    },
+
+    DISC: {
+      icon: "👤",
+      label: "KEPEMIMPINAN"
+    },
+
+    PAPI: {
+      icon: "📊",
+      label: "SIKAP KERJA"
+    },
+
+    BIGFIVE: {
+      icon: "📝",
+      label: "KEPRIBADIAN"
+    },
+
+    GRAFIS: {
+      icon: "🎨",
+      label: "GAMBAR"
+    },
+
+    EXCEL: {
+      icon: "📑",
+      label: "EXCEL"
+    },
+
+    TYPING: {
+      icon: "⌨️",
+      label: "MENGETIK"
+    },
+
+    SUBJECT: {
+      icon: "📚",
+      label: "SUBJEK"
+    }
+
   };
 
+
+  // ----------------------------------------------------------
+  // Buat chips tes
+  // ----------------------------------------------------------
+
   const chips = selectedTests
-    .map((id) => {
-      const item = testLabels[id] || { icon: "•", label: id };
+    .map((testId) => {
+
+      const item =
+        testLabels[testId] || {
+          icon: "•",
+          label: testId
+        };
+
       return `
-        <div style="display:flex;align-items:center;gap:7px;background:#f5fafd;
-          padding:9px 17px 8px 13px;border-radius:10px;font-size:1.09rem;box-shadow:0 2px 9px #d7eaf4;">
-          <span style="font-size:1.38em;">${item.icon}</span>
-          <span style="font-weight:600;">${escapeHtml(item.label)}</span>
-        </div>`;
+        <div
+          style="
+            display:flex;
+            align-items:center;
+            gap:7px;
+            background:#f5fafd;
+            padding:9px 17px 8px 13px;
+            border-radius:10px;
+            font-size:1.09rem;
+            box-shadow:0 2px 9px #d7eaf4;
+          "
+        >
+
+          <span style="font-size:1.38em;">
+            ${item.icon}
+          </span>
+
+          <span style="font-weight:600;">
+            ${escapeHtml(item.label)}
+          </span>
+
+        </div>
+      `;
+
     })
     .join("");
 
+
   const tesDipilihHTML = `
     <div style="margin:36px 0 16px 0;">
-      <div style="font-weight:700;font-size:1.13rem;color:#1864ab;margin-bottom:10px;text-align:center;">
+
+      <div
+        style="
+          font-weight:700;
+          font-size:1.13rem;
+          color:#1864ab;
+          margin-bottom:10px;
+          text-align:center;
+        "
+      >
         Tes yang Akan Anda Kerjakan:
       </div>
-      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px 18px;">${chips}</div>
-    </div>`;
 
-  // ---- Isi overlay ----
-  overlay.innerHTML = `
-    <div class="instruksiyuh" style="
-      max-width:98%; width:900px; padding:30px; background:#fff; border-radius:18px;
-      box-shadow:0 10px 40px rgba(0,0,0,0.25); position:relative;">
-      <div class="instruksi-gradient-strip" style="
-          height:6px; background:linear-gradient(90deg,#2c7be5,#00d97e);
-          border-radius:3px; margin-bottom:20px;"></div>
-
-      <button id="btnCloseOverlay" aria-label="Tutup" title="Tutup"
-        style="position:absolute;top:10px;right:10px;border:none;background:transparent;
-        font-size:22px;cursor:pointer;line-height:1;">✖</button>
-
-      <div style="font-size:1.5rem;font-weight:700;color:#1a3d7c;margin-bottom:10px;text-align:center;">
-        Hi, <b>${escapeHtml(nickname || "Peserta")}</b>!
+      <div
+        style="
+          display:flex;
+          flex-wrap:wrap;
+          justify-content:center;
+          gap:12px 18px;
+        "
+      >
+        ${chips}
       </div>
-      <h2 style="text-align:center;margin:0 0 20px 0;color:#233;font-size:1.8rem;">
-  Selamat Datang di Platform Tes
-</h2>
 
-      <div id="subtitleInstruksiTyping" style="
-        max-height:60vh; overflow-y:auto; padding:15px 20px; font-size:1.15rem; line-height:1.65;"></div>
-
-      ${tesDipilihHTML}
-
-      <div style="text-align:center; margin-top:25px;">
-        <button class="btn" id="btnSelesaiInstruksi" style="
-          display:none; padding:12px 40px; font-size:1.15rem; font-weight:700;
-          background:#2c7be5; color:#fff; border:none; border-radius:10px; cursor:pointer;">✔️ Selesai</button>
-      </div>
     </div>
   `;
 
-  // Close actions
+
+  // ----------------------------------------------------------
+  // Isi overlay
+  // ----------------------------------------------------------
+
+  overlay.innerHTML = `
+
+    <div
+      class="instruksiyuh"
+      style="
+        max-width:98%;
+        width:900px;
+        padding:30px;
+        background:#fff;
+        border-radius:18px;
+        box-shadow:0 10px 40px rgba(0,0,0,0.25);
+        position:relative;
+      "
+    >
+
+      <div
+        class="instruksi-gradient-strip"
+        style="
+          height:6px;
+          background:linear-gradient(90deg,#2c7be5,#00d97e);
+          border-radius:3px;
+          margin-bottom:20px;
+        "
+      ></div>
+
+
+      <button
+        id="btnCloseOverlay"
+        aria-label="Tutup"
+        title="Tutup"
+        style="
+          position:absolute;
+          top:10px;
+          right:10px;
+          border:none;
+          background:transparent;
+          font-size:22px;
+          cursor:pointer;
+          line-height:1;
+        "
+      >
+        ✖
+      </button>
+
+
+      <div
+        style="
+          font-size:1.5rem;
+          font-weight:700;
+          color:#1a3d7c;
+          margin-bottom:10px;
+          text-align:center;
+        "
+      >
+        Hi,
+        <b>
+          ${escapeHtml(nickname || "Peserta")}
+        </b>!
+      </div>
+
+
+      <h2
+        style="
+          text-align:center;
+          margin:0 0 20px 0;
+          color:#233;
+          font-size:1.8rem;
+        "
+      >
+        Selamat Datang di Platform Tes
+      </h2>
+
+
+      <div
+        id="subtitleInstruksiTyping"
+        style="
+          max-height:60vh;
+          overflow-y:auto;
+          padding:15px 20px;
+          font-size:1.15rem;
+          line-height:1.65;
+        "
+      ></div>
+
+
+      ${tesDipilihHTML}
+
+
+      <div
+        style="
+          text-align:center;
+          margin-top:25px;
+        "
+      >
+
+        <button
+          class="btn"
+          id="btnSelesaiInstruksi"
+          style="
+            display:none;
+            padding:12px 40px;
+            font-size:1.15rem;
+            font-weight:700;
+            background:#2c7be5;
+            color:#fff;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+          "
+        >
+          ✔️ Selesai
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+
+  // ==========================================================
+  // CLOSE ACTIONS
+  // ==========================================================
+
   const closeOverlay = () => {
-    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-    document.body.style.overflow = prevBodyOverflow;
+
+    if (
+      overlay &&
+      overlay.parentNode
+    ) {
+      overlay.parentNode.removeChild(overlay);
+    }
+
+    document.body.style.overflow =
+      prevBodyOverflow;
   };
-  overlay.querySelector("#btnCloseOverlay").onclick = closeOverlay;
+
+
+  const closeButton =
+    overlay.querySelector("#btnCloseOverlay");
+
+
+  if (closeButton) {
+    closeButton.onclick = closeOverlay;
+  }
+
+
+  // ----------------------------------------------------------
+  // Escape key
+  // ----------------------------------------------------------
+
   document.addEventListener(
     "keydown",
     function escHandler(e) {
+
       if (e.key === "Escape") {
+
         closeOverlay();
-        document.removeEventListener("keydown", escHandler);
+
+        document.removeEventListener(
+          "keydown",
+          escHandler
+        );
       }
+
     },
-    { once: true }
+    {
+      once: true
+    }
   );
 
- // ---- TAMPILKAN GAMBAR INSTRUKSI (ganti efek mengetik) ----
-const el = htmlIdOnce("subtitleInstruksiTyping");
 
-el.innerHTML = `
-  <div style="text-align:center;">
-    <img
-      src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/Aturan.png"
-      alt="Instruksi Tes Sugar Group Schools"
-      style="
-        width:100%;
-        max-width:1000px;
-        height:auto;
-        display:block;
-        margin:auto;
-        border-radius:12px;
-        box-shadow:0 6px 25px rgba(0,0,0,.12);
-      "
-    >
-  </div>
-`;
+  // ==========================================================
+  // TAMPILKAN GAMBAR INSTRUKSI
+  // ==========================================================
 
-// tombol selesai langsung muncul
-const btn = htmlIdOnce("btnSelesaiInstruksi");
-btn.style.display = "inline-block";
+  const el =
+    htmlIdOnce("subtitleInstruksiTyping");
 
-// hapus pesan lama jika ada
-const old = htmlIdOnce("pesanSelesaiInstruksi");
-if (old) old.remove();
 
-// tampilkan pesan bawah gambar
-const pesan = document.createElement("div");
-pesan.id = "pesanSelesaiInstruksi";
+  if (el) {
 
-Object.assign(pesan.style, {
-  marginTop: "30px",
-  marginBottom: "18px",
-  textAlign: "center",
-  color: "#1668a9",
-  fontSize: "1.11em",
-  fontWeight: "500"
-});
+    el.innerHTML = `
 
-pesan.innerHTML =
-  `Klik <b>Selesai</b> untuk mengecek tombol download hasil tes.`;
+      <div style="text-align:center;">
 
-btn.parentNode.parentNode.insertBefore(
-  pesan,
-  btn.parentNode
-);
+        <img
+          src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/Aturan.png"
+          alt="Instruksi Tes Sugar Group Schools"
+          style="
+            width:100%;
+            max-width:1000px;
+            height:auto;
+            display:block;
+            margin:auto;
+            border-radius:12px;
+            box-shadow:0 6px 25px rgba(0,0,0,.12);
+          "
+        >
 
-// ---- Setelah "Selesai" ----
-htmlIdOnce("btnSelesaiInstruksi").onclick = () => {
-  window.appState = window.appState || {};
-  appState.showTestCards = true;
+      </div>
 
-  closeOverlay();
-
-  if (typeof window.renderHome === "function") {
-    window.renderHome();
+    `;
   }
 
-  // ⬇️ Tambahkan blok ini (scroll full ke bawah untuk cek tombol)
-  setTimeout(() => {
-    // scroll sekali
-    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-    // (opsional) ulangi sekali lagi setelah render stabil
-    setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }), 400);
-  }, 200);
 
-  // (sisanya biarkan seperti punyamu)
-  window.sudahCekDownload = true;
+  // ==========================================================
+  // TOMBOL SELESAI
+  // ==========================================================
 
-  setTimeout(() => {
-    const box   = document.getElementById("downloadPDFBox");
-    const pdfBtn= document.getElementById("btnDownloadPDF");
-    const cekMsg= document.getElementById("cekDownloadMsg");
+  const btn =
+    htmlIdOnce("btnSelesaiInstruksi");
 
-    if (typeof window.enableDownloadButtonSetelahCek === "function") {
-      window.enableDownloadButtonSetelahCek();
+
+  if (!btn) {
+    return;
+  }
+
+
+  // Tombol langsung muncul
+  btn.style.display = "inline-block";
+
+
+  // ----------------------------------------------------------
+  // Hapus pesan lama
+  // ----------------------------------------------------------
+
+  const old =
+    htmlIdOnce("pesanSelesaiInstruksi");
+
+
+  if (old) {
+    old.remove();
+  }
+
+
+  // ----------------------------------------------------------
+  // Pesan bawah gambar
+  // ----------------------------------------------------------
+
+  const pesan =
+    document.createElement("div");
+
+
+  pesan.id =
+    "pesanSelesaiInstruksi";
+
+
+  Object.assign(
+    pesan.style,
+    {
+      marginTop: "30px",
+      marginBottom: "18px",
+      textAlign: "center",
+      color: "#1668a9",
+      fontSize: "1.11em",
+      fontWeight: "500"
     }
-    if (cekMsg) cekMsg.style.display = "block";
-    // jangan ubah counter/label di sini agar tidak auto-terhitung “sudah dicek”
-  }, 600);
-};
+  );
 
+
+  pesan.innerHTML =
+    `Klik <b>Selesai</b> untuk mengecek tombol download hasil tes.`;
+
+
+  if (
+    btn.parentNode &&
+    btn.parentNode.parentNode
+  ) {
+
+    btn.parentNode.parentNode.insertBefore(
+      pesan,
+      btn.parentNode
+    );
+
+  }
+
+
+  // ==========================================================
+  // SETELAH TOMBOL "SELESAI" DIKLIK
+  // ==========================================================
+
+  btn.onclick = () => {
+
+    // Pastikan appState tersedia
+    window.appState =
+      window.appState || {};
+
+
+    // Tampilkan test cards
+    window.appState.showTestCards =
+      true;
+
+
+    // Tutup overlay
+    closeOverlay();
+
+
+    // Render home
+    if (
+      typeof window.renderHome === "function"
+    ) {
+
+      window.renderHome();
+
+    }
+
+
+    // --------------------------------------------------------
+    // Scroll ke bagian paling bawah
+    // --------------------------------------------------------
+
+    setTimeout(
+      () => {
+
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth"
+        });
+
+
+        // Ulangi setelah render stabil
+        setTimeout(
+          () => {
+
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: "smooth"
+            });
+
+          },
+          400
+        );
+
+      },
+      200
+    );
+
+
+    // --------------------------------------------------------
+    // Tandai sudah cek download
+    // --------------------------------------------------------
+
+    window.sudahCekDownload =
+      true;
+
+
+    // --------------------------------------------------------
+    // Aktifkan tombol download setelah pengecekan
+    // --------------------------------------------------------
+
+    setTimeout(
+      () => {
+
+        const box =
+          document.getElementById(
+            "downloadPDFBox"
+          );
+
+
+        const pdfBtn =
+          document.getElementById(
+            "btnDownloadPDF"
+          );
+
+
+        const cekMsg =
+          document.getElementById(
+            "cekDownloadMsg"
+          );
+
+
+        if (
+          typeof window.enableDownloadButtonSetelahCek ===
+          "function"
+        ) {
+
+          window.enableDownloadButtonSetelahCek();
+
+        }
+
+
+        if (cekMsg) {
+
+          cekMsg.style.display =
+            "block";
+
+        }
+
+      },
+      600
+    );
+
+  };
 
 }
-
 
 
 
