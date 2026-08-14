@@ -6802,6 +6802,7 @@ window.installPdfButtonHandler = function () {
       showFormAndAutoLogout();
 
     }
+    }
 
   };
 
