@@ -5473,6 +5473,16 @@ function renderHome() {
   const isBoth      = hasPsikotes && hasAdmin;
 
 // ============================================================
+// URL VIDEO YOUTUBE INSTRUKSI
+// ============================================================
+// GANTI URL INI DENGAN VIDEO YOUTUBE INSTRUKSI RESMI ANDA
+// Jika belum punya video khusus, link ini tetap mengarah ke
+// pencarian YouTube terkait tes/asesmen psikologi.
+const YOUTUBE_INSTRUKSI_URL =
+  'https://www.youtube.com/results?search_query=tes+psikologi+instruksi+asesmen';
+
+
+// ============================================================
 // BLOK GREETING
 // ============================================================
 let greetingHTML = '';
@@ -6109,11 +6119,148 @@ html += `
 
     }
 
+
+    /* ========================================================
+       TOMBOL YOUTUBE DI OVERLAY INSTRUKSI
+       ======================================================== */
+
+    .youtube-instruksi-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      margin:10px auto 14px auto;
+      padding:12px 22px;
+      border-radius:10px;
+      border:2px solid #ff3d3d;
+      background:linear-gradient(
+        92deg,
+        #fff5f5 60%,
+        #ffdede 100%
+      );
+      color:#c62828;
+      font-size:1rem;
+      font-weight:800;
+      text-decoration:none;
+      box-shadow:
+        0 3px 12px #ff4b4b25,
+        0 1px 4px #ffdddd;
+      transition:
+        transform .15s,
+        box-shadow .15s,
+        background .15s;
+      cursor:pointer;
+    }
+
+
+    .youtube-instruksi-btn:hover {
+      transform:translateY(-1px);
+      background:linear-gradient(
+        92deg,
+        #fffafa 60%,
+        #ffcaca 100%
+      );
+      box-shadow:
+        0 5px 17px #ff4b4b38;
+    }
+
+
+    .youtube-instruksi-btn:active {
+      transform:translateY(0);
+    }
+
+
+    /* ========================================================
+       PENANDA SELESAI INSTRUKSI
+       ======================================================== */
+
+    .instruksi-selesai-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      margin-top:14px;
+      padding:13px 28px;
+      border-radius:11px;
+      border:2px solid #31b729;
+      background:linear-gradient(
+        92deg,
+        #f7fff1 60%,
+        #d3ffb8 100%
+      );
+      color:#15772a;
+      font-size:1.03rem;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:
+        0 0 16px #45ff6150,
+        0 2px 8px #d9ffd4;
+    }
+
   </style>
 `;
 
 
 document.getElementById('app').innerHTML = html;
+
+
+// ============================================================
+// FUNGSI SCROLL KE TOMBOL PDF
+// ============================================================
+// Setelah instruksi selesai, fungsi ini akan mencari tombol PDF
+// dan melakukan scroll otomatis ke sana.
+// ============================================================
+window.scrollToPDFButton = function () {
+
+  setTimeout(() => {
+
+    const pdfBox =
+      document.getElementById('downloadPDFBox');
+
+    const pdfBtn =
+      document.getElementById('btnDownloadPDF');
+
+
+    const target =
+      pdfBox || pdfBtn;
+
+
+    if (!target) {
+      return;
+    }
+
+
+    target.scrollIntoView({
+      behavior:'smooth',
+      block:'center'
+    });
+
+
+    // Tambahkan efek perhatian sementara
+    if (pdfBtn) {
+
+      pdfBtn.classList.add('blink');
+
+
+      setTimeout(() => {
+
+        pdfBtn.style.transform =
+          'scale(1.04)';
+
+        setTimeout(() => {
+
+          pdfBtn.style.transform =
+            'scale(1)';
+
+        }, 220);
+
+      }, 500);
+
+    }
+
+  }, 400);
+
+};
 
 
 // ============================================================
@@ -6141,7 +6288,9 @@ setTimeout(() => {
         sessionStorage.removeItem('dlClick');
       } catch (e) {}
 
+      // --------------------------------------------------------
       // Hentikan watcher lama jika masih ada
+      // --------------------------------------------------------
       if (window.__pdfBtnWatcher) {
 
         try {
@@ -6151,11 +6300,17 @@ setTimeout(() => {
         window.__pdfBtnWatcher = null;
       }
 
+
+      // --------------------------------------------------------
+      // TAMPILKAN OVERLAY INSTRUKSI
+      // --------------------------------------------------------
       showInstruksiOverlay(
         nickname,
         instruksiList
       );
+
     };
+
   }
 
 }, 300);
@@ -6185,30 +6340,6 @@ window.downloadClickCount =
   }
 
 })();
-
-
-// ------------------------------------------------------------
-// Sinkronisasi state tombol
-// ------------------------------------------------------------
-if (
-  typeof window.updateDownloadButtonState === "function"
-) {
-
-  window.updateDownloadButtonState();
-
-}
-
-
-// ------------------------------------------------------------
-// Pasang handler PDF
-// ------------------------------------------------------------
-if (
-  typeof window.installPdfButtonHandler === 'function'
-) {
-
-  window.installPdfButtonHandler();
-
-}
 
 
 // ============================================================
@@ -6326,6 +6457,7 @@ window.installPdfButtonHandler = function () {
     return selected.every(
       id => completed[id] === true
     );
+
   }
 
 
@@ -6351,6 +6483,7 @@ window.installPdfButtonHandler = function () {
       </span>
       Cek Tombol Download (uji unduh PDF)
     `;
+
   }
 
 
@@ -6376,6 +6509,7 @@ window.installPdfButtonHandler = function () {
       </span>
       Sudah dicek. Silakan selesaikan semua tes yang dipilih
     `;
+
   }
 
 
@@ -6402,6 +6536,7 @@ window.installPdfButtonHandler = function () {
       Unduh Akhir &amp; Kumpulkan
       (Logout Otomatis)
     `;
+
   }
 
 
@@ -6488,6 +6623,7 @@ window.installPdfButtonHandler = function () {
         });
 
       }, 200);
+
     }
 
 
@@ -6544,6 +6680,7 @@ window.installPdfButtonHandler = function () {
       location.reload();
 
     }, 1500);
+
   }
 
 
@@ -6695,6 +6832,7 @@ window.installPdfButtonHandler = function () {
         } catch (e) {}
 
         window.__pdfBtnWatcher = null;
+
       }
 
 
@@ -6802,7 +6940,6 @@ window.installPdfButtonHandler = function () {
       showFormAndAutoLogout();
 
     }
-    }
 
   };
 
@@ -6854,6 +6991,470 @@ window.installPdfButtonHandler = function () {
 };
 
 
+// ============================================================
+// PASANG HANDLER PDF SETELAH FUNGSI SUDAH DIDEFINISIKAN
+// ============================================================
+// Ini sengaja diletakkan SETELAH deklarasi fungsi
+// installPdfButtonHandler agar tidak terjadi kondisi
+// fungsi belum tersedia ketika dipanggil.
+// ============================================================
+setTimeout(() => {
+
+  if (
+    typeof window.updateDownloadButtonState === "function"
+  ) {
+
+    window.updateDownloadButtonState();
+
+  }
+
+
+  if (
+    typeof window.installPdfButtonHandler === 'function'
+  ) {
+
+    window.installPdfButtonHandler();
+
+  }
+
+}, 100);
+
+
+// ============================================================
+// ============================================================
+// INTEGRASI DENGAN OVERLAY INSTRUKSI
+// ============================================================
+// Bagian ini membuat link YouTube muncul di overlay instruksi
+// tanpa menghapus instruksiList yang sudah Anda punya.
+//
+// Mekanisme:
+// 1. User klik "Lihat & Pahami Instruksi"
+// 2. Overlay instruksi muncul seperti sebelumnya
+// 3. User diarahkan untuk melihat video YouTube
+// 4. User membaca/mendengarkan instruksi
+// 5. Setelah selesai, tombol selesai akan memanggil
+//    scrollToPDFButton()
+// ============================================================
+
+
+// ============================================================
+// FUNGSI TAMBAHKAN PANEL YOUTUBE KE OVERLAY
+// ============================================================
+window.addYouTubeInstructionPanel = function () {
+
+  // Cari overlay yang sedang aktif.
+  // Dibuat fleksibel karena struktur overlay Anda mungkin
+  // memiliki nama/class/id yang berbeda.
+  const possibleOverlaySelectors = [
+    '#instruksiOverlay',
+    '#instructionOverlay',
+    '.instruksi-overlay',
+    '.instruction-overlay',
+    '[id*="instruksiOverlay"]',
+    '[id*="instructionOverlay"]'
+  ];
+
+
+  let overlay = null;
+
+
+  for (
+    let i = 0;
+    i < possibleOverlaySelectors.length;
+    i++
+  ) {
+
+    const el =
+      document.querySelector(
+        possibleOverlaySelectors[i]
+      );
+
+
+    if (el) {
+
+      overlay = el;
+
+      break;
+
+    }
+
+  }
+
+
+  if (!overlay) {
+    return;
+  }
+
+
+  // ----------------------------------------------------------
+  // Cegah panel dibuat dua kali
+  // ----------------------------------------------------------
+  if (
+    overlay.querySelector(
+      '#youtubeInstruksiPanel'
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const panel =
+    document.createElement('div');
+
+
+  panel.id =
+    'youtubeInstruksiPanel';
+
+
+  panel.innerHTML = `
+
+    <div style="
+      margin:18px auto 18px auto;
+      max-width:720px;
+      padding:17px 20px 18px 20px;
+      background:linear-gradient(
+        135deg,
+        #fff8f8 0%,
+        #fffefe 55%,
+        #fff4f4 100%
+      );
+      border:1.7px solid #ffb7b7;
+      border-radius:15px;
+      box-shadow:
+        0 4px 18px #ffb7b725,
+        0 1px 4px #ffffff;
+      text-align:center;
+    ">
+
+      <div style="
+        font-size:1.25rem;
+        font-weight:900;
+        color:#b71c1c;
+        margin-bottom:7px;
+      ">
+        🎬 Sebelum Mengerjakan, Pahami Instruksi
+      </div>
+
+
+      <div style="
+        font-size:1rem;
+        color:#444;
+        line-height:1.55;
+        margin-bottom:9px;
+      ">
+
+        Silakan lihat video YouTube berikut terlebih dahulu
+        agar Anda memahami cara mengikuti proses tes
+        dengan benar.
+
+      </div>
+
+
+      <a
+        class="youtube-instruksi-btn"
+        href="${YOUTUBE_INSTRUKSI_URL}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ▶️ Buka Video YouTube Instruksi
+      </a>
+
+
+      <div style="
+        font-size:.88rem;
+        color:#777;
+        margin-top:3px;
+      ">
+        Video akan terbuka pada tab baru.
+        Setelah selesai memahami video, kembali ke halaman tes.
+      </div>
+
+    </div>
+
+  `;
+
+
+  // ----------------------------------------------------------
+  // Cari bagian konten overlay
+  // ----------------------------------------------------------
+  const overlayContent =
+    overlay.querySelector(
+      '.modal-content, .overlay-content, .instruksi-content, .instruction-content'
+    );
+
+
+  if (overlayContent) {
+
+    overlayContent.prepend(panel);
+
+  } else {
+
+    overlay.prepend(panel);
+
+  }
+
+};
+
+
+// ============================================================
+// WATCH OVERLAY INSTRUKSI
+// ============================================================
+// Karena fungsi showInstruksiOverlay() Anda sudah ada,
+// kita tidak mengganti fungsi tersebut.
+//
+// Kita hanya menunggu overlay muncul, kemudian menambahkan
+// panel YouTube.
+// ============================================================
+window.watchInstruksiOverlay = function () {
+
+  let attempts = 0;
+
+
+  const watcher =
+    setInterval(() => {
+
+      attempts++;
+
+
+      try {
+
+        window.addYouTubeInstructionPanel();
+
+      } catch (e) {
+
+        console.warn(
+          'Panel YouTube belum dapat dipasang:',
+          e
+        );
+
+      }
+
+
+      // Beri waktu beberapa detik untuk overlay
+      // menyelesaikan proses rendering.
+      if (attempts >= 20) {
+
+        clearInterval(watcher);
+
+      }
+
+    }, 250);
+
+};
+
+
+// ============================================================
+// MODIFIKASI EVENT TOMBOL INSTRUKSI
+// ============================================================
+setTimeout(() => {
+
+  const instruksiBtn =
+    document.getElementById('btnShowInstruksi');
+
+
+  if (!instruksiBtn) {
+    return;
+  }
+
+
+  // Ganti handler agar seluruh state lama tetap dijalankan
+  // kemudian panel YouTube dipasang.
+  instruksiBtn.onclick = () => {
+
+    // --------------------------------------------------------
+    // RESET TOTAL STATE DOWNLOAD
+    // --------------------------------------------------------
+    window.downloadClickCount = 0;
+
+
+    try {
+
+      sessionStorage.removeItem(
+        'dlClick'
+      );
+
+    } catch (e) {}
+
+
+    // --------------------------------------------------------
+    // Hentikan watcher lama
+    // --------------------------------------------------------
+    if (window.__pdfBtnWatcher) {
+
+      try {
+
+        clearInterval(
+          window.__pdfBtnWatcher
+        );
+
+      } catch (e) {}
+
+      window.__pdfBtnWatcher = null;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Tampilkan instruksi
+    // --------------------------------------------------------
+    showInstruksiOverlay(
+      nickname,
+      instruksiList
+    );
+
+
+    // --------------------------------------------------------
+    // Tambahkan panel YouTube setelah overlay muncul
+    // --------------------------------------------------------
+    window.watchInstruksiOverlay();
+
+  };
+
+}, 500);
+
+
+// ============================================================
+// OBSERVER UNTUK DETEKSI SELESAI INSTRUKSI
+// ============================================================
+// Tujuan:
+// Ketika overlay instruksi dihapus/ditutup oleh fungsi
+// showInstruksiOverlay() yang sudah Anda miliki, sistem akan
+// otomatis scroll ke tombol PDF.
+//
+// Ini tidak mengganti fungsi overlay Anda.
+// ============================================================
+(function setupInstructionCompletionWatcher() {
+
+  let overlayWasVisible = false;
+
+  let lastOverlayDetected = false;
+
+
+  const observer =
+    new MutationObserver(() => {
+
+      const possibleOverlaySelectors = [
+        '#instruksiOverlay',
+        '#instructionOverlay',
+        '.instruksi-overlay',
+        '.instruction-overlay',
+        '[id*="instruksiOverlay"]',
+        '[id*="instructionOverlay"]'
+      ];
+
+
+      let currentOverlay = null;
+
+
+      for (
+        let i = 0;
+        i < possibleOverlaySelectors.length;
+        i++
+      ) {
+
+        const el =
+          document.querySelector(
+            possibleOverlaySelectors[i]
+          );
+
+
+        if (el) {
+
+          currentOverlay = el;
+
+          break;
+
+        }
+
+      }
+
+
+      const overlayExists =
+        !!currentOverlay;
+
+
+      // ------------------------------------------------------
+      // Overlay muncul
+      // ------------------------------------------------------
+      if (overlayExists) {
+
+        overlayWasVisible = true;
+
+        lastOverlayDetected = true;
+
+        return;
+
+      }
+
+
+      // ------------------------------------------------------
+      // Overlay sebelumnya ada,
+      // sekarang sudah tidak ada.
+      //
+      // Artinya instruksi kemungkinan sudah selesai.
+      // ------------------------------------------------------
+      if (
+        overlayWasVisible &&
+        lastOverlayDetected &&
+        !overlayExists
+      ) {
+
+        overlayWasVisible = false;
+
+        lastOverlayDetected = false;
+
+
+        // Beri sedikit jeda agar DOM home page
+        // sudah benar-benar siap.
+        setTimeout(() => {
+
+          window.scrollToPDFButton();
+
+        }, 500);
+
+      }
+
+    });
+
+
+  observer.observe(
+    document.body,
+    {
+      childList:true,
+      subtree:true
+    }
+  );
+
+
+})();
+
+
+// ============================================================
+// FALLBACK: EVENT CUSTOM
+// ============================================================
+// Jika fungsi overlay Anda sudah memiliki event custom
+// "instruksiSelesai", maka bagian ini juga akan menangkapnya.
+// ============================================================
+document.addEventListener(
+  'instruksiSelesai',
+  () => {
+
+    window.scrollToPDFButton();
+
+  }
+);
+
+
+document.addEventListener(
+  'instructionComplete',
+  () => {
+
+    window.scrollToPDFButton();
+
+  }
+);
 
 
 // ==============================
