@@ -5973,104 +5973,55 @@ function showInstruksiOverlay(nickname, instruksiList) {
     { once: true }
   );
 
-  // ---- Mesin ketik ----
-  const teks = String((instruksiList && instruksiList[0]) || "");
-  const el = htmlIdOnce("subtitleInstruksiTyping");
-  el.textContent = "";
-  let i = 0;
+ // ---- TAMPILKAN GAMBAR INSTRUKSI (ganti efek mengetik) ----
+const el = htmlIdOnce("subtitleInstruksiTyping");
 
-  // style anim 1x
-  if (!htmlIdOnce("instruksiTypingStyle")) {
-    const style = document.createElement("style");
-    style.id = "instruksiTypingStyle";
-    style.textContent = `
-      @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
-        70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
-      }
-      .blink-cursor { animation: blink 1s infinite; }
-      @keyframes blink { 0%,100% {opacity:1;} 50% {opacity:0;} }
-      #subtitleInstruksiTyping > div > div[style*="background:#ffebee"] { animation: pulse 1.5s infinite; }
-    `;
-    document.head.appendChild(style);
-  }
+el.innerHTML = `
+  <div style="text-align:center;">
+    <img
+      src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/Aturan.png"
+      alt="Instruksi Tes Sugar Group Schools"
+      style="
+        width:100%;
+        max-width:1000px;
+        height:auto;
+        display:block;
+        margin:auto;
+        border-radius:12px;
+        box-shadow:0 6px 25px rgba(0,0,0,.12);
+      "
+    >
+  </div>
+`;
 
-  function formatTokens(rawText) {
-    // mapping tag custom -> inline style
-    return rawText
-      .replace(
-        /<WELCOME>(.*?)<\/WELCOME>/gs,
-        '<div style="font-size:1.6rem;font-weight:700;color:#2c7be5;text-align:center;margin:0 0 15px 0;line-height:1.4;">$1</div>'
-      )
-      .replace(
-        /<HEADNOTE>(.*?)<\/HEADNOTE>/gs,
-        '<div style="font-size:1.25rem;font-weight:600;color:#3a506b;margin:0 0 15px 0;text-align:center;">$1</div>'
-      )
-      .replace(
-        /<div class="instruksi-section">/g,
-        '<div style="margin-bottom:18px;padding:15px;background:#f8fbff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.05);">'
-      )
-      .replace(
-        /<div class="section-title">/g,
-        '<div style="font-size:1.18rem;font-weight:700;color:#1a3d7c;margin-bottom:10px;display:flex;align-items:center;gap:8px;">'
-      )
-      .replace(
-        /<div class="section-content">/g,
-        '<div style="padding-left:20px;font-size:1.08rem;line-height:1.6;color:#334e68;">'
-      )
-      .replace(
-        /<PENTING>(.*?)<\/PENTING>/gs,
-        '<div style="margin:22px 0;padding:18px;background:#fff8f0;border:2px solid #ff6b6b;border-radius:12px;box-shadow:0 4px 15px rgba(255,107,107,0.1);">$1</div>'
-      )
-      .replace(
-        /<div class="warning-header">/g,
-        '<div style="font-size:1.25rem;font-weight:800;color:#d32f2f;text-align:center;margin-bottom:15px;">'
-      )
-      .replace(
-        /<div class="warning-content">/g,
-        '<div style="font-size:1.1rem;line-height:1.6;color:#5a3e3e;padding:0 10px;">'
-      )
-      .replace(
-        /<div class="warning-alert">/g,
-        '<div style="margin-top:15px;padding:12px;background:#ffebee;border-radius:8px;font-weight:700;color:#b71c1c;text-align:center;border:1px dashed #f44336;">'
-      );
-  }
+// tombol selesai langsung muncul
+const btn = htmlIdOnce("btnSelesaiInstruksi");
+btn.style.display = "inline-block";
 
-  function typeLoop() {
-  const rawText = teks.substring(0, i);
-  const mapped = formatTokens(rawText);
-  const safe = sanitizeHTML(mapped);
-  el.innerHTML = safe + `<span class="blink-cursor">|</span>`;
+// hapus pesan lama jika ada
+const old = htmlIdOnce("pesanSelesaiInstruksi");
+if (old) old.remove();
 
-  if (i < teks.length) {
-    i++;
-    setTimeout(typeLoop, 12);
-  } else {
-    el.innerHTML = sanitizeHTML(formatTokens(teks));
+// tampilkan pesan bawah gambar
+const pesan = document.createElement("div");
+pesan.id = "pesanSelesaiInstruksi";
 
-    // tombol selesai + pesan
-    const btn = htmlIdOnce("btnSelesaiInstruksi");
-    btn.style.display = "inline-block";
+Object.assign(pesan.style, {
+  marginTop: "30px",
+  marginBottom: "18px",
+  textAlign: "center",
+  color: "#1668a9",
+  fontSize: "1.11em",
+  fontWeight: "500"
+});
 
-    const old = htmlIdOnce("pesanSelesaiInstruksi");
-    if (old) old.remove();
+pesan.innerHTML =
+  `Klik <b>Selesai</b> untuk mengecek tombol download hasil tes.`;
 
-    const pesan = document.createElement("div");
-    pesan.id = "pesanSelesaiInstruksi";
-    Object.assign(pesan.style, {
-      marginTop: "30px",
-      marginBottom: "18px",
-      textAlign: "center",
-      color: "#1668a9",
-      fontSize: "1.11em",
-      fontWeight: "500",
-    });
-    pesan.innerHTML = `Klik <b>Selesai</b> untuk mengecek tombol download hasil tes.`;
-    btn.parentNode.parentNode.insertBefore(pesan, btn.parentNode);
-  }
-}
-typeLoop();
+btn.parentNode.parentNode.insertBefore(
+  pesan,
+  btn.parentNode
+);
 
 // ---- Setelah "Selesai" ----
 htmlIdOnce("btnSelesaiInstruksi").onclick = () => {
