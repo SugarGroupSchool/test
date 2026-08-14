@@ -5941,7 +5941,9 @@ function showInstruksiOverlay(nickname, instruksiList) {
       <div style="font-size:1.5rem;font-weight:700;color:#1a3d7c;margin-bottom:10px;text-align:center;">
         Hi, <b>${escapeHtml(nickname || "Peserta")}</b>!
       </div>
-      <h2 style="text-align:center;margin:0 0 20px 0;color:#233;font-size:1.8rem;">Selamat Datang</h2>
+      <h2 style="text-align:center;margin:0 0 20px 0;color:#233;font-size:1.8rem;">
+  Selamat Datang di Platform Tes
+</h2>
 
       <div id="subtitleInstruksiTyping" style="
         max-height:60vh; overflow-y:auto; padding:15px 20px; font-size:1.15rem; line-height:1.65;"></div>
