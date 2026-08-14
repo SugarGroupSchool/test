@@ -4082,141 +4082,727 @@ function renderKraeplinChartToPDF(doc, x, y, width, height, data, opts = {}) {
 
 
 
-// Password protection
+// ============================================================
+// PASSWORD PROTECTION
+// ============================================================
+
 let downloadClickCount = 0;
-let PASSWORD = localStorage.getItem('usedPragas') === '1' ? "Talent#Secure2626!" : "SGS@Assessment202626";
+
+let PASSWORD =
+    localStorage.getItem('usedPragas') === '1'
+        ? "Talent#Secure2626!"
+        : "SGS@Assessment202626";
 
 
-// --- Efek suara welcome (futuristik) ---
+// ============================================================
+// EFEK SUARA WELCOME — FUTURISTIK
+// ============================================================
 
 function playFuturisticSound() {
+
+    // --------------------------------------------------------
     // MP3 Welcome
-    const audioWelcome = new Audio('https://cdn.jsdelivr.net/gh/Pragas123/assets@main/futuristic.mp3');
-    audioWelcome.volume = 0.80;
-    audioWelcome.play();
+    // --------------------------------------------------------
 
+    try {
+
+        const audioWelcome = new Audio(
+            'https://cdn.jsdelivr.net/gh/Pragas123/assets@main/futuristic.mp3'
+        );
+
+        audioWelcome.volume = 0.80;
+
+        const welcomePromise = audioWelcome.play();
+
+        if (welcomePromise !== undefined) {
+            welcomePromise.catch(() => {
+                console.log("Audio welcome tidak dapat diputar.");
+            });
+        }
+
+    } catch (err) {
+
+        console.log("Audio welcome error:", err);
+
+    }
+
+
+    // --------------------------------------------------------
     // MP3 TTS Benar Password
-    const audioTTS = new Audio('https://cdn.jsdelivr.net/gh/Pragas123/assets@70d6b32ad0b433b80453e5cd0897f5a541e7075d/welcome.mp3');
-    audioTTS.volume = 0.65;
-    audioTTS.play();
+    // --------------------------------------------------------
 
-    // OSCILLATOR Futuristik
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const now = ctx.currentTime;
-    const mainDuration = 0.65;
+    try {
 
-    // Main layer
-    const mainOsc = ctx.createOscillator();
-    const mainGain = ctx.createGain();
-    const filter = ctx.createBiquadFilter();
+        const audioTTS = new Audio(
+            'https://cdn.jsdelivr.net/gh/Pragas123/assets@70d6b32ad0b433b80453e5cd0897f5a541e7075d/welcome.mp3'
+        );
 
-    mainOsc.type = "sawtooth";
-    mainOsc.frequency.setValueAtTime(180, now);
-    mainOsc.frequency.exponentialRampToValueAtTime(2200, now + 0.18);
-    mainOsc.frequency.exponentialRampToValueAtTime(900, now + 0.4);
+        audioTTS.volume = 0.65;
 
-    // Detune mod
-    const detuneOsc = ctx.createOscillator();
-    detuneOsc.type = "sine";
-    detuneOsc.frequency.value = 16;
-    detuneOsc.connect(mainOsc.detune);
-    mainOsc.detune.value = 15;
+        const ttsPromise = audioTTS.play();
 
-    // Filter
-    filter.type = "bandpass";
-    filter.frequency.value = 2000;
-    filter.Q.value = 12;
-    filter.frequency.exponentialRampToValueAtTime(800, now + mainDuration);
+        if (ttsPromise !== undefined) {
+            ttsPromise.catch(() => {
+                console.log("Audio TTS tidak dapat diputar.");
+            });
+        }
 
-    // Gain envelope
-    mainGain.gain.setValueCurveAtTime(
-        [0, 0.8, 0.3, 0.6, 0.2, 0],
-        now,
-        mainDuration,
-        0.2
+    } catch (err) {
+
+        console.log("Audio TTS error:", err);
+
+    }
+
+
+    // --------------------------------------------------------
+    // OSCILLATOR FUTURISTIK
+    // --------------------------------------------------------
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContext) {
+            return;
+        }
+
+        const ctx = new AudioContext();
+
+        if (ctx.state === "suspended") {
+            ctx.resume().catch(() => {});
+        }
+
+        const now = ctx.currentTime;
+        const mainDuration = 0.65;
+
+
+        // ----------------------------------------------------
+        // Main Layer
+        // ----------------------------------------------------
+
+        const mainOsc = ctx.createOscillator();
+        const mainGain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
+        mainOsc.type = "sawtooth";
+
+        mainOsc.frequency.setValueAtTime(
+            180,
+            now
+        );
+
+        mainOsc.frequency.exponentialRampToValueAtTime(
+            2200,
+            now + 0.18
+        );
+
+        mainOsc.frequency.exponentialRampToValueAtTime(
+            900,
+            now + 0.4
+        );
+
+
+        // ----------------------------------------------------
+        // Detune Mod
+        // ----------------------------------------------------
+
+        const detuneOsc = ctx.createOscillator();
+
+        detuneOsc.type = "sine";
+
+        detuneOsc.frequency.value = 16;
+
+        detuneOsc.connect(mainOsc.detune);
+
+        mainOsc.detune.value = 15;
+
+
+        // ----------------------------------------------------
+        // Filter
+        // ----------------------------------------------------
+
+        filter.type = "bandpass";
+
+        filter.frequency.value = 2000;
+
+        filter.Q.value = 12;
+
+        filter.frequency.exponentialRampToValueAtTime(
+            800,
+            now + mainDuration
+        );
+
+
+        // ----------------------------------------------------
+        // Gain Envelope
+        // ----------------------------------------------------
+
+        mainGain.gain.setValueCurveAtTime(
+            [
+                0,
+                0.8,
+                0.3,
+                0.6,
+                0.2,
+                0
+            ],
+            now,
+            mainDuration
+        );
+
+
+        // ----------------------------------------------------
+        // Connect Main Layer
+        // ----------------------------------------------------
+
+        mainOsc.connect(filter);
+
+        filter.connect(mainGain);
+
+        mainGain.connect(ctx.destination);
+
+
+        // ----------------------------------------------------
+        // Digital Glitch
+        // ----------------------------------------------------
+
+        const addGlitch = (time) => {
+
+            try {
+
+                const glitch =
+                    ctx.createOscillator();
+
+                const glitchGain =
+                    ctx.createGain();
+
+                glitch.type = "square";
+
+                glitch.frequency.value =
+                    3800 +
+                    Math.random() * 1000;
+
+                glitchGain.gain.setValueAtTime(
+                    0.22,
+                    time
+                );
+
+                glitchGain.gain.exponentialRampToValueAtTime(
+                    0.001,
+                    time + 0.08
+                );
+
+                glitch.connect(glitchGain);
+
+                glitchGain.connect(ctx.destination);
+
+                glitch.start(time);
+
+                glitch.stop(time + 0.08);
+
+            } catch (err) {
+
+                console.log(
+                    "Glitch audio error:",
+                    err
+                );
+
+            }
+
+        };
+
+
+        // ----------------------------------------------------
+        // Suara Bassline Sub
+        // ----------------------------------------------------
+
+        const subOsc =
+            ctx.createOscillator();
+
+        const subGain =
+            ctx.createGain();
+
+        subOsc.type = "sine";
+
+        subOsc.frequency.value = 90;
+
+        subGain.gain.setValueAtTime(
+            0.15,
+            now
+        );
+
+        subGain.gain.exponentialRampToValueAtTime(
+            0.01,
+            now + 0.3
+        );
+
+        subOsc.connect(subGain);
+
+        subGain.connect(ctx.destination);
+
+
+        // ----------------------------------------------------
+        // Start Semua
+        // ----------------------------------------------------
+
+        mainOsc.start(now);
+
+        detuneOsc.start(now);
+
+        subOsc.start(now);
+
+
+        // ----------------------------------------------------
+        // Stop Semua
+        // ----------------------------------------------------
+
+        mainOsc.stop(
+            now + mainDuration
+        );
+
+        detuneOsc.stop(
+            now + mainDuration
+        );
+
+        subOsc.stop(
+            now + 0.5
+        );
+
+
+        // ----------------------------------------------------
+        // Glitch Timing
+        // ----------------------------------------------------
+
+        addGlitch(
+            now + 0.12
+        );
+
+        addGlitch(
+            now + 0.35
+        );
+
+        setTimeout(() => {
+
+            try {
+
+                addGlitch(
+                    ctx.currentTime
+                );
+
+            } catch (err) {
+
+                console.log(
+                    "Delayed glitch error:",
+                    err
+                );
+
+            }
+
+        }, 480);
+
+
+        // ----------------------------------------------------
+        // Tutup AudioContext
+        // ----------------------------------------------------
+
+        setTimeout(() => {
+
+            try {
+
+                if (ctx.state !== "closed") {
+                    ctx.close();
+                }
+
+            } catch (err) {
+
+                console.log(
+                    "AudioContext close error:",
+                    err
+                );
+
+            }
+
+        }, 1800);
+
+    } catch (err) {
+
+        console.log(
+            "Futuristic oscillator error:",
+            err
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// CEK PASSWORD
+// ============================================================
+// PENTING:
+// Menggunakan window.checkPassword agar dapat dipanggil dari
+// HTML seperti:
+// onclick="checkPassword()"
+// ============================================================
+
+window.checkPassword = function () {
+
+    const input =
+        document.getElementById(
+            'passwordInput'
+        );
+
+    const error =
+        document.getElementById(
+            'passwordError'
+        );
+
+
+    // --------------------------------------------------------
+    // Cek elemen
+    // --------------------------------------------------------
+
+    if (!input || !error) {
+
+        console.error(
+            "Elemen passwordInput atau passwordError tidak ditemukan."
+        );
+
+        return;
+    }
+
+
+    // --------------------------------------------------------
+    // Password Benar
+    // --------------------------------------------------------
+
+    if (input.value === PASSWORD) {
+
+        // Mainkan suara
+        playFuturisticSound();
+
+
+        // Hapus pesan error
+        error.textContent = '';
+
+
+        // Welcome message
+        const welcomeMessage =
+            document.getElementById(
+                'welcomeMessage'
+            );
+
+        if (welcomeMessage) {
+
+            welcomeMessage.classList.add(
+                'show'
+            );
+
+        }
+
+
+        // Logo
+        const passwordLogo =
+            document.getElementById(
+                'passwordLogo'
+            );
+
+        if (passwordLogo) {
+
+            passwordLogo.classList.add(
+                'small'
+            );
+
+        }
+
+
+        // Form password
+        const passwordForm =
+            document.getElementById(
+                'passwordForm'
+            );
+
+        if (passwordForm) {
+
+            passwordForm.style.opacity = '0';
+
+            passwordForm.style.pointerEvents =
+                'none';
+
+        }
+
+
+        // ----------------------------------------------------
+        // Pindah ke Identity Form
+        // ----------------------------------------------------
+
+        setTimeout(() => {
+
+            const passwordScreen =
+                document.getElementById(
+                    'passwordScreen'
+                );
+
+            if (passwordScreen) {
+
+                passwordScreen.classList.add(
+                    'hidden'
+                );
+
+            }
+
+
+            // Pastikan fungsi tersedia
+            if (
+                typeof renderIdentityForm ===
+                'function'
+            ) {
+
+                renderIdentityForm();
+
+            } else {
+
+                console.error(
+                    "renderIdentityForm() tidak ditemukan."
+                );
+
+            }
+
+        }, 1500);
+
+
+    }
+
+    // --------------------------------------------------------
+    // Password Salah
+    // --------------------------------------------------------
+
+    else {
+
+        error.textContent =
+            'Kode akses salah!';
+
+        input.focus();
+
+    }
+
+};
+
+
+// ============================================================
+// ENTER = CEK PASSWORD
+// ============================================================
+
+function setupPasswordEvents() {
+
+    const passwordInput =
+        document.getElementById(
+            'passwordInput'
+        );
+
+
+    if (!passwordInput) {
+
+        console.warn(
+            "passwordInput belum ditemukan."
+        );
+
+        return;
+
+    }
+
+
+    passwordInput.addEventListener(
+        'keypress',
+        function (e) {
+
+            if (e.key === 'Enter') {
+
+                e.preventDefault();
+
+                window.checkPassword();
+
+            }
+
+        }
     );
 
-    mainOsc.connect(filter);
-    filter.connect(mainGain);
-    mainGain.connect(ctx.destination);
-
-    // Layer digital glitch
-    const addGlitch = (time) => {
-        const glitch = ctx.createOscillator();
-        const glitchGain = ctx.createGain();
-        glitch.type = "square";
-        glitch.frequency.value = 3800 + Math.random() * 1000;
-        glitchGain.gain.value = 0.22;
-        glitchGain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
-        glitch.connect(glitchGain);
-        glitchGain.connect(ctx.destination);
-        glitch.start(time);
-        glitch.stop(time + 0.08);
-    };
-
-    // Suara bassline sub
-    const subOsc = ctx.createOscillator();
-    const subGain = ctx.createGain();
-    subOsc.type = "sine";
-    subOsc.frequency.value = 90;
-    subGain.gain.value = 0.15;
-    subGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-    subOsc.connect(subGain);
-    subGain.connect(ctx.destination);
-
-    // Start semua
-    mainOsc.start(now);
-    detuneOsc.start(now);
-    subOsc.start(now);
-
-    mainOsc.stop(now + mainDuration);
-    detuneOsc.stop(now + mainDuration);
-    subOsc.stop(now + 0.5);
-
-    addGlitch(now + 0.12);
-    addGlitch(now + 0.35);
-    setTimeout(() => addGlitch(ctx.currentTime), 480);
 }
 
-// --- Cek Password ---
-function checkPassword() {
-    const input = document.getElementById('passwordInput');
-    const error = document.getElementById('passwordError');
-    if (input.value === PASSWORD) {
-        playFuturisticSound();
-        error.textContent = '';
-        document.getElementById('welcomeMessage').classList.add('show');
-        document.getElementById('passwordLogo').classList.add('small');
-        document.getElementById('passwordForm').style.opacity = '0';
-        document.getElementById('passwordForm').style.pointerEvents = 'none';
-        setTimeout(() => {
-            document.getElementById('passwordScreen').classList.add('hidden');
-            renderIdentityForm();
-        }, 1500);
-    } else {
-        error.textContent = 'Kode akses salah!';
-        input.focus();
+
+// ============================================================
+// RESET KE LOGIN
+// ============================================================
+// Dibuat global agar dapat dipanggil dari HTML:
+// onclick="resetToLogin()"
+// ============================================================
+
+window.resetToLogin = function () {
+
+    const passwordScreen =
+        document.getElementById(
+            'passwordScreen'
+        );
+
+    const passwordForm =
+        document.getElementById(
+            'passwordForm'
+        );
+
+    const passwordInput =
+        document.getElementById(
+            'passwordInput'
+        );
+
+    const passwordError =
+        document.getElementById(
+            'passwordError'
+        );
+
+    const welcomeMessage =
+        document.getElementById(
+            'welcomeMessage'
+        );
+
+    const passwordLogo =
+        document.getElementById(
+            'passwordLogo'
+        );
+
+    const app =
+        document.getElementById(
+            'app'
+        );
+
+
+    // --------------------------------------------------------
+    // Password Screen
+    // --------------------------------------------------------
+
+    if (passwordScreen) {
+
+        passwordScreen.classList.remove(
+            'hidden'
+        );
+
     }
-}
-document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        checkPassword();
+
+
+    // --------------------------------------------------------
+    // Password Form
+    // --------------------------------------------------------
+
+    if (passwordForm) {
+
+        passwordForm.style.opacity = '1';
+
+        passwordForm.style.pointerEvents =
+            'auto';
+
     }
-});
-window.addEventListener('load', function() {
-    document.getElementById('passwordInput').focus();
-});
-function resetToLogin() {
-  document.getElementById('passwordScreen').classList.remove('hidden');
-  document.getElementById('passwordForm').style.opacity = '1';
-  document.getElementById('passwordForm').style.pointerEvents = 'auto';
-  document.getElementById('passwordInput').value = '';
-  document.getElementById('passwordError').textContent = '';
-  document.getElementById('welcomeMessage').classList.remove('show');
-  document.getElementById('passwordLogo').classList.remove('small');
-  document.getElementById('app').innerHTML = '';
-  setTimeout(()=>document.getElementById('passwordInput').focus(), 150);
-}
+
+
+    // --------------------------------------------------------
+    // Password Input
+    // --------------------------------------------------------
+
+    if (passwordInput) {
+
+        passwordInput.value = '';
+
+    }
+
+
+    // --------------------------------------------------------
+    // Error
+    // --------------------------------------------------------
+
+    if (passwordError) {
+
+        passwordError.textContent = '';
+
+    }
+
+
+    // --------------------------------------------------------
+    // Welcome
+    // --------------------------------------------------------
+
+    if (welcomeMessage) {
+
+        welcomeMessage.classList.remove(
+            'show'
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // Logo
+    // --------------------------------------------------------
+
+    if (passwordLogo) {
+
+        passwordLogo.classList.remove(
+            'small'
+        );
+
+    }
+
+
+    // --------------------------------------------------------
+    // App
+    // --------------------------------------------------------
+
+    if (app) {
+
+        app.innerHTML = '';
+
+    }
+
+
+    // --------------------------------------------------------
+    // Fokus kembali ke password
+    // --------------------------------------------------------
+
+    setTimeout(() => {
+
+        if (passwordInput) {
+
+            passwordInput.focus();
+
+        }
+
+    }, 150);
+
+};
+
+
+// ============================================================
+// WINDOW LOAD
+// ============================================================
+
+window.addEventListener(
+    'load',
+    function () {
+
+        setupPasswordEvents();
+
+        const passwordInput =
+            document.getElementById(
+                'passwordInput'
+            );
+
+        if (passwordInput) {
+
+            passwordInput.focus();
+
+        }
+
+    }
+);
 // --- Utility: Hitung Umur ---
 function calculateAge(dob) {
     if (!dob) return '';
