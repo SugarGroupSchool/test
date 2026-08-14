@@ -6980,7 +6980,7 @@ window.installPdfButtonHandler = function () {
 
   }
 
-  else if (
+   else if (
     window.downloadClickCount === 2
   ) {
 
@@ -6989,6 +6989,8 @@ window.installPdfButtonHandler = function () {
   }
 
 };
+
+}
 
 
 // ============================================================
