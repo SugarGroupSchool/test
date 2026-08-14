@@ -5472,12 +5472,17 @@ function renderHome() {
   const hasAdmin    = adminList.some(t => selectedTests.includes(t));
   const isBoth      = hasPsikotes && hasAdmin;
 
-  // Blok greeting
-  let greetingHTML = '';
-  if (!appState.showTestCards) {
-    greetingHTML = `
-      <div class="personal-greeting"
-        style="margin:30px auto 30px auto;
+// ============================================================
+// BLOK GREETING
+// ============================================================
+let greetingHTML = '';
+
+if (!appState.showTestCards) {
+
+  greetingHTML = `
+    <div class="personal-greeting"
+      style="
+        margin:30px auto 30px auto;
         padding:30px 24px 23px 24px;
         max-width:480px;
         background:linear-gradient(113deg,#fff8fc 88%,#eaf6ff 100%);
@@ -5487,29 +5492,71 @@ function renderHome() {
         box-shadow:0 4px 32px #bbd0ff36,0 1.5px 4px #d1f7f920;
         text-align:center;
         border:1.5px solid #d6e6fa;
-        position:relative;">
-        <div style="font-size:2.3em;margin-bottom:8px;">👋</div>
-        <b style="font-size:1.13em;">Halo, ${nickname}!</b>
-        <div style="margin-top:7px;font-size:1.08em;line-height:1.55;">
-          Untuk memastikan Anda memahami seluruh proses, silakan baca dan dengarkan <span style="color:#117ad1;font-weight:700;">instruksi tes</span> terlebih dahulu.<br>
-          <span style="color:#1d6c3a;font-size:1.05em;font-weight:600;">Klik tombol di bawah sebelum mulai mengerjakan!</span>
-        </div>
-        <div style="margin-top:21px;">
-          <button class="btn blink"
-            id="btnShowInstruksi"
-            style="padding:13px 42px;font-size:1.15rem;font-weight:800;border:2.5px solid #FFD600;
-              background:linear-gradient(91deg,#fffde4 65%,#ffe178 100%);color:#1b222e;
-              box-shadow:0 0 18px #ffd600b6,0 1px 10px #eaeaba50;border-radius:11px;
-              transition:background .17s,box-shadow .14s;cursor:pointer;letter-spacing:.2px;">
-            📢 Lihat &amp; Pahami Instruksi
-          </button>
-        </div>
+        position:relative;
+      "
+    >
+
+      <div style="font-size:2.3em;margin-bottom:8px;">👋</div>
+
+      <b style="font-size:1.13em;">
+        Halo, ${nickname}!
+      </b>
+
+      <div style="
+        margin-top:7px;
+        font-size:1.08em;
+        line-height:1.55;
+      ">
+        Untuk memastikan Anda memahami seluruh proses,
+        silakan baca dan dengarkan
+        <span style="color:#117ad1;font-weight:700;">
+          instruksi tes
+        </span>
+        terlebih dahulu.
+        <br>
+
+        <span style="
+          color:#1d6c3a;
+          font-size:1.05em;
+          font-weight:600;
+        ">
+          Klik tombol di bawah sebelum mulai mengerjakan!
+        </span>
       </div>
-    `;
-  } else {
-    greetingHTML = `
-      <div class="personal-greeting"
-        style="margin:30px auto 30px auto;
+
+      <div style="margin-top:21px;">
+
+        <button
+          class="btn blink"
+          id="btnShowInstruksi"
+          type="button"
+          style="
+            padding:13px 42px;
+            font-size:1.15rem;
+            font-weight:800;
+            border:2.5px solid #FFD600;
+            background:linear-gradient(91deg,#fffde4 65%,#ffe178 100%);
+            color:#1b222e;
+            box-shadow:0 0 18px #ffd600b6,0 1px 10px #eaeaba50;
+            border-radius:11px;
+            transition:background .17s,box-shadow .14s;
+            cursor:pointer;
+            letter-spacing:.2px;
+          "
+        >
+          📢 Lihat &amp; Pahami Instruksi
+        </button>
+
+      </div>
+    </div>
+  `;
+
+} else {
+
+  greetingHTML = `
+    <div class="personal-greeting"
+      style="
+        margin:30px auto 30px auto;
         padding:22px 24px 18px 24px;
         max-width:480px;
         background:linear-gradient(113deg,#fff8fc 88%,#eaf6ff 100%);
@@ -5519,323 +5566,1290 @@ function renderHome() {
         box-shadow:0 4px 24px #bbd0ff22,0 1.5px 4px #d1f7f910;
         text-align:center;
         border:1.5px solid #d6e6fa;
-        position:relative;">
-        <div style="font-size:2.1em;margin-bottom:8px;">👋</div>
-        <b style="font-size:1.11em;">Halo, ${nickname}!</b>
-        <div style="margin-top:7px;font-size:1.06em;line-height:1.48;">
-          Instruksi sudah selesai.<br>
-          Silakan mulai mengerjakan tes yang telah dipilih di bawah ini.<br>
-          <span style="color:#278f36;font-size:1em;font-weight:600;">Semoga lancar!</span>
-        </div>
-      </div>
-    `;
-  }
+        position:relative;
+      "
+    >
 
-  let html = `
-    <div class="card" id="homeCard" style="max-width:900px;margin:36px auto 0 auto;padding:0 0 38px 0;border-radius:27px;
-      background:linear-gradient(135deg,#f5faff 88%,#e5f3ff 100%);
-      box-shadow:0 10px 36px #c9eaff33, 0 1.5px 6px #fff9;border:1.7px solid #bfe3fc;overflow:hidden;">
-      <div style="display:flex;align-items:center;gap:18px;padding:38px 34px 0 34px;">
-        <img src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
-          alt="Logo Psikotes" style="width:68px;height:68px;object-fit:contain;border-radius:16px;box-shadow:0 2px 12px #bddff930;">
-        <div>
-          <h1 style="margin:0 0 8px 0;font-size:2.09rem;font-weight:900;color:#1662a5;letter-spacing:0.2px;text-shadow:0 1.5px 10px #e1efff99;">
-            Platfoform Tes Sugar Group Schools
-          </h1>
-          <div style="font-size:1.11rem;color:#337;font-weight:600;opacity:.95;">
-            Platform Seleksi & Pengembangan
-          </div>
-        </div>
-      </div>
-      ${greetingHTML}
-  `;
+      <div style="font-size:2.1em;margin-bottom:8px;">👋</div>
 
-  // Kartu tes & tombol download (jika instruksi selesai)
-  if (appState.showTestCards) {
-    if (hasPsikotes) {
-      if (isBoth) html += `<div style="
-        margin-bottom:14px;font-weight:800;color:#14672e;font-size:1.19em;
-        letter-spacing:.01em;text-align:center;
-        border-bottom:2.5px solid #dbe6e0;
-        padding-bottom:5px;max-width:370px;
-        margin-left:auto;margin-right:auto;">
-        Kategori 1: Tes Psikologi
-      </div>`;
-      html += `<div class="test-selection" style="padding:0 24px;">`;
-      if (selectedTests.includes('IST'))      html += `<div class="test-card ${appState.completed.IST ? 'completed' : ''}" onclick="startTest('IST')"><div class="test-icon">🧠</div><h3>KECERDASAN</h3><p>${tests.IST.description}</p><div class="time">Waktu: ~60 menit</div><div class="status">${appState.completed.IST ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('KRAEPLIN')) html += `<div class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}" onclick="startTest('KRAEPLIN')"><div class="test-icon">🧮</div><h3>KORAN</h3><p>${tests.KRAEPLIN.description}</p><div class="time">Waktu: ±5-10 menit</div><div class="status">${appState.completed.KRAEPLIN ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('DISC'))     html += `<div class="test-card ${appState.completed.DISC ? 'completed' : ''}" onclick="startTest('DISC')"><div class="test-icon">👤</div><h3>KEPEMIMPINAN</h3><p>${tests.DISC.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.DISC ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('PAPI'))     html += `<div class="test-card ${appState.completed.PAPI ? 'completed' : ''}" onclick="startTest('PAPI')"><div class="test-icon">📊</div><h3>SIKAP KERJA</h3><p>${tests.PAPI.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.PAPI ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('BIGFIVE'))  html += `<div class="test-card ${appState.completed.BIGFIVE ? 'completed' : ''}" onclick="startTest('BIGFIVE')"><div class="test-icon">📝</div><h3>KEPRIBADIAN</h3><p>${tests.BIGFIVE.description}</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.BIGFIVE ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('GRAFIS'))   html += `<div class="test-card ${appState.completed.GRAFIS ? 'completed' : ''}" onclick="startTest('GRAFIS')"><div class="test-icon">🎨</div><h3>GAMBAR</h3><p>Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.</p><div class="time">Waktu: ~10 menit</div><div class="status">${appState.completed.GRAFIS ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      html += `</div>`;
-    }
-    if (hasAdmin) {
-      if (isBoth) html += `<div style="
-        margin:38px auto 14px auto;font-weight:800;
-        color:#1c4e81;font-size:1.19em;
-        letter-spacing:.01em;text-align:center;
-        border-bottom:2.5px solid #e1eaff;
-        padding-bottom:5px;max-width:430px;">
-        Kategori 2: Tes Kemampuan/Administrasi
-      </div>`;
-      html += `<div class="test-selection" style="padding:0 24px;">`;
-      if (selectedTests.includes('EXCEL'))   html += `<div class="test-card ${appState.completed.EXCEL ? 'completed' : ''}" onclick="startTest('EXCEL')"><div class="test-icon">📑</div><h3>EXCEL</h3><p>Mengerjakan soal administrasi sekolah di spreadsheet online.</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.EXCEL ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('TYPING'))  html += `<div class="test-card ${appState.completed.TYPING ? 'completed' : ''}" onclick="startTest('TYPING')"><div class="test-icon">⌨️</div><h3>KETIK</h3><p>Uji kecepatan dan akurasi mengetik kalimat tertentu.</p><div class="time">Waktu: ~5 menit</div><div class="status">${appState.completed.TYPING ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      if (selectedTests.includes('SUBJECT')) html += `<div class="test-card ${appState.completed.SUBJECT ? 'completed' : ''}" onclick="startTest('SUBJECT')"><div class="test-icon">📚</div><h3>SUBJEK</h3><p>Pilih dan kerjakan soal sesuai mata pelajaran (Math, Indonesia, Inggris, dll).</p><div class="time">Waktu: ~15 menit</div><div class="status">${appState.completed.SUBJECT ? '✓ Selesai' : 'Belum dikerjakan'}</div></div>`;
-      html += `</div>`;
-    }
-    html += `
-    <div id="downloadPDFBox" style="text-align:center;margin:48px 0 0 0;">
-      <button class="btn btn-download"
-        id="btnDownloadPDF"
-        style="padding:19px 48px;font-size:1.25rem;font-weight:900;border:2.4px solid #31b729;
-          background:linear-gradient(92deg,#f7fff1 65%,#d3ffb8 100%);color:#15772a;
-          box-shadow:0 0 18px #45ff6190,0 0 7px #eaffea55,0 1.5px 6px #fafdf6;
-          border-radius:15px;margin-bottom:0;transition:background 0.16s,box-shadow 0.15s;
-          letter-spacing:.1px;position:relative;"
-        onclick="generatePDF()">
-       <span style="font-size:1.23em;vertical-align:-3px;">📄</span> Cek Tombol Download (uji unduh PDF)
-</button>
-      <div style="margin-top:13px;font-size:1.01em;color:#486908;letter-spacing:.01em;opacity:.97;">
-        <span style="background:#fffde8;border-radius:8px;padding:3px 13px 3px 11px;display:inline-block;border:1px solid #ffe066;">
-          <b>PENTING:</b> Unduh hasil hanya setelah semua tes selesai.
+      <b style="font-size:1.11em;">
+        Halo, ${nickname}!
+      </b>
+
+      <div style="
+        margin-top:7px;
+        font-size:1.06em;
+        line-height:1.48;
+      ">
+        Instruksi sudah selesai.
+        <br>
+        Silakan mulai mengerjakan tes yang telah dipilih di bawah ini.
+        <br>
+
+        <span style="
+          color:#278f36;
+          font-size:1em;
+          font-weight:600;
+        ">
+          Semoga lancar!
         </span>
       </div>
+
     </div>
-    <div id="cekDownloadMsg"
-      style="margin:24px auto 16px auto; max-width:485px; background:#fffbe0; border:1.6px solid #ffe066; border-radius:12px;
-      padding:15px 25px 13px 22px; color:#6b5a05; font-size:1.13em; box-shadow:0 2px 12px #ffe06624; display:none;">
-      <div style="font-weight:800;color:#bb9300;margin-bottom:4px;">
-        ⚠️ Cek Fungsi Download
-      </div>
+  `;
+}
+
+
+// ============================================================
+// HOME CARD
+// ============================================================
+let html = `
+  <div
+    class="card"
+    id="homeCard"
+    style="
+      max-width:900px;
+      margin:36px auto 0 auto;
+      padding:0 0 38px 0;
+      border-radius:27px;
+      background:linear-gradient(135deg,#f5faff 88%,#e5f3ff 100%);
+      box-shadow:0 10px 36px #c9eaff33,0 1.5px 6px #fff9;
+      border:1.7px solid #bfe3fc;
+      overflow:hidden;
+    "
+  >
+
+    <div style="
+      display:flex;
+      align-items:center;
+      gap:18px;
+      padding:38px 34px 0 34px;
+    ">
+
+      <img
+        src="https://raw.githubusercontent.com/Pragas123/assets/refs/heads/main/nmqo6a.png"
+        alt="Logo Psikotes"
+        style="
+          width:68px;
+          height:68px;
+          object-fit:contain;
+          border-radius:16px;
+          box-shadow:0 2px 12px #bddff930;
+        "
+      >
+
       <div>
-        <b>Silakan klik tombol <u>Download Hasil Tes</u> di atas satu kali untuk memastikan file berhasil diunduh.</b><br><br>
-        Jika file PDF/Excel berhasil diunduh, Anda dapat lanjut mengerjakan seluruh tes.<br>
-        <b>Jika <u>tidak</u> ada file terunduh</b>, segera hubungi tim rekrutmen untuk bantuan.
+
+        <h1 style="
+          margin:0 0 8px 0;
+          font-size:2.09rem;
+          font-weight:900;
+          color:#1662a5;
+          letter-spacing:0.2px;
+          text-shadow:0 1.5px 10px #e1efff99;
+        ">
+          Platform Tes Sugar Group Schools
+        </h1>
+
+        <div style="
+          font-size:1.11rem;
+          color:#337;
+          font-weight:600;
+          opacity:.95;
+        ">
+          Platform Seleksi &amp; Pengembangan
+        </div>
+
       </div>
     </div>
-    `;
-  }
 
-  html += `</div>
-  <style>
-    .btn-download:hover {background:linear-gradient(92deg,#fafff3 62%,#e1ffd4 100%) !important;box-shadow:0 0 22px #66ffb190,0 0 10px #eafff0b0;color:#17852c;border-color:#2cd645;}
-    .btn-download:active {background:linear-gradient(92deg,#edffe1 67%,#c9ffb2 100%) !important;color:#18692d;border-color:#1ab529;}
-    .btn.blink {animation: blink 1.6s infinite;}
-    @keyframes blink {0%,100% { box-shadow:0 0 18px #ffd600b6,0 1px 10px #eaeaba50;}50% { box-shadow:0 0 30px #fff972,0 1px 16px #ffe178aa;}}
-  </style>`;
+    ${greetingHTML}
+`;
 
-  document.getElementById('app').innerHTML = html;
 
-  // Tombol instruksi (jika belum instruksi)
-  setTimeout(() => {
-    const instruksiBtn = document.getElementById('btnShowInstruksi');
-    if (instruksiBtn) {
-      instruksiBtn.classList.add('blink');
-      instruksiBtn.onclick = () => showInstruksiOverlay(nickname, instruksiList);
+// ============================================================
+// KARTU TES & DOWNLOAD
+// ============================================================
+if (appState.showTestCards) {
+
+  // ==========================================================
+  // TES PSIKOLOGI
+  // ==========================================================
+  if (hasPsikotes) {
+
+    if (isBoth) {
+
+      html += `
+        <div style="
+          margin-bottom:14px;
+          font-weight:800;
+          color:#14672e;
+          font-size:1.19em;
+          letter-spacing:.01em;
+          text-align:center;
+          border-bottom:2.5px solid #dbe6e0;
+          padding-bottom:5px;
+          max-width:370px;
+          margin-left:auto;
+          margin-right:auto;
+        ">
+          Kategori 1: Tes Psikologi
+        </div>
+      `;
     }
-  }, 300);
 
-  // =========================
-  // [D] Sinkronisasi tombol PDF (panggilan saja)
-  // =========================
+    html += `
+      <div class="test-selection" style="padding:0 24px;">
+    `;
 
-  
-  // 1) counter
-window.downloadClickCount = (typeof window.downloadClickCount === "number") ? window.downloadClickCount : 0;
 
-// 2) netralisir onclick inline
-(function () {
-  const pdfBtnImmediate = document.getElementById('btnDownloadPDF');
-  if (pdfBtnImmediate) {
-    pdfBtnImmediate.removeAttribute('onclick');
-  }
-})();
+    if (selectedTests.includes('IST')) {
 
-// 3) (opsional) sinkronisasi state awal tombolmu jika punya fungsi itu
-if (typeof window.updateDownloadButtonState === "function") {
-  window.updateDownloadButtonState();
-}
-
-// 4) pasang handler
-if (typeof window.installPdfButtonHandler === 'function') {
-  window.installPdfButtonHandler();
-}
-
-}
-
-// [PDF-HANDLER v3] Klik-1 = cek download (disable tombol).
-// Saat semua tes selesai, tombol aktif lagi. Klik-2 (final) = download lagi + auto Form & auto logout.
-window.installPdfButtonHandler = function () {
-  const box    = document.getElementById('downloadPDFBox');
-  const pdfBtn = document.getElementById('btnDownloadPDF');
-  const cekMsg = document.getElementById('cekDownloadMsg');
-  if (!pdfBtn || pdfBtn.hasHandler) return;
-
-  // Netralisir onclick inline & siapkan counter
-  pdfBtn.removeAttribute('onclick');
-  window.downloadClickCount = (typeof window.downloadClickCount === 'number') ? window.downloadClickCount : 0;
-
- // setelah const pdfBtn / cekMsg dll & sebelum pdfBtn.onclick = …
-if (window.downloadClickCount === 0) {
-  pdfBtn.disabled = false;
-  pdfBtn.style.opacity = '1';
-  pdfBtn.style.pointerEvents = 'auto';
-  pdfBtn.classList.add('blink');
-
-  // label awal: CEK tombol (uji unduh), sesuai brief
-  pdfBtn.innerHTML = `<span style="font-size:1.23em;vertical-align:-3px;">📄</span> Cek Tombol Download (uji unduh PDF)`;
-}
-
-  // Cek selesai dinamis: hanya tes yang DIPILIH
-  const allDone = (typeof window.allTestsCompleted === 'function')
-    ? window.allTestsCompleted
-    : function () {
-        let selected = [];
-        try {
-          selected = Array.isArray(appState.selectedTests) && appState.selectedTests.length
-            ? appState.selectedTests
-            : JSON.parse(localStorage.getItem('selectedTests') || '[]');
-        } catch { selected = []; }
-        if (!selected.length) return false;
-        const completed = (appState && appState.completed) || {};
-        return selected.every(id => completed[id] === true);
-      };
-
-  function showFormAndAutoLogout() {
-    if (box) {
-      box.innerHTML = `
-        <div style="text-align:center;margin-top:24px;">
-          <div style="color:#c00;font-weight:600;margin-bottom:14px;line-height:1.6;">
-            ✅ Hasil akhir telah diunduh.<br>
-            <b>Silakan unggah PDF hasil tes ke link berikut (dibuka otomatis):</b><br>
-            <a href="https://forms.gle/G69K56TRfxNnBXtr9" target="_blank" rel="noopener" style="font-weight:bold;color:#1565c0;word-break:break-all;">
-              https://forms.gle/G69K56TRfxNnBXtr9
-            </a><br>
-            Sistem akan <b>logout otomatis</b> sesaat lagi.
+      html += `
+        <div
+          class="test-card ${appState.completed.IST ? 'completed' : ''}"
+          onclick="startTest('IST')"
+        >
+          <div class="test-icon">🧠</div>
+          <h3>KECERDASAN</h3>
+          <p>${tests.IST.description}</p>
+          <div class="time">Waktu: ~60 menit</div>
+          <div class="status">
+            ${appState.completed.IST
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
           </div>
         </div>
       `;
-      setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 200);
     }
-    // Buka form (tab baru)
-    try { window.open('https://forms.gle/G69K56TRfxNnBXtr9', '_blank', 'noopener'); } catch {}
-    // Auto logout (beri jeda pendek agar unduhan/DOM settle)
-    setTimeout(() => {
-      localStorage.setItem('usedPragas', '1');
-      localStorage.removeItem('identity');
-      try { sessionStorage.removeItem('dlClick'); } catch {}
-      location.reload();
-    }, 900);
+
+
+    if (selectedTests.includes('KRAEPLIN')) {
+
+      html += `
+        <div
+          class="test-card ${appState.completed.KRAEPLIN ? 'completed' : ''}"
+          onclick="startTest('KRAEPLIN')"
+        >
+          <div class="test-icon">🧮</div>
+          <h3>KORAN</h3>
+          <p>${tests.KRAEPLIN.description}</p>
+          <div class="time">Waktu: ±5-10 menit</div>
+          <div class="status">
+            ${appState.completed.KRAEPLIN
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
+          </div>
+        </div>
+      `;
+    }
+
+
+    if (selectedTests.includes('DISC')) {
+
+      html += `
+        <div
+          class="test-card ${appState.completed.DISC ? 'completed' : ''}"
+          onclick="startTest('DISC')"
+        >
+          <div class="test-icon">👤</div>
+          <h3>KEPEMIMPINAN</h3>
+          <p>${tests.DISC.description}</p>
+          <div class="time">Waktu: ~5 menit</div>
+          <div class="status">
+            ${appState.completed.DISC
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
+          </div>
+        </div>
+      `;
+    }
+
+
+    if (selectedTests.includes('PAPI')) {
+
+      html += `
+        <div
+          class="test-card ${appState.completed.PAPI ? 'completed' : ''}"
+          onclick="startTest('PAPI')"
+        >
+          <div class="test-icon">📊</div>
+          <h3>SIKAP KERJA</h3>
+          <p>${tests.PAPI.description}</p>
+          <div class="time">Waktu: ~5 menit</div>
+          <div class="status">
+            ${appState.completed.PAPI
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
+          </div>
+        </div>
+      `;
+    }
+
+
+    if (selectedTests.includes('BIGFIVE')) {
+
+      html += `
+        <div
+          class="test-card ${appState.completed.BIGFIVE ? 'completed' : ''}"
+          onclick="startTest('BIGFIVE')"
+        >
+          <div class="test-icon">📝</div>
+          <h3>KEPRIBADIAN</h3>
+          <p>${tests.BIGFIVE.description}</p>
+          <div class="time">Waktu: ~5 menit</div>
+          <div class="status">
+            ${appState.completed.BIGFIVE
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
+          </div>
+        </div>
+      `;
+    }
+
+
+    if (selectedTests.includes('GRAFIS')) {
+
+      html += `
+        <div
+          class="test-card ${appState.completed.GRAFIS ? 'completed' : ''}"
+          onclick="startTest('GRAFIS')"
+        >
+          <div class="test-icon">🎨</div>
+          <h3>GAMBAR</h3>
+          <p>
+            Upload hasil gambar Rumah, Pohon, dan Orang sesuai instruksi.
+          </p>
+          <div class="time">Waktu: ~10 menit</div>
+          <div class="status">
+            ${appState.completed.GRAFIS
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
+          </div>
+        </div>
+      `;
+    }
+
+
+    html += `</div>`;
   }
 
-  pdfBtn.onclick = function () {
-    // Anti double-click
-    if (pdfBtn.__busy) return;
 
-    // KLIK-1 (cek download) — saat awal atau saat belum semua tes selesai
-    if (window.downloadClickCount === 0) {
-      pdfBtn.__busy = true;
-      try {
-        if (typeof window.generatePDF === 'function') {
-          window.generatePDF();
-        } else {
-          alert('Fungsi generatePDF() belum tersedia.');
-          return;
-        }
-      } finally {
-        setTimeout(() => { pdfBtn.__busy = false; }, 300);
+  // ==========================================================
+  // TES KEMAMPUAN / ADMINISTRASI
+  // ==========================================================
+  if (hasAdmin) {
+
+    if (isBoth) {
+
+      html += `
+        <div style="
+          margin:38px auto 14px auto;
+          font-weight:800;
+          color:#1c4e81;
+          font-size:1.19em;
+          letter-spacing:.01em;
+          text-align:center;
+          border-bottom:2.5px solid #e1eaff;
+          padding-bottom:5px;
+          max-width:430px;
+        ">
+          Kategori 2: Tes Kemampuan/Administrasi
+        </div>
+      `;
+    }
+
+
+    html += `
+      <div class="test-selection" style="padding:0 24px;">
+    `;
+
+
+    if (selectedTests.includes('EXCEL')) {
+
+      html += `
+        <div
+          class="test-card ${appState.completed.EXCEL ? 'completed' : ''}"
+          onclick="startTest('EXCEL')"
+        >
+          <div class="test-icon">📑</div>
+          <h3>EXCEL</h3>
+          <p>
+            Mengerjakan soal administrasi sekolah di spreadsheet online.
+          </p>
+          <div class="time">Waktu: ~15 menit</div>
+          <div class="status">
+            ${appState.completed.EXCEL
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
+          </div>
+        </div>
+      `;
+    }
+
+
+    if (selectedTests.includes('TYPING')) {
+
+      html += `
+        <div
+          class="test-card ${appState.completed.TYPING ? 'completed' : ''}"
+          onclick="startTest('TYPING')"
+        >
+          <div class="test-icon">⌨️</div>
+          <h3>KETIK</h3>
+          <p>
+            Uji kecepatan dan akurasi mengetik kalimat tertentu.
+          </p>
+          <div class="time">Waktu: ~5 menit</div>
+          <div class="status">
+            ${appState.completed.TYPING
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
+          </div>
+        </div>
+      `;
+    }
+
+
+    if (selectedTests.includes('SUBJECT')) {
+
+      html += `
+        <div
+          class="test-card ${appState.completed.SUBJECT ? 'completed' : ''}"
+          onclick="startTest('SUBJECT')"
+        >
+          <div class="test-icon">📚</div>
+          <h3>SUBJEK</h3>
+          <p>
+            Pilih dan kerjakan soal sesuai mata pelajaran
+            (Math, Indonesia, Inggris, dll).
+          </p>
+          <div class="time">Waktu: ~15 menit</div>
+          <div class="status">
+            ${appState.completed.SUBJECT
+              ? '✓ Selesai'
+              : 'Belum dikerjakan'}
+          </div>
+        </div>
+      `;
+    }
+
+
+    html += `</div>`;
+  }
+
+
+  // ==========================================================
+  // TOMBOL DOWNLOAD
+  // ==========================================================
+  html += `
+    <div
+      id="downloadPDFBox"
+      style="
+        text-align:center;
+        margin:48px 0 0 0;
+      "
+    >
+
+      <button
+        class="btn btn-download"
+        id="btnDownloadPDF"
+        type="button"
+        style="
+          padding:19px 48px;
+          font-size:1.25rem;
+          font-weight:900;
+          border:2.4px solid #31b729;
+          background:linear-gradient(92deg,#f7fff1 65%,#d3ffb8 100%);
+          color:#15772a;
+          box-shadow:
+            0 0 18px #45ff6190,
+            0 0 7px #eaffea55,
+            0 1.5px 6px #fafdf6;
+          border-radius:15px;
+          margin-bottom:0;
+          transition:background .16s,box-shadow .15s;
+          letter-spacing:.1px;
+          position:relative;
+        "
+      >
+        <span style="
+          font-size:1.23em;
+          vertical-align:-3px;
+        ">📄</span>
+        Cek Tombol Download (uji unduh PDF)
+      </button>
+
+
+      <div style="
+        margin-top:13px;
+        font-size:1.01em;
+        color:#486908;
+        letter-spacing:.01em;
+        opacity:.97;
+      ">
+        <span style="
+          background:#fffde8;
+          border-radius:8px;
+          padding:3px 13px 3px 11px;
+          display:inline-block;
+          border:1px solid #ffe066;
+        ">
+          <b>PENTING:</b>
+          Unduh hasil hanya setelah semua tes selesai.
+        </span>
+      </div>
+
+    </div>
+
+
+    <div
+      id="cekDownloadMsg"
+      style="
+        margin:24px auto 16px auto;
+        max-width:485px;
+        background:#fffbe0;
+        border:1.6px solid #ffe066;
+        border-radius:12px;
+        padding:15px 25px 13px 22px;
+        color:#6b5a05;
+        font-size:1.13em;
+        box-shadow:0 2px 12px #ffe06624;
+        display:none;
+      "
+    >
+
+      <div style="
+        font-weight:800;
+        color:#bb9300;
+        margin-bottom:4px;
+      ">
+        ⚠️ Cek Fungsi Download
+      </div>
+
+      <div>
+        <b>
+          Silakan klik tombol
+          <u>Download Hasil Tes</u>
+          di atas satu kali untuk memastikan file berhasil diunduh.
+        </b>
+
+        <br><br>
+
+        Jika file PDF/Excel berhasil diunduh,
+        Anda dapat lanjut mengerjakan seluruh tes.
+
+        <br>
+
+        <b>
+          Jika <u>tidak</u> ada file terunduh
+        </b>,
+        segera hubungi tim rekrutmen untuk bantuan.
+      </div>
+
+    </div>
+  `;
+}
+
+
+// ============================================================
+// STYLE
+// ============================================================
+html += `
+  </div>
+
+  <style>
+
+    .btn-download:hover {
+      background:linear-gradient(
+        92deg,
+        #fafff3 62%,
+        #e1ffd4 100%
+      ) !important;
+
+      box-shadow:
+        0 0 22px #66ffb190,
+        0 0 10px #eafff0b0;
+
+      color:#17852c;
+      border-color:#2cd645;
+    }
+
+
+    .btn-download:active {
+      background:linear-gradient(
+        92deg,
+        #edffe1 67%,
+        #c9ffb2 100%
+      ) !important;
+
+      color:#18692d;
+      border-color:#1ab529;
+    }
+
+
+    .btn.blink {
+      animation:blink 1.6s infinite;
+    }
+
+
+    @keyframes blink {
+
+      0%,100% {
+        box-shadow:
+          0 0 18px #ffd600b6,
+          0 1px 10px #eaeaba50;
       }
 
-      // Jika ternyata SEMUA tes sudah selesai saat klik-1 → langsung final (one-click)
-      if (allDone()) {
-        window.downloadClickCount = 2;
-        try { sessionStorage.setItem('dlClick', '2'); } catch {}
-        showFormAndAutoLogout();
-        return;
+      50% {
+        box-shadow:
+          0 0 30px #fff972,
+          0 1px 16px #ffe178aa;
       }
 
-      // ELSE: belum selesai → disable & tunggu
-      window.downloadClickCount = 1;
-      try { sessionStorage.setItem('dlClick', '1'); } catch {}
+    }
 
-      pdfBtn.disabled = true;
-      pdfBtn.style.opacity = '0.45';
-      pdfBtn.style.pointerEvents = 'none';
-      pdfBtn.classList.remove('blink');
-      pdfBtn.innerHTML = `<span style="font-size:1.15em;vertical-align:-2px;">⏳</span> Sudah dicek. Silakan selesaikan semua tes yang dipilih`;
-
-      if (cekMsg) {
-        cekMsg.innerHTML = `
-<b>✅ Tombol sudah dicek.</b><br>
-Silakan kerjakan <u>semua</u> tes yang dipilih. Setelah semuanya selesai, tombol akan aktif kembali untuk <b>unduh akhir & logout otomatis</b>.
+  </style>
 `;
-        cekMsg.style.display = 'block';
+
+
+document.getElementById('app').innerHTML = html;
+
+
+// ============================================================
+// TOMBOL INSTRUKSI
+// ============================================================
+setTimeout(() => {
+
+  const instruksiBtn =
+    document.getElementById('btnShowInstruksi');
+
+  if (instruksiBtn) {
+
+    instruksiBtn.classList.add('blink');
+
+    instruksiBtn.onclick = () => {
+
+      // --------------------------------------------------------
+      // RESET TOTAL STATE DOWNLOAD
+      // Setiap kali proses instruksi dimulai,
+      // status tombol PDF harus kembali ke KLIK-1.
+      // --------------------------------------------------------
+      window.downloadClickCount = 0;
+
+      try {
+        sessionStorage.removeItem('dlClick');
+      } catch (e) {}
+
+      // Hentikan watcher lama jika masih ada
+      if (window.__pdfBtnWatcher) {
+
+        try {
+          clearInterval(window.__pdfBtnWatcher);
+        } catch (e) {}
+
+        window.__pdfBtnWatcher = null;
       }
 
-      // Pantau sampai selesai → aktifkan untuk klik-2
-      if (window.__pdfBtnWatcher) { try { clearInterval(window.__pdfBtnWatcher); } catch {} }
-      window.__pdfBtnWatcher = setInterval(() => {
-        if (allDone()) {
-          try { clearInterval(window.__pdfBtnWatcher); } catch {}
-          window.__pdfBtnWatcher = null;
-          pdfBtn.disabled = false;
-          pdfBtn.style.opacity = '1';
-          pdfBtn.style.pointerEvents = 'auto';
-          pdfBtn.classList.add('blink');
-          pdfBtn.innerHTML = `<span style="font-size:1.1em;vertical-align:-2px;">📄</span> Unduh Akhir & Kumpulkan (Logout Otomatis)`;
-        }
-      }, 700);
+      showInstruksiOverlay(
+        nickname,
+        instruksiList
+      );
+    };
+  }
+
+}, 300);
+
+
+// ============================================================
+// [D] SINKRONISASI TOMBOL PDF
+// ============================================================
+
+// Counter global
+window.downloadClickCount =
+  (typeof window.downloadClickCount === 'number')
+    ? window.downloadClickCount
+    : 0;
+
+
+// ------------------------------------------------------------
+// Netralisasi onclick inline
+// ------------------------------------------------------------
+(function () {
+
+  const pdfBtnImmediate =
+    document.getElementById('btnDownloadPDF');
+
+  if (pdfBtnImmediate) {
+    pdfBtnImmediate.removeAttribute('onclick');
+  }
+
+})();
+
+
+// ------------------------------------------------------------
+// Sinkronisasi state tombol
+// ------------------------------------------------------------
+if (
+  typeof window.updateDownloadButtonState === "function"
+) {
+
+  window.updateDownloadButtonState();
+
+}
+
+
+// ------------------------------------------------------------
+// Pasang handler PDF
+// ------------------------------------------------------------
+if (
+  typeof window.installPdfButtonHandler === 'function'
+) {
+
+  window.installPdfButtonHandler();
+
+}
+
+
+// ============================================================
+// PDF HANDLER
+//
+// KLIK 1:
+// - Download PDF untuk pengecekan fungsi
+// - Tombol dikunci
+// - User mengerjakan semua tes yang dipilih
+//
+// KLIK 2:
+// - Download PDF final
+// - Buka Google Form
+// - Logout otomatis
+// ============================================================
+window.installPdfButtonHandler = function () {
+
+  const box =
+    document.getElementById('downloadPDFBox');
+
+  const pdfBtn =
+    document.getElementById('btnDownloadPDF');
+
+  const cekMsg =
+    document.getElementById('cekDownloadMsg');
+
+
+  // ----------------------------------------------------------
+  // Tidak ada tombol
+  // ----------------------------------------------------------
+  if (!pdfBtn) {
+    return;
+  }
+
+
+  // ----------------------------------------------------------
+  // Cegah handler dipasang berkali-kali
+  // ----------------------------------------------------------
+  if (pdfBtn.__pdfHandlerInstalled) {
+    return;
+  }
+
+  pdfBtn.__pdfHandlerInstalled = true;
+
+
+  // ----------------------------------------------------------
+  // Hapus onclick inline
+  // ----------------------------------------------------------
+  pdfBtn.removeAttribute('onclick');
+
+
+  // ----------------------------------------------------------
+  // Counter
+  // ----------------------------------------------------------
+  if (
+    typeof window.downloadClickCount !== 'number'
+  ) {
+
+    window.downloadClickCount = 0;
+
+  }
+
+
+  // ==========================================================
+  // CEK SEMUA TES YANG DIPILIH
+  // ==========================================================
+  function allDone() {
+
+    // Gunakan fungsi existing jika tersedia
+    if (
+      typeof window.allTestsCompleted === 'function'
+    ) {
+
+      return window.allTestsCompleted();
+
+    }
+
+
+    let selected = [];
+
+
+    try {
+
+      selected =
+        Array.isArray(appState.selectedTests) &&
+        appState.selectedTests.length
+
+          ? appState.selectedTests
+
+          : JSON.parse(
+              localStorage.getItem(
+                'selectedTests'
+              ) || '[]'
+            );
+
+    } catch (e) {
+
+      selected = [];
+
+    }
+
+
+    // Tidak ada tes terpilih
+    if (!selected.length) {
+      return false;
+    }
+
+
+    const completed =
+      (appState && appState.completed)
+        ? appState.completed
+        : {};
+
+
+    return selected.every(
+      id => completed[id] === true
+    );
+  }
+
+
+  // ==========================================================
+  // TAMPILAN AWAL
+  // ==========================================================
+  function setInitialButton() {
+
+    pdfBtn.disabled = false;
+
+    pdfBtn.style.opacity = '1';
+
+    pdfBtn.style.pointerEvents = 'auto';
+
+    pdfBtn.classList.add('blink');
+
+    pdfBtn.innerHTML = `
+      <span style="
+        font-size:1.23em;
+        vertical-align:-3px;
+      ">
+        📄
+      </span>
+      Cek Tombol Download (uji unduh PDF)
+    `;
+  }
+
+
+  // ==========================================================
+  // TAMPILAN MENUNGGU TES
+  // ==========================================================
+  function setWaitingButton() {
+
+    pdfBtn.disabled = true;
+
+    pdfBtn.style.opacity = '0.45';
+
+    pdfBtn.style.pointerEvents = 'none';
+
+    pdfBtn.classList.remove('blink');
+
+    pdfBtn.innerHTML = `
+      <span style="
+        font-size:1.15em;
+        vertical-align:-2px;
+      ">
+        ⏳
+      </span>
+      Sudah dicek. Silakan selesaikan semua tes yang dipilih
+    `;
+  }
+
+
+  // ==========================================================
+  // TAMPILAN FINAL
+  // ==========================================================
+  function setFinalButton() {
+
+    pdfBtn.disabled = false;
+
+    pdfBtn.style.opacity = '1';
+
+    pdfBtn.style.pointerEvents = 'auto';
+
+    pdfBtn.classList.add('blink');
+
+    pdfBtn.innerHTML = `
+      <span style="
+        font-size:1.1em;
+        vertical-align:-2px;
+      ">
+        📄
+      </span>
+      Unduh Akhir &amp; Kumpulkan
+      (Logout Otomatis)
+    `;
+  }
+
+
+  // ==========================================================
+  // FORM + AUTO LOGOUT
+  // ==========================================================
+  function showFormAndAutoLogout() {
+
+    const formURL =
+      'https://forms.gle/G69K56TRfxNnBXtr9';
+
+
+    // --------------------------------------------------------
+    // Hentikan watcher
+    // --------------------------------------------------------
+    if (window.__pdfBtnWatcher) {
+
+      try {
+        clearInterval(window.__pdfBtnWatcher);
+      } catch (e) {}
+
+      window.__pdfBtnWatcher = null;
+    }
+
+
+    // --------------------------------------------------------
+    // Ganti area tombol
+    // --------------------------------------------------------
+    if (box) {
+
+      box.innerHTML = `
+        <div style="
+          text-align:center;
+          margin-top:24px;
+        ">
+
+          <div style="
+            color:#c00;
+            font-weight:600;
+            margin-bottom:14px;
+            line-height:1.6;
+          ">
+
+            ✅ Hasil akhir telah diunduh.
+            <br>
+
+            <b>
+              Silakan unggah PDF hasil tes
+              ke link berikut (dibuka otomatis):
+            </b>
+
+            <br>
+
+            <a
+              href="${formURL}"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="
+                font-weight:bold;
+                color:#1565c0;
+                word-break:break-all;
+              "
+            >
+              ${formURL}
+            </a>
+
+            <br>
+
+            Sistem akan
+            <b>logout otomatis</b>
+            sesaat lagi.
+
+          </div>
+
+        </div>
+      `;
+
+
+      setTimeout(() => {
+
+        window.scrollTo({
+          top:document.body.scrollHeight,
+          behavior:'smooth'
+        });
+
+      }, 200);
+    }
+
+
+    // --------------------------------------------------------
+    // BUKA GOOGLE FORM
+    // --------------------------------------------------------
+    try {
+
+      window.open(
+        formURL,
+        '_blank',
+        'noopener,noreferrer'
+      );
+
+    } catch (e) {
+
+      console.warn(
+        'Form tidak dapat dibuka otomatis:',
+        e
+      );
+
+    }
+
+
+    // --------------------------------------------------------
+    // AUTO LOGOUT
+    // --------------------------------------------------------
+    setTimeout(() => {
+
+      localStorage.setItem(
+        'usedPragas',
+        '1'
+      );
+
+      localStorage.removeItem(
+        'identity'
+      );
+
+
+      try {
+
+        sessionStorage.removeItem(
+          'dlClick'
+        );
+
+      } catch (e) {}
+
+
+      // Reset counter
+      window.downloadClickCount = 0;
+
+
+      // Reload
+      location.reload();
+
+    }, 1500);
+  }
+
+
+  // ==========================================================
+  // STATE AWAL
+  // ==========================================================
+  if (
+    window.downloadClickCount === 0
+  ) {
+
+    setInitialButton();
+
+  }
+
+
+  // ==========================================================
+  // EVENT KLIK
+  // ==========================================================
+  pdfBtn.onclick = function () {
+
+    // --------------------------------------------------------
+    // Anti double click
+    // --------------------------------------------------------
+    if (pdfBtn.__busy) {
       return;
     }
 
-    // KLIK-2 (final) — saat semua tes sudah selesai
-    if (window.downloadClickCount === 1) {
-      if (!allDone()) return; // safety
+
+    // ========================================================
+    // KLIK 1
+    // ========================================================
+    if (
+      window.downloadClickCount === 0
+    ) {
+
       pdfBtn.__busy = true;
+
+
       try {
-        if (typeof window.generatePDF === 'function') {
-          window.generatePDF(); // unduh akhir
+
+        if (
+          typeof window.generatePDF === 'function'
+        ) {
+
+          window.generatePDF();
+
         } else {
-          alert('Fungsi generatePDF() belum tersedia.');
+
+          alert(
+            'Fungsi generatePDF() belum tersedia.'
+          );
+
           pdfBtn.__busy = false;
+
           return;
         }
+
       } finally {
-        setTimeout(() => { pdfBtn.__busy = false; }, 300);
+
+        setTimeout(() => {
+
+          pdfBtn.__busy = false;
+
+        }, 500);
+
       }
 
-      window.downloadClickCount = 2;
-      try { sessionStorage.setItem('dlClick', '2'); } catch {}
-      showFormAndAutoLogout();
+
+      // ------------------------------------------------------
+      // Jika semua tes sudah selesai,
+      // klik pertama langsung menjadi final.
+      // ------------------------------------------------------
+      if (allDone()) {
+
+        window.downloadClickCount = 2;
+
+
+        try {
+
+          sessionStorage.setItem(
+            'dlClick',
+            '2'
+          );
+
+        } catch (e) {}
+
+
+        showFormAndAutoLogout();
+
+        return;
+      }
+
+
+      // ------------------------------------------------------
+      // Belum semua tes selesai
+      // ------------------------------------------------------
+      window.downloadClickCount = 1;
+
+
+      try {
+
+        sessionStorage.setItem(
+          'dlClick',
+          '1'
+        );
+
+      } catch (e) {}
+
+
+      setWaitingButton();
+
+
+      // ------------------------------------------------------
+      // Pesan
+      // ------------------------------------------------------
+      if (cekMsg) {
+
+        cekMsg.innerHTML = `
+          <b>✅ Tombol sudah dicek.</b>
+          <br>
+
+          Silakan kerjakan
+          <u>semua</u>
+          tes yang dipilih.
+
+          <br>
+
+          Setelah semuanya selesai,
+          tombol akan aktif kembali untuk
+          <b>unduh akhir &amp; logout otomatis</b>.
+        `;
+
+        cekMsg.style.display = 'block';
+
+      }
+
+
+      // ------------------------------------------------------
+      // Hapus watcher lama
+      // ------------------------------------------------------
+      if (window.__pdfBtnWatcher) {
+
+        try {
+
+          clearInterval(
+            window.__pdfBtnWatcher
+          );
+
+        } catch (e) {}
+
+        window.__pdfBtnWatcher = null;
+      }
+
+
+      // ------------------------------------------------------
+      // Pantau status tes
+      // ------------------------------------------------------
+      window.__pdfBtnWatcher =
+        setInterval(() => {
+
+          if (allDone()) {
+
+            try {
+
+              clearInterval(
+                window.__pdfBtnWatcher
+              );
+
+            } catch (e) {}
+
+
+            window.__pdfBtnWatcher = null;
+
+
+            // Tetap 1 karena user belum klik final
+            window.downloadClickCount = 1;
+
+
+            setFinalButton();
+
+          }
+
+        }, 700);
+
+
+      return;
     }
+
+
+    // ========================================================
+    // KLIK 2 — DOWNLOAD FINAL
+    // ========================================================
+    if (
+      window.downloadClickCount === 1
+    ) {
+
+      // Safety check
+      if (!allDone()) {
+        return;
+      }
+
+
+      pdfBtn.__busy = true;
+
+
+      try {
+
+        if (
+          typeof window.generatePDF === 'function'
+        ) {
+
+          // Download PDF final
+          window.generatePDF();
+
+        } else {
+
+          alert(
+            'Fungsi generatePDF() belum tersedia.'
+          );
+
+          pdfBtn.__busy = false;
+
+          return;
+        }
+
+      } finally {
+
+        setTimeout(() => {
+
+          pdfBtn.__busy = false;
+
+        }, 500);
+
+      }
+
+
+      // ------------------------------------------------------
+      // Tandai final
+      // ------------------------------------------------------
+      window.downloadClickCount = 2;
+
+
+      try {
+
+        sessionStorage.setItem(
+          'dlClick',
+          '2'
+        );
+
+      } catch (e) {}
+
+
+      // ------------------------------------------------------
+      // Buka Form + Logout
+      // ------------------------------------------------------
+      showFormAndAutoLogout();
+
+    }
+
   };
 
+
+  // ==========================================================
+  // PENANDA HANDLER
+  // ==========================================================
   pdfBtn.hasHandler = true;
 
-  // === TIDAK ADA pemulihan otomatis dari sessionStorage untuk state "sudah dicek" ===
-  // (Supaya setelah Selesai Instruksi, tombol SELALU mulai sebagai "Download PDF")
-  // Jika kamu ingin tetap memulihkan state saat reload halaman, boleh tambahkan lagi logika restore di sini.
-  // Pastikan kamu reset dlClick & downloadClickCount ke 0 ketika user klik "Selesai Instruksi".
-  
-  // Sinkronisasi tampilan jika saat ini sudah click-1 / sudah selesai semua (mis. setelah dipantau)
-  if (window.downloadClickCount === 1 && !allDone()) {
-    pdfBtn.disabled = true;
-    pdfBtn.style.opacity = '0.45';
-    pdfBtn.style.pointerEvents = 'none';
-    pdfBtn.classList.remove('blink');
-    pdfBtn.innerHTML = `⏳ Sudah dicek. Silakan selesaikan semua tes yang dipilih`;
-  } else if (window.downloadClickCount === 1 && allDone()) {
-    pdfBtn.disabled = false;
-    pdfBtn.style.opacity = '1';
-    pdfBtn.style.pointerEvents = 'auto';
-    pdfBtn.classList.add('blink');
-    pdfBtn.innerHTML = `<span style="font-size:1.1em;vertical-align:-2px;">📄</span> Unduh Akhir & Kumpulkan (Logout Otomatis)`;
-  } else if (window.downloadClickCount === 2) {
-    // Jika refresh setelah final → tetap arahkan ke form & logout
-    showFormAndAutoLogout();
+
+  // ==========================================================
+  // SINKRONISASI STATE SAAT HANDLER DIPASANG
+  // ==========================================================
+
+  if (
+    window.downloadClickCount === 0
+  ) {
+
+    setInitialButton();
+
   }
+
+  else if (
+    window.downloadClickCount === 1 &&
+    !allDone()
+  ) {
+
+    setWaitingButton();
+
+  }
+
+  else if (
+    window.downloadClickCount === 1 &&
+    allDone()
+  ) {
+
+    setFinalButton();
+
+  }
+
+  else if (
+    window.downloadClickCount === 2
+  ) {
+
+    showFormAndAutoLogout();
+
+  }
+
 };
 
 
